@@ -61,3 +61,6 @@
       background-color: #00925d;
       color: rgb(0, 0, 0);
     }
+    :root {
+      color-scheme: only light;
+    }
