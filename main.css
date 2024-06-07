@@ -42,22 +42,22 @@
     }
   
     .topnav a:hover {
-      background-color: #00462c;
+      background-color: #00925d;
       color: rgb(0, 0, 0);
     }
   
     .topnav a.active {
-      background-color: #00462c;
+      background-color: #00925d;
       color: rgb(0, 0, 0);
     }
     .button1 {
       background-color: white;
       font-size: 25px;
-      color: rgb(255, 255, 255);
-      border: 7px solid #00462c;
+      color: rgb(0, 0, 0);
+      border: 7px solid #00925d;
     }
     
     .button1:hover {
-      background-color: #00462c;
+      background-color: #00925d;
       color: rgb(0, 0, 0);
     }
