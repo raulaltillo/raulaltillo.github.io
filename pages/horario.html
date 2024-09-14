@@ -7,287 +7,138 @@
 <body>
   <div class="topnav">
     <a href="../index.html">Inicio</a>
-    <a class="active" href="#">Horario</a>
-    <a href="menu.html">Menu</a>
-    <a href="coding_answers.html">Coding/CS</a>
-    <a href="book_answers.html">Respuestas Libros</a>
-    <a href="4dexams.html">4D examenes</a>
+    <a href="./horario.html" class="active" >Horario</a>
+    <a href="./menu.html">Menu</a>
+    <!--<a href="pages/coding_answers.html">Coding/CS</a>-->
+    <!--<a href="./book_answers.html">Respuestas Libros</a>-->
+    <!--<a href="pages/4dexams.html">examanes</a>-->
   </div>
   <br>
   <br>
   <br>
-<div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;">
-  <h1 style="font-size: 400%; color: #000000; text-align: center;">A</h1>
-  <div class="row">
-  <div class="column" style="background-color:#2d9e00;" id="MondayA">
+
+  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
+    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Helvetica">Salud Lomce</h1>
+    <div id="Salud Lomce"></div>
+  </div>
+  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
+    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Helvetica">Salud IB</h1>
+    <div id="Salud IB"></div>
+  </div>
+  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
+    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Helvetica">Tecnologico Lomce</h1>
+    <div id="Tecnologico Lomce"></div>
+  </div>
+  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
+    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Helvetica">Tecnologico IB</h1>
+    <div id="Tecnologico IB"></div>
+  </div>
+  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
+    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Helvetica">Sociales Lomce</h1>
+    <div id="Sociales Lomce"></div>
+  </div>
+  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
+    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Helvetica">Sociales IB</h1>
+    <div id="Sociales IB"></div>
+  </div>
+  <script type="text/javascript">
+    const classes={ 
+     "Salud Lomce":[["Filosofia", "Biologia", "Ingles", "TIC", "Fisica", "Frances", "Deporte"],
+                    ["Biologia", "Frances", "PS", "Lengua", "Mates", "ToK", "Ingles"],
+                    ["Lengua", "Fisica", "TIC", "Deporte", "Filosofia", "Mates", "Ingles"],
+                    ["Mates", "ToK/CAS", "Fisica", "English", "Filosofia", "Biologia", "Lengua"],
+                    ["Lengua", "Biologia", "Fisica", "TIC", "PS", "Mates", "Ingles"]], 
+     "Salud IB":[["Frances", "Monografia/CAS", "Ingles", "Mates", "Fisica", "Deporte", "Biologia"],
+                    ["Lengua", "Deporte", "Frances", "Mates", "Biologia", "PS", "Ingles"],
+                    ["Mates", "Fisica", "Lengua", "Biologia", "SAS", "Frances", "Ingles"],
+                    ["ToK", "Biologia", "Fisica", "Ingles", "Mates", "SAS", "Lengua"],
+                    ["Tok", "SAS", "Fisica", "PS", "Frances", "Lengua", "Ingles"]], 
+     "Tecnologico Lomce":[["PS", "DT", "Ingles", "Lengua", "Mates", "Frances", "Fisica"],
+                    ["TIC", "Frances", "ToK/CAS", "Lengua", "Filosofia", "Mates", "Ingles"],
+                    ["DT", "Deporte", "Fisica", "TIC", "Mates", "PS", "Ingles"],
+                    ["Filosofia", "TIC", "Lengua", "Ingles", "Fisica", "ToK", "DT"],
+                    ["DT", "Fisica", "Lengua", "Mates", "Filosofia", "Deporte", "Ingles"]],
+      "Tecnologico IB":[["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"]],
+      "Sociales Lomce":[["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"]],
+      "Sociales IB":[["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"],
+                    ["sin info", "sin info", "sin info", "sin info", "sin info", "sin info", "sin info"]],
+};
+for (const schoolclass in classes){
+    document.getElementById(schoolclass).innerHTML = `  <div class="row">
+  <div class="column" style="background-color:#2d9e00;" id="Monday">
   <h3>Lunes</h3>
-  <pre>fisica 
-lengua
-frances
+  <pre style=";font-family:Helvetica">${classes[schoolclass][0][0]}
+${classes[schoolclass][0][1]}
       
-coding
-biologia
+${classes[schoolclass][0][2]}
+${classes[schoolclass][0][3]}
       
-economia
-ingles</pre>
+${classes[schoolclass][0][4]}
+${classes[schoolclass][0][5]}
+${classes[schoolclass][0][6]}</pre>
   </div>
-  <div class="column" style="background-color:#3ac62d;" id="TuesdayA">
+  <div class="column" style="background-color:#3ac62d;" id="Tuesday">
   <h3>Martes</h3>
-  <pre>mates
-deporte
-examprep
+  <pre style="font-family:Helvetica">${classes[schoolclass][1][0]}
+${classes[schoolclass][1][1]}
       
-ingles
-computers
+${classes[schoolclass][1][2]}
+${classes[schoolclass][1][3]}
       
-lengua
-frances</pre>
+${classes[schoolclass][1][4]}
+${classes[schoolclass][1][5]}
+${classes[schoolclass][1][6]}</pre>
   </div>
-  <div class="column" style="background-color:#2dff2d;" id="WednesdayA">
+  <div class="column" style="background-color:#2dff2d;" id="Wednesday">
   <h3>Miercoles</h3>
-  <pre>fisica
-investigacion
-biologia
+  <pre style="font-family:Helvetica">${classes[schoolclass][2][0]}
+${classes[schoolclass][2][1]}
       
-historia
-ingles
+${classes[schoolclass][2][2]}
+${classes[schoolclass][2][3]}
       
-lengua
-mates</pre>
+${classes[schoolclass][2][4]}
+${classes[schoolclass][2][5]}
+${classes[schoolclass][2][6]}</pre>
   </div>
-  <div class="column" style="background-color:#78ff42;" id="ThursdayA">
+  <div class="column" style="background-color:#78ff42;" id="Thursday">
   <h3>Jueves</h3>
-  <pre>mates
-frances
-historia
+  <pre style="font-family:Helvetica">${classes[schoolclass][3][0]}
+${classes[schoolclass][3][1]}
       
-lengua
-computer
+${classes[schoolclass][3][2]}
+${classes[schoolclass][3][3]}
       
-examprep
-deporte</pre>
+${classes[schoolclass][3][4]}
+${classes[schoolclass][3][5]}
+${classes[schoolclass][3][6]}</pre>
   </div>
-  <div class="column" style="background-color:#a1ff6a;" id="FridayA">
+  <div class="column" style="background-color:#a1ff6a;" id="Friday">
   <h3>Viernes</h3>
-  <pre>fisica
-lengua
-mates
+  <pre style="font-family:Helvetica">${classes[schoolclass][4][0]}
+${classes[schoolclass][4][1]}
       
-historia
-frances
+${classes[schoolclass][4][2]}
+${classes[schoolclass][4][3]}
       
-biologia
-ingles</pre>
-  </div>
-    </div>
-</div>
-<br>
-<div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;">
-  <h1 style="font-size: 400%; color: #000000; text-align: center; ">B</h1>
-<div class="row">
-<div class="column" style="background-color:#2d9e00;" id="MondayB">
-<h3>Lunes</h3>
-<pre>frances
-historia
-computers
-      
-economia
-fisica
-      
-lengua
-ingles</pre>
-</div>
-<div class="column" style="background-color:#3ac62d;" id="TuesdayB">
-<h3>Martes</h3>
-<pre>mates
-frances
-examprep
-      
-ingles
-historia
-      
-deporte
-lengua</pre>
-</div>
-<div class="column" style="background-color:#2dff2d;" id="WednesdayB">
-<h3>Miercoles</h3>
-<pre>biologia
-investigacion
-lengua
-      
-fisica
-ingles
-      
-computers
-mates</pre>
-</div>
-<div class="column" style="background-color:#78ff42;" id="ThursdayB">
-<h3>Jueves</h3>
-<pre>mates
-historia
-biologia
-      
-frances
-lengua
-      
-examprep
-fisica</pre>
-</div>
-<div class="column" style="background-color:#a1ff6a;" id="FridayB">
-<h3>Viernes</h3>
-<pre>biologia
-mates
-deporte
-      
-conding
-lengua
-      
-frances
-ingles</pre>
-</div>
-  </div>
-</div>
-<br>
-<div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;">
-    <h1 style="font-size: 400%; color: #000000; text-align: center; ">C</h1>
-  <div class="row">
-  <div class="column" style="background-color:#2d9e00;" id="MondayC">
-  <h3>Lunes</h3>
-  <pre>lengua
-computers
-historia
-      
-frances
-mates
-      
-deporte
-ingles</pre>
-  </div>
-  <div class="column" style="background-color:#3ac62d;" id="TuesdayC">
-  <h3>Martes</h3>
-  <pre>biologia
-mates
-examprep
-      
-ingles
-lengua
-      
-frances
-fisica</pre>
-  </div>
-  <div class="column" style="background-color:#2dff2d;" id="WednesdayC">
-  <h3>Miercoles</h3>
-  <pre>fisica
-investigacion
-biologia
-      
-mates
-ingles
-      
-coding
-lengua</pre>
-  </div>
-  <div class="column" style="background-color:#78ff42;" id="ThursdayC">
-  <h3>Jueves</h3>
-  <pre>historia
-lengua
-economia
-      
-mates
-computers
-      
-examprep
-frances</pre>
-  </div>
-  <div class="column" style="background-color:#a1ff6a;" id="FridayC">
-  <h3>Viernes</h3>
-  <pre>fisica
-historia
-biologia
-      
-frances
-lengua
-      
-deporte
-ingles</pre>
-  </div>
-    </div>
-</div>
-<br>
-<div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;">
-  <h1 style="font-size: 400%; color: #000000; text-align: center; ">D</h1>
-<div class="row">
-<div class="column" style="background-color:#2d9e00;" id="MondayD">
-<h3>Lunes</h3>
-<pre>frances
-lengua
-coding
-      
-mates
-fisica
-      
-historia
-ingles</pre>
-</div>
-<div class="column" style="background-color:#3ac62d;" id="TuesdayD">
-<h3>Martes</h3>
-<pre>frances
-biologia
-examprep
-      
-ingles
-mates
-      
-economia
-lengua</pre>
-</div>
-<div class="column" style="background-color:#2dff2d;" id="WednesdayD">
-<h3>Miercoles</h3>
-<pre>deporte
-investigacion
-lengua
-      
-computers
-ingles
-      
-frances
-biologia</pre>
-</div>
-<div class="column" style="background-color:#78ff42;" id="ThursdayD">
-<h3>Jueves</h3>
-<pre>lengua
-biologia
-mates
-      
-fisica
-frances
-      
-examprep
-historia</pre>
-</div>
-<div class="column" style="background-color:#a1ff6a;" id="FridayD">
-<h3>Viernes</h3>
-<pre>deporte
-computers
-historia
-      
-fisica
-mates
-      
-lengua
-ingles</pre>
-</div>
-  </div>
-</div>
-  
+${classes[schoolclass][4][4]}
+${classes[schoolclass][4][5]}
+${classes[schoolclass][4][6]}</pre>
+  </div></div>`;
+}
+
+    </script>
+
 
 </body>
-<script type="text/javascript">
-    const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    const times = []
-    const d = new Date()
-    document.getElementById(weekday[d.getDay()] + "A").style.backgroundColor='ff6600';
-    document.getElementById(weekday[d.getDay()] + "B").style.backgroundColor='ff6600';
-    document.getElementById(weekday[d.getDay()] + "C").style.backgroundColor='ff6600';
-    document.getElementById(weekday[d.getDay()] + "D").style.backgroundColor='ff6600';
-    </script>
