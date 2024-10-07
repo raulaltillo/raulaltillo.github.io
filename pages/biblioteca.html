@@ -1,0 +1,181 @@
+<head>
+    <title>SCHL Biblioteca</title>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../main.css">
+    <meta name="color-scheme" content="light only">
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+      }
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+          font-size: 200%;
+          
+      }
+      th, td {
+          padding: 10px;
+          text-align: center;
+          border: 1px solid #ddd;
+          font-family:Helvetica
+      }
+      th {
+          background-color: #f2f2f2;
+      }
+      .time-slot {
+          background-color: #f9f9f9;
+      }
+      .highlight {
+            background-color: #ffeb3b; /* dia actual */
+        }
+      .ushighlight {
+            background-color: #4cbc2b; /* biblioteca */
+        }
+        .bothhighlight {
+            background-color: #3bffc1; /* ambos */
+        }
+  </style>
+</head>
+<body>
+  <div class="topnav">
+    <a href="../index.html">Inicio</a>
+    <a href="./horario.html">Horario</a>
+    <a href="./menu.html">Menu</a>
+    <a href="#" class="active">Biblioteca</a>
+    <!--<a href="pages/coding_answers.html">Coding/CS</a>-->
+    <a href="./book_answers.html">Respuestas Libros</a>
+    <!--<a href="pages/4dexams.html">examanes</a>-->
+  </div>
+  <br>
+  <br>
+  <br>
+<br>
+<center>
+  <h1 style="font-family:Helvetica;font-size: 300%">Calendario de biblioteca</h1>
+  <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+    <div style="display: flex; align-items: center;">
+        <div style="width: 50px; height: 50px; background-color: #ffeb3b; margin-right: 10px; border-radius: 25%; margin-left: 10px"></div>
+        <span style="font-size: 16px;font-family:Helvetica;font-size: 200%">Dia actual</span>
+    </div>
+
+    <div style="display: flex; align-items: center;">
+        <div style="width: 50px; height: 50px; background-color: #4cbc2b; margin-right: 10px; border-radius: 25%;"></div>
+        <span style="font-size: 16px;font-family:Helvetica;font-size: 200%">Dia de biblioteca</span>
+    </div>
+
+    <div style="display: flex; align-items: center;">
+        <div style="width: 50px; height: 50px; background-color: #3bffc1; margin-right: 10px; border-radius: 25%;"></div>
+        <span style="font-size: 16px; margin-right: 10px;font-family:Helvetica;font-size: 200%">Dia actual + Biblioteca</span>
+    </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Dia</th>
+            <th>Primer Patio</th>
+            <th>Segundo Patio</th>
+        </tr>
+    </thead>
+    <tbody id="calendar-body">
+        <!-- Rows will be inserted here by JavaScript -->
+    </tbody>
+</table>
+<script>
+  // The schedule dictionary
+const schedule = {
+  "Jueves 26": ["No hay", "1 BTO"],
+  "Viernes 27": ["2 BTO", "No hay"],
+  
+  "Lunes 30 Sep": ["1 BTO", "No hay"],
+  "Martes 1": ["2 BTO", "1 BTO"],
+  "Miercoles 2": ["1 BTO", "2 BTO"],
+  "Jueves 3": ["2 BTO", "1 BTO"],
+  "Viernes 4": ["1 BTO", "No hay"],
+  
+  "Lunes 7": ["2 BTO", "No hay"],
+  "Martes 8": ["1 BTO", "2 BTO"],
+  "Miercoles 9": ["2 BTO", "1 BTO"],
+  "Jueves 10": ["1 BTO", "2 BTO"],
+  "Viernes 11": ["2 BTO", "No hay"],
+  
+  "Lunes 14": ["1 BTO", "No hay"],
+  "Martes 15": ["2 BTO", "1 BTO"],
+  "Miercoles 16": ["1 BTO", "2 BTO"],
+  "Jueves 17": ["2 BTO", "1 BTO"],
+  "Viernes 18": ["1 BTO", "No hay"],
+  
+  "Lunes 21": ["2 BTO", "No hay"],
+  "Martes 22": ["1 BTO", "2 BTO"],
+  "Miercoles 23": ["2 BTO", "1 BTO"],
+  "Jueves 24": ["1 BTO", "2 BTO"],
+  "Viernes 25": ["2 BTO", "No hay"]
+};
+
+// Function to get the current date in a format like "Lunes 7"
+function getCurrentFormattedDate() {
+    const today = new Date();
+    
+    const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado"];
+    const dayOfWeek = daysOfWeek[today.getDay()]; // Get day of the week (Lunes, Martes, etc.)
+    
+    const day = today.getDate(); // Get day of the month (1, 2, 3, etc.)
+    const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const monthShortName = monthNames[today.getMonth()]; // Get the short name of the month (Sep for September)
+    
+    return `${dayOfWeek} ${day}`; // Format it like "Lunes 7"
+}
+
+// Function to populate the calendar table
+function populateCalendar() {
+    const calendarBody = document.getElementById('calendar-body');
+    const currentDate = getCurrentFormattedDate();
+
+    // Loop over the schedule dictionary
+    for (const date in schedule) {
+        if (schedule.hasOwnProperty(date)) {
+            const [timeSlot1, timeSlot2] = schedule[date];
+            
+            // Create a new table row
+            const row = document.createElement('tr');
+
+            // Create cells for date, 12:00-12:30, and 15:00-15:30
+            const dateCell = document.createElement('td');
+            dateCell.textContent = date;
+
+            const timeSlot1Cell = document.createElement('td');
+            timeSlot1Cell.textContent = timeSlot1;
+
+            const timeSlot2Cell = document.createElement('td');
+            timeSlot2Cell.textContent = timeSlot2;
+
+            // Highlight row if it's the current date
+            if (timeSlot1 === "1 BTO" || timeSlot2 === "1 BTO") {
+              row.classList.add('ushighlight');
+              }
+            if (date === currentDate) {
+                row.classList.add('highlight');
+                if (timeSlot1 === "1 BTO" || timeSlot2 === "1 BTO") {
+                  row.classList.add('bothhighlight');
+                }
+            }
+            
+
+            // Append cells to the row
+            row.appendChild(dateCell);
+            row.appendChild(timeSlot1Cell);
+            row.appendChild(timeSlot2Cell);
+
+            // Append row to the calendar body
+            calendarBody.appendChild(row);
+        }
+    }
+}
+
+// Call the function to populate the calendar when the page loads
+document.addEventListener('DOMContentLoaded', populateCalendar);
+</script>
+</center>
+</div>
+</body>
