@@ -103,9 +103,8 @@ const schedule = {
   "Martes 22 Oct": ["1 BTO", "2 BTO"],
   "Miercoles 23 Oct": ["2 BTO", "1 BTO"],
   "Jueves 24 Oct": ["1 BTO", "2 BTO"],
-  "Viernes 25 Oct": ["2 BTO", "No hay"]
+  "Viernes 25 Oct": ["2 BTO", "No hay"],
 };
-let foundDay = false;
 let foundUs = false;
 function getCurrentFormattedDate() {
     const today = new Date();
@@ -119,9 +118,39 @@ function getCurrentFormattedDate() {
     
     return `${dayOfWeek} ${day} ${monthShortName}`; // Format it like "Lunes 7"
 }
+function parseSpanishDate(dateString) {
+    // Month mapping from Spanish abbreviations to month numbers
+    const months = {
+        'Ene': 0,  // January
+        'Feb': 1,  // February
+        'Mar': 2,  // March
+        'Abr': 3,  // April
+        'May': 4,  // May
+        'Jun': 5,  // June
+        'Jul': 6,  // July
+        'Ago': 7,  // August
+        'Sep': 8,  // September
+        'Oct': 9,  // October
+        'Nov': 10, // November
+        'Dic': 11  // December
+    };
 
+    // Split the input string into components
+    const [weekday, day, month] = dateString.split(" ");
+
+    // Get the current year (or you can specify a different year if needed)
+    const currentYear = new Date().getFullYear();
+
+    // Create a Date object
+    const date = new Date(currentYear, months[month], parseInt(day));
+
+    return date;
+}
 // Function to populate the calendar table
 function populateCalendar() {
+    if (new Date() > parseSpanishDate(Object.keys(schedule).pop())){
+        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='color: red;font-family:Helvetica'>(desactualizado)</div>"
+    }
     const calendarBody = document.getElementById('calendar-body');
     const currentDate = getCurrentFormattedDate();
 
@@ -157,7 +186,6 @@ function populateCalendar() {
                 timeSlot2Cell.classList.add("ushighlight")
             }
             if (date === currentDate) {
-                foundDay = true;
                 dateCell.classList.add('highlight');
             }
             
@@ -171,9 +199,6 @@ function populateCalendar() {
     }
     if (!foundUs){
         document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Helvetica'>Hoy: No hay</div>"
-    }
-    if (!foundDay) {
-        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='color: red;font-family:Helvetica'>(desactualizado)</div>"
     }
 }
 
