@@ -52,7 +52,7 @@
   <br>
 <br>
 <center>
-  <h1 style="font-family:Helvetica;font-size: 300%">Calendario de biblioteca</h1>
+  <h1 style="font-family:Helvetica;font-size: 300%" id="title">Calendario de biblioteca</h1>
   <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
     <div style="display: flex; align-items: center;">
         <div style="width: 50px; height: 50px; background-color: #ffeb3b; margin-right: 10px; border-radius: 25%; margin-left: 10px"></div>
@@ -79,11 +79,9 @@
         </tr>
     </thead>
     <tbody id="calendar-body">
-        <!-- Rows will be inserted here by JavaScript -->
     </tbody>
 </table>
 <script>
-  // The schedule dictionary
 const schedule = {
   "Jueves 26": ["No hay", "1 BTO"],
   "Viernes 27": ["2 BTO", "No hay"],
@@ -112,17 +110,16 @@ const schedule = {
   "Jueves 24": ["1 BTO", "2 BTO"],
   "Viernes 25": ["2 BTO", "No hay"]
 };
-
-// Function to get the current date in a format like "Lunes 7"
+let foundDay = false;
 function getCurrentFormattedDate() {
     const today = new Date();
     
     const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sábado"];
-    const dayOfWeek = daysOfWeek[today.getDay()]; // Get day of the week (Lunes, Martes, etc.)
+    const dayOfWeek = daysOfWeek[today.getDay()];
     
-    const day = today.getDate(); // Get day of the month (1, 2, 3, etc.)
+    const day = today.getDate();
     const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-    const monthShortName = monthNames[today.getMonth()]; // Get the short name of the month (Sep for September)
+    const monthShortName = monthNames[today.getMonth()];
     
     return `${dayOfWeek} ${day}`; // Format it like "Lunes 7"
 }
@@ -137,10 +134,8 @@ function populateCalendar() {
         if (schedule.hasOwnProperty(date)) {
             const [timeSlot1, timeSlot2] = schedule[date];
             
-            // Create a new table row
             const row = document.createElement('tr');
 
-            // Create cells for date, 12:00-12:30, and 15:00-15:30
             const dateCell = document.createElement('td');
             dateCell.textContent = date;
 
@@ -155,6 +150,7 @@ function populateCalendar() {
               row.classList.add('ushighlight');
               }
             if (date === currentDate) {
+                foundDay = true;
                 row.classList.add('highlight');
                 if (timeSlot1 === "1 BTO" || timeSlot2 === "1 BTO") {
                   row.classList.add('bothhighlight');
@@ -162,18 +158,18 @@ function populateCalendar() {
             }
             
 
-            // Append cells to the row
             row.appendChild(dateCell);
             row.appendChild(timeSlot1Cell);
             row.appendChild(timeSlot2Cell);
 
-            // Append row to the calendar body
             calendarBody.appendChild(row);
         }
     }
+    if (!foundDay) {
+        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='color: red;font-family:Helvetica'>(desactualizado)</div>"
+    }
 }
 
-// Call the function to populate the calendar when the page loads
 document.addEventListener('DOMContentLoaded', populateCalendar);
 </script>
 </center>

@@ -19,8 +19,27 @@
   <br>
 <br>
 <center>
-  <h1 style="color:#000000; font-size: 300%;">Menu</h1>
+  <h1 style="color:#000000; font-size: 300%;" id="menu">Menu</h1>
     <img src="../images/menu.png" width="1000px" style="border: solid 15px #000000; border-radius: 10px;">
 </center>
+<script>
+  // Function to check if the current date is past a certain date
+function isPastDate(specificDateString) {
+  console.log("asd")  
+    // Get the current date
+    const currentDate = Date.now();
+    
+    // Convert the specific date string to a Date object
+    const specificDate = Date.parse('31 Oct 2024 23:59:59 GMT+2');;
+    
+    // Compare the two dates
+    if (currentDate > specificDate) {
+        console.log("asd")
+        document.getElementById("menu").innerHTML = "Menu <div style='color: red;font-family:Helvetica'>(desactualizado)</div>"
+    }
+}
+
+isPastDate();  //YYYY-MM-DD
+</script>
 </div>
 </body>
