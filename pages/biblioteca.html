@@ -17,7 +17,7 @@
       th, td {
           padding: 10px;
           text-align: center;
-          border: 1px solid #ddd;
+          border: 3px solid #000000;
           font-family:Helvetica
       }
       th {
@@ -61,12 +61,7 @@
 
     <div style="display: flex; align-items: center;">
         <div style="width: 50px; height: 50px; background-color: #4cbc2b; margin-right: 10px; border-radius: 25%;"></div>
-        <span style="font-size: 16px;font-family:Helvetica;font-size: 200%">Dia de biblioteca</span>
-    </div>
-
-    <div style="display: flex; align-items: center;">
-        <div style="width: 50px; height: 50px; background-color: #3bffc1; margin-right: 10px; border-radius: 25%;"></div>
-        <span style="font-size: 16px; margin-right: 10px;font-family:Helvetica;font-size: 200%">Dia actual + Biblioteca</span>
+        <span style="font-size: 16px;font-family:Helvetica;font-size: 200%">Biblioteca para nosotros</span>
     </div>
 </div>
 
@@ -83,34 +78,35 @@
 </table>
 <script>
 const schedule = {
-  "Jueves 26": ["No hay", "1 BTO"],
-  "Viernes 27": ["2 BTO", "No hay"],
+  "Jueves 26 Sep": ["No hay", "1 BTO"],
+  "Viernes 27 Sep": ["2 BTO", "No hay"],
   
   "Lunes 30 Sep": ["1 BTO", "No hay"],
-  "Martes 1": ["2 BTO", "1 BTO"],
-  "Miercoles 2": ["1 BTO", "2 BTO"],
-  "Jueves 3": ["2 BTO", "1 BTO"],
-  "Viernes 4": ["1 BTO", "No hay"],
+  "Martes 1 Oct": ["2 BTO", "1 BTO"],
+  "Miercoles 2 Oct": ["1 BTO", "2 BTO"],
+  "Jueves 3 Oct": ["2 BTO", "1 BTO"],
+  "Viernes 4 Oct": ["1 BTO", "No hay"],
   
-  "Lunes 7": ["2 BTO", "No hay"],
-  "Martes 8": ["1 BTO", "2 BTO"],
-  "Miercoles 9": ["2 BTO", "1 BTO"],
-  "Jueves 10": ["1 BTO", "2 BTO"],
-  "Viernes 11": ["2 BTO", "No hay"],
+  "Lunes 7 Oct": ["2 BTO", "No hay"],
+  "Martes 8 Oct": ["1 BTO", "2 BTO"],
+  "Miercoles 9 Oct": ["2 BTO", "1 BTO"],
+  "Jueves 10 Oct": ["1 BTO", "2 BTO"],
+  "Viernes 11 Oct": ["2 BTO", "No hay"],
   
-  "Lunes 14": ["1 BTO", "No hay"],
-  "Martes 15": ["2 BTO", "1 BTO"],
-  "Miercoles 16": ["1 BTO", "2 BTO"],
-  "Jueves 17": ["2 BTO", "1 BTO"],
-  "Viernes 18": ["1 BTO", "No hay"],
+  "Lunes 14 Oct": ["1 BTO", "No hay"],
+  "Martes 15 Oct": ["2 BTO", "1 BTO"],
+  "Miercoles 16 Oct": ["1 BTO", "2 BTO"],
+  "Jueves 17 Oct": ["2 BTO", "1 BTO"],
+  "Viernes 18 Oct": ["1 BTO", "No hay"],
   
-  "Lunes 21": ["2 BTO", "No hay"],
-  "Martes 22": ["1 BTO", "2 BTO"],
-  "Miercoles 23": ["2 BTO", "1 BTO"],
-  "Jueves 24": ["1 BTO", "2 BTO"],
-  "Viernes 25": ["2 BTO", "No hay"]
+  "Lunes 21 Oct": ["2 BTO", "No hay"],
+  "Martes 22 Oct": ["1 BTO", "2 BTO"],
+  "Miercoles 23 Oct": ["2 BTO", "1 BTO"],
+  "Jueves 24 Oct": ["1 BTO", "2 BTO"],
+  "Viernes 25 Oct": ["2 BTO", "No hay"]
 };
 let foundDay = false;
+let foundUs = false;
 function getCurrentFormattedDate() {
     const today = new Date();
     
@@ -121,7 +117,7 @@ function getCurrentFormattedDate() {
     const monthNames = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
     const monthShortName = monthNames[today.getMonth()];
     
-    return `${dayOfWeek} ${day}`; // Format it like "Lunes 7"
+    return `${dayOfWeek} ${day} ${monthShortName}`; // Format it like "Lunes 7"
 }
 
 // Function to populate the calendar table
@@ -146,15 +142,23 @@ function populateCalendar() {
             timeSlot2Cell.textContent = timeSlot2;
 
             // Highlight row if it's the current date
-            if (timeSlot1 === "1 BTO" || timeSlot2 === "1 BTO") {
-              row.classList.add('ushighlight');
+            if (timeSlot1 === "1 BTO") {
+              timeSlot1Cell.classList.add("ushighlight")
+              if (date === currentDate) {
+              document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Helvetica'>Hoy: Primer patio</div>"
+              foundUs = true;
               }
+            }
+            if (timeSlot2 === "1 BTO"){
+                if (date === currentDate) {
+                document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Helvetica'>Hoy: Segundo patio</div>"
+                foundUs = true;    
+            }
+                timeSlot2Cell.classList.add("ushighlight")
+            }
             if (date === currentDate) {
                 foundDay = true;
-                row.classList.add('highlight');
-                if (timeSlot1 === "1 BTO" || timeSlot2 === "1 BTO") {
-                  row.classList.add('bothhighlight');
-                }
+                dateCell.classList.add('highlight');
             }
             
 
@@ -164,6 +168,9 @@ function populateCalendar() {
 
             calendarBody.appendChild(row);
         }
+    }
+    if (!foundUs){
+        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Helvetica'>Hoy: No hay</div>"
     }
     if (!foundDay) {
         document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='color: red;font-family:Helvetica'>(desactualizado)</div>"
