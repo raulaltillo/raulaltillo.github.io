@@ -18,28 +18,98 @@
   <br>
   <br>
   <br>
-<br>
+  <br>
 <center>
+
   <h1 style="color:#000000; font-size: 300%;" id="menu">Menu</h1>
-    <img src="../images/menu.png" width="1000px" style="border: solid 15px #000000; border-radius: 10px;">
+  <pre style="font-family: Arial, Helvetica, sans-serif;font-size: 175%;", id="todaydata">Algo ha fallado</pre>
+  <img src="../images/menu.png" width="1000px" style="border: solid 15px #000000; border-radius: 10px;">
+  <p style="font: size 125%;font-family: Arial, Helvetica, sans-serif;">*El sistema del menu de hoy es un prototipo, puede haber fallos</p>
 </center>
 <script>
-  // Function to check if the current date is past a certain date
-function isPastDate(specificDateString) {
-    // Get the current date
-    const currentDate = Date.now();
-    
-    // Convert the specific date string to a Date object
-    const specificDate = Date.parse('31 Oct 2024 23:59:59 GMT+2');;
-    
-    // Compare the two dates
-    if (currentDate > specificDate) {
-        console.log("asd")
-        document.getElementById("menu").innerHTML = "Menu <div style='color: red;font-family:Helvetica'>(desactualizado)</div>"
-    }
-}
+  const menu = {
+    "Lunes 7 Oct": ["Crema de calabaza", "Huevo frito con patatas", "Fruta del tiempo"],
+    "Martes 8 Oct": ["Cocido madrileño", "Carne mechada con zanahorias", "Natillas"],
+    "Miércoles 9 Oct": ["Espaguetis carbonara (con tomate)", "Pollo en salsa. Champiñones", "Fruta del tiempo"],
+    "Jueves 10 Oct": ["Estofado de cerdo con patatas", "Merluza a la plancha con ensalada", "Fruta del tiempo"],
+    "Viernes 11 Oct": ["Gazpacho (crema de calabacín)", "Pizza (Pescadito de la bahía. Tomate aliñado)", "Fruta del tiempo"],
+    "Lunes 14 Oct": ["Crema de zanahorias", "Canelones (pechuga de pollo a la plancha con batata asada)", "Melocotón en almíbar"],
+    "Martes 15 Oct": ["Cocido madrileño", "Fogonero a la plancha. Verduras al horno", "Yogur"],
+    "Miércoles 16 Oct": ["Paella de marisco", "Hamburguesa. Coliflores salteadas", "Fruta del tiempo"],
+    "Jueves 17 Oct": ["Ensalada de pasta", "Pescadito de la bahía con picadillo de tomate y pimiento", "Fruta del tiempo"],
+    "Viernes 18 Oct": ["Lentejas estofadas", "Tortilla de patatas. Ensalada de lechuga y maíz", "Fruta del tiempo"],
+    "Lunes 21 Oct": ["Ensalada completa (crema de calabacín)", "Pollo al horno con arroz salteado", "Fruta del tiempo"],
+    "Martes 22 Oct": ["Espaguetis boloñesa", "Fogonero a la plancha con verduras al horno", "Fruta del tiempo"],
+    "Miércoles 23 Oct": ["Berza jerezana", "Albóndigas en salsa con zanahorias", "Fruta del tiempo"],
+    "Jueves 24 Oct": ["Gazpacho (sopa de letras)", "Flamenquín con patatas fritas", "Yogur"],
+    "Viernes 25 Oct": ["Patatas con chocos", "Huevos rellenos. Ensalada de col", "Fruta del tiempo"],
+    "Lunes 28 Oct": ["Lentejas con chorizo", "Tortilla de patatas. Berenjenas", "Fruta del tiempo"],
+    "Martes 29 Oct": ["Ensalada de pasta", "Carne de cerdo en salsa. Zanahorias", "Yogur"],
+    "Miércoles 30 Oct": ["Crema de puerros", "Revuelto de jamón, patatas y champiñones", "Fruta del tiempo"],
+    "Jueves 31 Oct": ["Garbanzos con calabaza", "Croquetas. Lechuga aliñada", "Fruta del tiempo"]
+  };
 
-isPastDate();  //YYYY-MM-DD
+  // Helper function to get today's date in the correct format (e.g., "Lunes 28 Oct")
+  function getFormattedDate() {
+    const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+    const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    
+    const today = new Date();
+    const dayOfWeek = daysOfWeek[today.getDay()];
+    const day = today.getDate();
+    const month = months[today.getMonth()];
+
+    return `${dayOfWeek} ${day} ${month}`;
+  }
+  function parseSpanishDate(dateString) {
+    // Month mapping from Spanish abbreviations to month numbers
+    const months = {
+        'Ene': 0,  // January
+        'Feb': 1,  // February
+        'Mar': 2,  // March
+        'Abr': 3,  // April
+        'May': 4,  // May
+        'Jun': 5,  // June
+        'Jul': 6,  // July
+        'Ago': 7,  // August
+        'Sep': 8,  // September
+        'Oct': 9,  // October
+        'Nov': 10, // November
+        'Dic': 11  // December
+    };
+
+    // Split the input string into components
+    const [weekday, day, month] = dateString.split(" ");
+
+    // Get the current year (or you can specify a different year if needed)
+    const currentYear = new Date().getFullYear();
+
+    // Create a Date object
+    const date = new Date(currentYear, months[month], parseInt(day));
+
+    return date;
+}
+  // Check if today's date is beyond the last date in the menu
+
+  // Get today's menu or indicate if the data is outdated
+  function getTodaysMenu() {
+    const today = getFormattedDate();
+    const todayDate = new Date();
+    const isWeekend = (todayDate.getDay() === 0 || todayDate.getDay() === 6);
+
+    if (new Date() > parseSpanishDate(Object.keys(menu).pop())) {
+      return `Menú de hoy* (${today}):\n\nDatos no disponibles (desactualizado)`;
+    } else if (isWeekend) {
+      return `Menú de hoy* (${today}):\n\nNo hay menú disponible hoy`;
+    } else if (menu[today]) {
+      return `Menú de hoy* (${today}):\n\n${menu[today].join('\n')}`;
+    } else {
+      return `Menú de hoy* (${today}):\n\nNo hay datos disponibles`;
+    }
+  }
+
+  // Display the menu at the top of the page
+    document.getElementById("todaydata").innerHTML = getTodaysMenu();
 </script>
 </div>
 </body>
