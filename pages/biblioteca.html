@@ -149,9 +149,6 @@ function parseSpanishDate(dateString) {
 }
 // Function to populate the calendar table
 function populateCalendar() {
-    if (new Date() > parseSpanishDate(Object.keys(schedule).pop())){
-        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='color: red;font-family:Helvetica'>(desactualizado)</div>"
-    }
     const calendarBody = document.getElementById('calendar-body');
     const currentDate = getCurrentFormattedDate();
 
@@ -198,8 +195,12 @@ function populateCalendar() {
             calendarBody.appendChild(row);
         }
     }
+    
     if (!foundUs){
         document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Helvetica'>Hoy: No hay</div>"
+    }
+    if (new Date() > parseSpanishDate(Object.keys(schedule).pop())){
+        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='color: red;font-family:Helvetica'>(desactualizado)</div>"
     }
 }
 
