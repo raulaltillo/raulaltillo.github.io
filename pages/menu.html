@@ -24,10 +24,10 @@
   <h1 style="color:#000000; font-size: 300%;" id="menu">Menu</h1>
   <pre style="font-family: Arial, Helvetica, sans-serif;font-size: 175%;", id="todaydata">Algo ha fallado</pre>
   <img src="../images/menu.png" width="1000px" style="border: solid 15px #000000; border-radius: 10px;">
-  <p style="font: size 125%;font-family: Arial, Helvetica, sans-serif;">*El sistema del menu de hoy es un prototipo, puede haber fallos</p>
 </center>
 <script>
   const menu = {
+  "Jueves 31 Oct": ["Garbanzos con calabaza", "Croquetas. Lechuga aliñada", "Fruta del tiempo"],
   "Lunes 4 Nov": ["Patatas con alcachofas", "Pavo guisado con champiñones", "Fruta del tiempo"],
   "Martes 5 Nov": ["Arroz con tomate", "Fogonero a la plancha con ensalada", "Fruta del tiempo"],
   "Miércoles 6 Nov": ["Crema de calabaza", "Pizza (revuelto de jamón y champiñones)", "Fruta del tiempo"],
@@ -102,13 +102,13 @@
     const isWeekend = (todayDate.getDay() === 0 || todayDate.getDay() === 6);
 
     if (new Date() > parseSpanishDate(Object.keys(menu).pop())) {
-      return `Menú de hoy* (${today}):\n\nDatos no disponibles (desactualizado)`;
+      return `Menú de hoy (${today}):\n\nDatos no disponibles (desactualizado)`;
     } else if (isWeekend) {
-      return `Menú de hoy* (${today}):\n\nNo hay menú disponible hoy`;
+      return `Menú de hoy (${today}):\n\nNo hay menú disponible hoy`;
     } else if (menu[today]) {
-      return `Menú de hoy* (${today}):\n\n${menu[today].join('\n')}`;
+      return `Menú de hoy (${today}):\n\n${menu[today].join('\n')}`;
     } else {
-      return `Menú de hoy* (${today}):\n\nNo hay datos disponibles`;
+      return `Menú de hoy (${today}):\n\nNo hay datos disponibles`;
     }
   }
 
