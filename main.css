@@ -9,12 +9,13 @@
   
   .row {
     display: flex;
+    padding:5px 
   }
   
   /* Create two equal columns that sits next to each other */
   .column {
     flex: 50%;
-    padding: 0px;
+    padding: 5px;
     text-align: center;
     font-size:175% /* Should be removed. Only for demonstration */
   }
@@ -23,32 +24,37 @@
       font-family: Arial, Helvetica, sans-serif;
       background-color: #ffffff
     }
-  
+
     .topnav {
-      top: 0px;
-      position: fixed;
-      overflow: hidden;
-      width: 100%; /* Full width */
-      background-color: #ffffff;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      background-color: #333;
+      padding: 10px 0;
     }
-  
+    
     .topnav a {
-      float: left;
-      color: #000000;
+      color: white;
+      padding: 14px 20px;
       text-align: center;
-      padding: 14px 16px;
       text-decoration: none;
-      font-size: 17px;
+      font-size: 1.1em;
+      flex: 1 1 100%; /* Stack items vertically on small screens */
     }
   
     .topnav a:hover {
-      background-color: #00925d;
-      color: rgb(0, 0, 0);
+      background-color: #575757;
+    }
+    
+    .topnav a.active {
+      background-color: #4CAF50;
     }
   
-    .topnav a.active {
-      background-color: #00925d;
-      color: rgb(0, 0, 0);
+    /* Responsive adjustments for mobile */
+    @media (min-width: 600px) {
+      .topnav a {
+        flex: 1; /* Horizontal layout on larger screens */
+      }
     }
     .button1 {
       background-color: white;
