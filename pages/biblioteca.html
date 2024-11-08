@@ -1,12 +1,11 @@
 <head>
-    <title>Biblioteca Altillo</title>
+    <title>SCHL Biblioteca</title>
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../main.css">
     <meta name="color-scheme" content="light only">
     <style>
       body {
-          font-family: Arial, sans-serif;
-      }
+        font-family: Verdana, Geneva, Tahoma, sans-serif;      }
       table {
           width: 100%;
           border-collapse: collapse;
@@ -18,7 +17,7 @@
           padding: 10px;
           text-align: center;
           border: 3px solid #000000;
-          font-family:Helvetica
+          font-family:Verdana
       }
       th {
           background-color: #f2f2f2;
@@ -54,16 +53,16 @@
   <br>
 <br>
 <center>
-  <h1 style="font-family:Helvetica;font-size: 300%" id="title">Calendario de biblioteca</h1>
+  <h1 style="font-family:Verdana, Geneva, Tahoma, sans-serif;font-size: 300%" id="title">Calendario de biblioteca</h1>
   <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
     <div style="display: flex; align-items: center;">
         <div style="width: 50px; height: 50px; background-color: #ffeb3b; margin-right: 10px; border-radius: 25%; margin-left: 10px"></div>
-        <span style="font-size: 16px;font-family:Helvetica;font-size: 200%">Dia actual</span>
+        <span style="font-size: 16px;font-family:Verdana;font-size: 200%">Dia actual</span>
     </div>
 
     <div style="display: flex; align-items: center;">
         <div style="width: 50px; height: 50px; background-color: #4cbc2b; margin-right: 10px; border-radius: 25%;"></div>
-        <span style="font-size: 16px;font-family:Helvetica;font-size: 200%">Biblioteca para nosotros</span>
+        <span style="font-size: 16px;font-family:Verdana;font-size: 200%">Biblioteca para nosotros</span>
     </div>
 </div>
 
@@ -150,6 +149,9 @@ function parseSpanishDate(dateString) {
 }
 // Function to populate the calendar table
 function populateCalendar() {
+    if (new Date() > parseSpanishDate(Object.keys(schedule).pop())){
+        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='color: red;font-family:Verdana'>(desactualizado)</div>"
+    }
     const calendarBody = document.getElementById('calendar-body');
     const currentDate = getCurrentFormattedDate();
 
@@ -173,13 +175,13 @@ function populateCalendar() {
             if (timeSlot1 === "1 BTO") {
               timeSlot1Cell.classList.add("ushighlight")
               if (date === currentDate) {
-              document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Helvetica'>Hoy: Primer patio</div>"
+              document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Verdana'>Hoy: Primer patio</div>"
               foundUs = true;
               }
             }
             if (timeSlot2 === "1 BTO"){
                 if (date === currentDate) {
-                document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Helvetica'>Hoy: Segundo patio</div>"
+                document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Verdana'>Hoy: Segundo patio</div>"
                 foundUs = true;    
             }
                 timeSlot2Cell.classList.add("ushighlight")
@@ -196,12 +198,8 @@ function populateCalendar() {
             calendarBody.appendChild(row);
         }
     }
-    
     if (!foundUs){
-        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Helvetica'>Hoy: No hay</div>"
-    }
-    if (new Date() > parseSpanishDate(Object.keys(schedule).pop())){
-        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='color: red;font-family:Helvetica'>(desactualizado)</div>"
+        document.getElementById("title").innerHTML = "Calendario de biblioteca <div style='font-family:Verdana'>Hoy: No hay</div>"
     }
 }
 
