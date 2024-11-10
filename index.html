@@ -28,7 +28,6 @@
             max-width: 900px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             text-align: center;
-            position: relative;
             font-family: Verdana;
         }
 
@@ -50,6 +49,18 @@
         .sticky-note {
             background-color: #ffe599;
             border: 2px solid #ccad00;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px;
+            width: 150px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            position: absolute;
+        }
+        .sticky-note:hover {
+            background-color: #c8b47a;
+            border: 2px solid #a78e00;
             border-radius: 10px;
             padding: 15px;
             margin: 15px;
@@ -112,6 +123,9 @@
             cursor: pointer;
             float: right;
         }
+        .overlay .close-btn:hover {
+            color: #820000;
+        }
     </style>
 </head>
 <body>
@@ -150,7 +164,6 @@
             <h2 id="overlay-title"></h2>
             <img id="overlay-image" src="" alt="">
             <p id="overlay-description"></p>
-            <a id="overlay-link" href="" target="_blank" style="color: #ffeb3b;">Más información</a>
         </div>
     </div>
 
@@ -164,12 +177,13 @@
       // Sample data for the sticky notes with row and column positions
       const announcements = [
           {
-              title: "Tombola",
-              description: "descripcion",
-              link: "https://ejemplo.com/evento-escolar",
-              image: "images/123.jpg",
-              row: 1,
-              column: 1
+              title: "¿Tablón de anuncios? (info)",
+              description: `<h1 style='font-family:Verdana'>¿Qué es y cuál es su uso?</h1>El tablón de anuncios es una forma de comunicar y promocionar proyectos, actividades y eventos que están ocurriendo en el colegio. Aquí puedes anunciar eventos como la tómbola, jumper sweater day, campañas solidarias, competencias deportivas, y mucho más.
+              <h1 style='font-family:Verdana'>Como lo puedo usar?</h1>Para publicar en el tablón de anuncios, envía un correo a raulaltillo@gmail.com con la siguiente información:<br><br>Título del anuncio<br>Imagen o gráfico que acompañe el mensaje (opcional, pero recomendable)<br>Descripción clara y breve del evento o proyecto, incluyendo fechas y lugar si es relevante.<br><br>
+              La nota se quedará en el tablón de anuncios hasta que el evento termine o cuando tú decidas retirarla. Si quieres que se retire en una fecha específica, indícalo en el correo.`,
+              image: false,
+              x: 650,
+              y: 425
           },
       ];
   
@@ -184,14 +198,20 @@
               sticky.className = 'sticky-note';
   
               // Position sticky note based on row and column
-              sticky.style.top = `${(note.row - 1) * noteSize + 20}px`;  // Adjust top offset by row
-              sticky.style.left = `${(note.column - 1) * noteSize + 20}px`;  // Adjust left offset by column
+              sticky.style.top = `${note.y}px`;  // Adjust top offset by row
+              sticky.style.left = `${note.x}px`;  // Adjust left offset by column
               
-              // Inner HTML for sticky note (title and image)
-              sticky.innerHTML = `
+              if (note.image){
+                sticky.innerHTML = `
                   <div class="title">${note.title}</div>
                   <img src="${note.image}" alt="${note.title}">
               `;
+            
+              }
+              else{
+                sticky.innerHTML = `
+                  <div class="title">${note.title}</div>`;
+              }
   
               // Event listener to open overlay with full information
               sticky.addEventListener('click', () => {
@@ -207,16 +227,10 @@
       function openOverlay(note) {
           document.getElementById('overlay-title').textContent = note.title;
           document.getElementById('overlay-image').src = note.image;
-          document.getElementById('overlay-description').textContent = note.description;
-          document.getElementById('overlay-link').href = note.link;
-          if(note.link == null){
-            document.getElementById('overlay-link').style.display = "none"
-
-          }
+          document.getElementById('overlay-description').innerHTML = note.description;
           document.getElementById('overlay-title').style.fontFamily = "Verdana";
           document.getElementById('overlay-image').style.fontFamily = "Verdana";
           document.getElementById('overlay-description').style.fontFamily = "Verdana";
-          document.getElementById('overlay-link').style.fontFamily = "Verdana";
   
           // Show the overlay
           document.getElementById('overlay').style.display = 'block';
