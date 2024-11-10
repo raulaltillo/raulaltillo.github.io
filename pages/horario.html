@@ -46,101 +46,57 @@
   </div>
   <script type="text/javascript">
     const classes={ 
-     "Salud Lomce":[["Filosofia", "Biologia", "Ingles", "TIC", "Fisica", "Frances", "Deporte"],
-                    ["Biologia", "Frances", "PS", "Lengua", "Mates", "ToK", "Ingles"],
-                    ["Lengua", "Fisica", "TIC", "Deporte", "Filosofia", "Mates", "Ingles"],
-                    ["Mates", "ToK/CAS", "Fisica", "Ingles", "Filosofia", "Biologia", "Lengua"],
-                    ["Lengua", "Biologia", "Fisica", "TIC", "PS", "Mates", "Ingles"]], 
-     "Salud IB":[["Frances", "Mngrf/CAS", "Ingles", "Mates", "Fisica", "Deporte", "Biologia"],
-                    ["Lengua", "Deporte", "Frances", "Mates", "Biologia", "PS", "Ingles"],
-                    ["Mates", "Fisica", "Lengua", "Biologia", "SAS", "Frances", "Ingles"],
-                    ["ToK", "Biologia", "Fisica", "Ingles", "Mates", "SAS", "Lengua"],
-                    ["Tok", "SAS", "Fisica", "PS", "Frances", "Lengua", "Ingles"]], 
-     "Tecnologico Lomce":[["PS", "DT", "Ingles", "Lengua", "Mates", "Frances", "Fisica"],
-                    ["TIC", "Frances", "ToK/CAS", "Lengua", "Filosofia", "Mates", "Ingles"],
-                    ["DT", "Deporte", "Fisica", "TIC", "Mates", "PS", "Ingles"],
-                    ["Filosofia", "TIC", "Lengua", "Ingles", "Fisica", "ToK", "DT"],
-                    ["DT", "Fisica", "Lengua", "Mates", "Filosofia", "Deporte", "Ingles"]],
-      "Tecnologico IB":[["DT", "Mngrf/CAS", "Ingles", "Mates", "SD", "Frances", "Fisica"],
-                    ["Lengua", "Frances", "SD", "Mates", "DT", "Deporte", "Ingles"],
-                    ["Mates", "DT", "Lengua", "Fisica", "SAS", "SD", "Ingles"],
-                    ["ToK", "Fisica", "SD", "Ingles", "Mates", "SAS", "Lengua"],
-                    ["ToK", "SAS", "Fisica", "Deporte", "DT", "Lengua", "Ingles"]],
-      "Sociales Lomce":[["Lengua", "PS", "Ingles", "Historia", "TIC", "Frances", "Mates"],
-                    ["Economia", "Frances", "TIC", "Filosofia", "Historia", "Lengua", "Ingles"],
-                    ["Lengua", "TIC", "PS", "Economia", "Mates", "ToK", "Ingles"],
-                    ["Mates", "Lengua", "Filosofia", "Ingles", "Historia", "Deporte", "Economia"],
-                    ["Historia", "Economia", "ToK/CAS", "Mates", "Deporte", "Filosofia", "Ingles"]],
-      "Sociales IB":[["Frances", "Mates", "Ingles", "Historia", "Gestion", "Deporte", "Lengua"],
-                    ["Gestion", "Deporte", "Frances", "SAS", "Historia", "PS", "Ingles"],
-                    ["SAS", "ToK", "Mates", "Gestion", "Lengua", "Frances", "Ingles"],
-                    ["Lengua", "ToK", "SAS", "Ingles", "Historia", "Mates", "Gestion"],
-                    ["Historia", "Lengua", "Mates", "PS", "Frances", "Mngrf/CAS", "Ingles"]],
+     "Salud Lomce":[["Filosofia", "Biologia", "Ingles", "", "TIC", "Fisica", "", "Frances", "Deporte"],
+                    ["Biologia", "Frances", "PS", "", "Lengua", "Mates", "", "ToK", "Ingles"],
+                    ["Lengua", "Fisica", "TIC", "", "Deporte", "Filosofia", "", "Mates", "Ingles"],
+                    ["Mates", "ToK/CAS", "Fisica", "", "Ingles", "Filosofia", "", "Biologia", "Lengua"],
+                    ["Lengua", "Biologia", "Fisica", "", "TIC", "PS", "", "Mates", "Ingles"]], 
+     "Salud IB":[["Frances", "Mngrf/CAS", "Ingles", "", "Mates", "Fisica", "", "Deporte", "Biologia"],
+                    ["Lengua", "Deporte", "Frances", "", "Mates", "Biologia", "", "PS", "Ingles"],
+                    ["Mates", "Fisica", "Lengua", "", "Biologia", "SAS", "", "Frances", "Ingles"],
+                    ["ToK", "Biologia", "Fisica", "", "Ingles", "Mates", "", "SAS", "Lengua"],
+                    ["Tok", "SAS", "Fisica", "", "PS", "Frances", "", "Lengua", "Ingles"]], 
+     "Tecnologico Lomce":[["PS", "DT", "Ingles", "", "Lengua", "Mates", "", "Frances", "Fisica"],
+                    ["TIC", "Frances", "ToK/CAS", "", "Lengua", "Filosofia", "", "Mates", "Ingles"],
+                    ["DT", "Deporte", "Fisica", "", "TIC", "Mates", "", "PS", "Ingles"],
+                    ["Filosofia", "TIC", "Lengua", "", "Ingles", "Fisica", "", "ToK", "DT"],
+                    ["DT", "Fisica", "Lengua", "", "Mates", "Filosofia", "", "Deporte", "Ingles"]],
+      "Tecnologico IB":[["DT", "Mngrf/CAS", "Ingles", "", "Mates", "SD", "", "Frances", "Fisica"],
+                    ["Lengua", "Frances", "SD", "", "Mates", "DT", "", "Deporte", "Ingles"],
+                    ["Mates", "DT", "Lengua", "", "Fisica", "SAS", "", "SD", "Ingles"],
+                    ["ToK", "Fisica", "SD", "", "Ingles", "Mates", "", "SAS", "Lengua"],
+                    ["ToK", "SAS", "Fisica", "", "Deporte", "DT", "", "Lengua", "Ingles"]],
+      "Sociales Lomce":[["Lengua", "PS", "Ingles", "", "Historia", "TIC", "", "Frances", "Mates"],
+                    ["Economia", "Frances", "TIC", "", "Filosofia", "Historia", "", "Lengua", "Ingles"],
+                    ["Lengua", "TIC", "PS", "", "Economia", "Mates", "", "ToK", "Ingles"],
+                    ["Mates", "Lengua", "Filosofia", "", "Ingles", "Historia", "", "Deporte", "Economia"],
+                    ["Historia", "Economia", "ToK/CAS", "", "Mates", "Deporte", "", "Filosofia", "Ingles"]],
+      "Sociales IB":[["Frances", "Mates", "Ingles", "", "Historia", "Gestion", "", "Deporte", "Lengua"],
+                    ["Gestion", "Deporte", "Frances", "", "SAS", "Historia", "", "PS", "Ingles"],
+                    ["SAS", "ToK", "Mates", "", "Gestion", "Lengua", "", "Frances", "Ingles"],
+                    ["Lengua", "ToK", "SAS", "", "Ingles", "Historia", "", "Mates", "Gestion"],
+                    ["Historia", "Lengua", "Mates", "", "PS", "Frances", "", "Mngrf/CAS", "Ingles"]],
 };
-for (const schoolclass in classes){
-    document.getElementById(schoolclass).innerHTML = `  <div class="row">
-  <div class="column" style="background-color:#2d9e00;" id="Monday">
-  <h3>Lunes</h3>
-  <pre style=";font-family:Verdana">${classes[schoolclass][0][0]}
-${classes[schoolclass][0][1]}
-${classes[schoolclass][0][2]}
+    const days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"];
+    const colors = ["#2d9e00", "#3ac62d", "#2dff2d", "#78ff42", "#a1ff6a"];
 
-${classes[schoolclass][0][3]}
-${classes[schoolclass][0][4]}
+    function generateDayColumn(day, subjects, color) {
+        return `
+            <div class="column" style="background-color:${color};">
+                <h3>${day}</h3>
+                <pre style="font-family:Verdana">${subjects.join("\n")}</pre>
+            </div>`;
+    }
 
-${classes[schoolclass][0][5]}
-${classes[schoolclass][0][6]}</pre>
-  </div>
-  <div class="column" style="background-color:#3ac62d;" id="Tuesday">
-  <h3>Martes</h3>
-  <pre style="font-family:Verdana">${classes[schoolclass][1][0]}
-${classes[schoolclass][1][1]}
-${classes[schoolclass][1][2]}
+    function generateScheduleHTML(classSchedule) {
+        return `<div class="row">
+            ${classSchedule.map((subjects, index) => generateDayColumn(days[index], subjects, colors[index])).join("")}
+        </div>`;
+    }
 
-${classes[schoolclass][1][3]}
-${classes[schoolclass][1][4]}
-
-${classes[schoolclass][1][5]}
-${classes[schoolclass][1][6]}</pre>
-  </div>
-  <div class="column" style="background-color:#2dff2d;" id="Wednesday">
-  <h3>Miercoles</h3>
-  <pre style="font-family:Verdana">${classes[schoolclass][2][0]}
-${classes[schoolclass][2][1]}
-${classes[schoolclass][2][2]}
-
-${classes[schoolclass][2][3]}
-${classes[schoolclass][2][4]}
-
-${classes[schoolclass][2][5]}
-${classes[schoolclass][2][6]}</pre>
-  </div>
-  <div class="column" style="background-color:#78ff42;" id="Thursday">
-  <h3>Jueves</h3>
-  <pre style="font-family:Verdana">${classes[schoolclass][3][0]}
-${classes[schoolclass][3][1]}
-${classes[schoolclass][3][2]}
-
-${classes[schoolclass][3][3]}
-${classes[schoolclass][3][4]}
-
-${classes[schoolclass][3][5]}
-${classes[schoolclass][3][6]}</pre>
-  </div>
-  <div class="column" style="background-color:#a1ff6a;" id="Friday">
-  <h3>Viernes</h3>
-  <pre style="font-family:Verdana">${classes[schoolclass][4][0]}
-${classes[schoolclass][4][1]}
-${classes[schoolclass][4][2]}
-
-${classes[schoolclass][4][3]}
-${classes[schoolclass][4][4]}
-
-${classes[schoolclass][4][5]}
-${classes[schoolclass][4][6]}</pre>
-  </div></div>`;
-}
-
+    for (const schoolClass in classes) {
+        document.getElementById(schoolClass).innerHTML = generateScheduleHTML(classes[schoolClass]);
+    }
     </script>
 
 
