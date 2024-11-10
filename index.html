@@ -86,21 +86,28 @@
 
         /* Full-screen overlay */
         .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #ffffff;
-            font-size: 1.2em;
-            text-align: center;
-            padding: 40px;
-            overflow-y: auto;
-            z-index: 1000;
-            font-family: Verdana;
-        }
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ffffff;
+    font-size: 1.2em;
+    text-align: center;
+    padding: 40px;
+    overflow-y: auto;
+    z-index: 1000;
+    font-family: Verdana;
+    opacity: 0; /* Start with opacity 0 */
+    transition: opacity 0.3s ease; /* Add fade transition */
+}
+
+.overlay.show {
+    display: block;
+    opacity: 1; /* Set to full opacity when shown */
+}
 
         .overlay-content {
             background-color: #333;
@@ -179,7 +186,7 @@
       const announcements = [
           {
               title: "¿Tablón de anuncios? (info)",
-              description: `<h1 style='font-family:Verdana'>¿Qué es y cuál es su uso?</h1>El tablón de anuncios es una forma de comunicar y promocionar proyectos, actividades y eventos que están ocurriendo en el colegio. Aquí puedes anunciar eventos como la tómbola, jumper sweater day, voluntariados, actividades deportivas, y mucho más.
+              description: `<h1 style='font-family:Verdana'>¿Qué es y cuál es su uso?</h1>El tablón de anuncios es una forma de comunicar y promocionar proyectos, actividades y eventos que están ocurriendo en el colegio. Aquí puedes anunciar eventos como la tómbola, jumper day, voluntariados, actividades deportivas, y mucho más.
               <h1 style='font-family:Verdana'>Como lo puedo usar?</h1>Para publicar en el tablón de anuncios, envía un correo a raulaltillo@gmail.com con la siguiente información:<br><br>Título del anuncio<br>Imagen o gráfico que acompañe el mensaje (opcional, pero recomendable)<br>Descripción clara y breve del evento o proyecto, incluyendo fechas y lugar si es relevante.<br><br>
               La nota se quedará en el tablón de anuncios hasta que el evento termine o cuando tú decidas retirarla. Si quieres que se retire en una fecha específica, indícalo en el correo.`,
               image: false,
@@ -226,21 +233,28 @@
   
       // Function to open overlay with note information
       function openOverlay(note) {
-          document.getElementById('overlay-title').textContent = note.title;
+        document.getElementById('overlay-title').textContent = note.title;
           document.getElementById('overlay-image').src = note.image;
           document.getElementById('overlay-description').innerHTML = note.description;
           document.getElementById('overlay-title').style.fontFamily = "Verdana";
           document.getElementById('overlay-image').style.fontFamily = "Verdana";
           document.getElementById('overlay-description').style.fontFamily = "Verdana";
-  
-          // Show the overlay
-          document.getElementById('overlay').style.display = 'block';
-      }
-  
-      // Function to close the overlay
-      function closeOverlay() {
-          document.getElementById('overlay').style.display = 'none';
-      }
+    const overlay = document.getElementById('overlay');
+    overlay.style.display = 'block'; // Set display to block to make it visible
+
+    // Use setTimeout to allow the display property change to take effect
+    setTimeout(() => {
+        overlay.classList.add('show'); // Add 'show' class to trigger fade-in transition
+    }, 10); // Small delay to ensure display update before opacity transition
+}
+
+function closeOverlay() {
+    const overlay = document.getElementById('overlay');
+    overlay.classList.remove('show'); // Fade out
+    setTimeout(() => {
+        overlay.style.display = 'none'; // Hide completely after fade-out
+    }, 300); // Match this with the CSS transition time
+}
   
       // Event listener to close overlay on Escape key press
       document.addEventListener('keydown', (event) => {
