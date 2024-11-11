@@ -26,34 +26,27 @@
   <br>
   <br>
   <br>
-
-  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
-    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Verdana">Salud Lomce</h1>
-    <div id="Salud Lomce"></div>
-  </div>
-  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
-    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Verdana">Salud IB</h1>
-    <div id="Salud IB"></div>
-  </div>
-  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
-    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Verdana">Tecnologico Lomce</h1>
-    <div id="Tecnologico Lomce"></div>
-  </div>
-  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
-    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Verdana">Tecnologico IB</h1>
-    <div id="Tecnologico IB"></div>
-  </div>
-  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
-    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Verdana">Sociales Lomce</h1>
-    <div id="Sociales Lomce"></div>
-  </div>
-  <div style="border: solid 15px #000000; border-radius: 10px; background-color: #ffffff; padding:20; margin:20px;" id="saludlom">
-    <h1 style="font-size: 400%; color: #000000; text-align: center;font-family:Verdana">Sociales IB</h1>
-    <div id="Sociales IB"></div>
-  </div>
+  <div style="border: solid 15px #000000; border-radius: 10px; padding:20; margin:20px">
+  <div id="scheduleContainer" style="display: none;">
+    <h1 id="classTitle" style="font-size: 2.5em; color: #000000; text-align: center; font-family: Verdana;"></h1>
+    <div id="schedule"></div>
+</div>
+  <div style="text-align: center; margin: 20px;">
+    <label for="classSelect" style="font-family:Verdana; font-size: 2em;">Selecciona tu clase:</label>
+    <select id="classSelect" onchange="selectClass()" style="font-family:Verdana; font-size: 2em;">
+      <option value="" style="font-family:Verdana">--Seleccionar Clase--</option>
+      <option value="Salud Lomloe" style="font-family:Verdana">Salud Lomloe</option>
+      <option value="Salud IB" style="font-family:Verdana">Salud IB</option>
+      <option value="Tecnologico Lomloe" style="font-family:Verdana">Tecnologico Lomloe</option>
+      <option value="Tecnologico IB" style="font-family:Verdana">Tecnologico IB</option>
+      <option value="Sociales Lomloe" style="font-family:Verdana">Sociales Lomloe</option>
+      <option value="Sociales IB" style="font-family:Verdana">Sociales IB</option>
+    </select>
+</div>
+</div>
   <script type="text/javascript">
     const classes={ 
-     "Salud Lomce":[["Filosofia", "Biologia", "Ingles", "", "TIC", "Fisica", "", "Frances", "Deporte"],
+     "Salud Lomloe":[["Filosofia", "Biologia", "Ingles", "", "TIC", "Fisica", "", "Frances", "Deporte"],
                     ["Biologia", "Frances", "PS", "", "Lengua", "Mates", "", "ToK", "Ingles"],
                     ["Lengua", "Fisica", "TIC", "", "Deporte", "Filosofia", "", "Mates", "Ingles"],
                     ["Mates", "ToK/CAS", "Fisica", "", "Ingles", "Filosofia", "", "Biologia", "Lengua"],
@@ -63,7 +56,7 @@
                     ["Mates", "Fisica", "Lengua", "", "Biologia", "SAS", "", "Frances", "Ingles"],
                     ["ToK", "Biologia", "Fisica", "", "Ingles", "Mates", "", "SAS", "Lengua"],
                     ["Tok", "SAS", "Fisica", "", "PS", "Frances", "", "Lengua", "Ingles"]], 
-     "Tecnologico Lomce":[["PS", "DT", "Ingles", "", "Lengua", "Mates", "", "Frances", "Fisica"],
+     "Tecnologico Lomloe":[["PS", "DT", "Ingles", "", "Lengua", "Mates", "", "Frances", "Fisica"],
                     ["TIC", "Frances", "ToK/CAS", "", "Lengua", "Filosofia", "", "Mates", "Ingles"],
                     ["DT", "Deporte", "Fisica", "", "TIC", "Mates", "", "PS", "Ingles"],
                     ["Filosofia", "TIC", "Lengua", "", "Ingles", "Fisica", "", "ToK", "DT"],
@@ -73,7 +66,7 @@
                     ["Mates", "DT", "Lengua", "", "Fisica", "SAS", "", "SD", "Ingles"],
                     ["ToK", "Fisica", "SD", "", "Ingles", "Mates", "", "SAS", "Lengua"],
                     ["ToK", "SAS", "Fisica", "", "Deporte", "DT", "", "Lengua", "Ingles"]],
-      "Sociales Lomce":[["Lengua", "PS", "Ingles", "", "Historia", "TIC", "", "Frances", "Mates"],
+      "Sociales Lomloe":[["Lengua", "PS", "Ingles", "", "Historia", "TIC", "", "Frances", "Mates"],
                     ["Economia", "Frances", "TIC", "", "Filosofia", "Historia", "", "Lengua", "Ingles"],
                     ["Lengua", "TIC", "PS", "", "Economia", "Mates", "", "ToK", "Ingles"],
                     ["Mates", "Lengua", "Filosofia", "", "Ingles", "Historia", "", "Deporte", "Economia"],
@@ -101,9 +94,28 @@
         </div>`;
     }
 
-    for (const schoolClass in classes) {
-        document.getElementById(schoolClass).innerHTML = generateScheduleHTML(classes[schoolClass]);
+    function selectClass() {
+        const selectedClass = document.getElementById("classSelect").value;
+        if (selectedClass) {
+            localStorage.setItem("selectedClass", selectedClass);
+            displayClassSchedule(selectedClass);
+        }
     }
+
+    function displayClassSchedule(className) {
+        const classSchedule = classes[className];
+        document.getElementById("classTitle").innerText = className;
+        document.getElementById("schedule").innerHTML = generateScheduleHTML(classSchedule);
+        document.getElementById("scheduleContainer").style.display = "block";
+    }
+
+    window.onload = function() {
+        const savedClass = localStorage.getItem("selectedClass");
+        if (savedClass) {
+            document.getElementById("classSelect").value = savedClass;
+            displayClassSchedule(savedClass);
+        }
+    };
     </script>
 
 
