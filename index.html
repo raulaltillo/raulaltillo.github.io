@@ -53,27 +53,22 @@
             border-radius: 10px;
             padding: 15px;
             margin: 15px;
-            width: 150px;
+            min-width: 150px; /* Minimum width for short content */
+            max-width: 300px; /* Optional max-width to limit note size */
+            width: auto; /* Allows width to adjust based on content */
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: inline-block;
             position: absolute;
+
         }
         .sticky-note:hover {
             background-color: #c8b47a;
             border: 2px solid #a78e00;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px;
-            width: 150px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-            position: absolute;
         }
 
         .sticky-note img {
-            width: 100%;
+            width: 150px;
             border-radius: 8px;
             margin-bottom: 10px;
         }
@@ -190,7 +185,33 @@
               <h1 style='font-family:Verdana'>Como lo puedo usar?</h1>Para publicar en el tablón de anuncios, envía un correo a raulaltillo@gmail.com con la siguiente información:<br><br>Título del anuncio<br>Imagen o gráfico que acompañe el mensaje (opcional, pero recomendable)<br>Descripción clara y breve del evento o proyecto, incluyendo fechas y lugar si es relevante.<br><br>
               La nota se quedará en el tablón de anuncios hasta que el evento termine o cuando tú decidas retirarla. Si quieres que se retire en una fecha específica, indícalo en el correo.`,
               image: false,
+              showimageonclick:false,
               x: 650,
+              y: 0
+          },
+          {
+              title: "Jumper day",
+              description: `Es un evento que se realiza cada año el 11 de diciembre, en el cual podemos vestir la ropa que queramos, siempre y cuando llevemos algo navideño y 1 euro.
+<br><br>El dinero recaudado en este evento será donado a una ONG.`,
+              image: "./images/jumper.png",
+              showimageonclick:false,
+              x: 0,
+              y: 0
+          },
+          {
+              title: "Jornada<br>cientifica",
+              description: `Este evento se llevará a cabo el día 29 de noviembre, y el 2 y 3 de diciembre.<h2 style='font-family:Verdana'>¿Qué se hace?</h2>La mayoría de los cursos solo participarán, excepto Bachillerato, que tendrá la oportunidad de ayudar en el evento como voluntario.`,
+              image: false,
+              showimageonclick:false,
+              x: 200,
+              y: 0
+          },
+          {
+              title: "Jornada<br>gastroeducativa",
+              description: `Este evento será el 21 de noviembre, en el cual se disfrutará de comida mexicana.<h2 style='font-family:Verdana'>¿Qué se comerá?</h2>Sopa de pollo mexicana<br>Chili con carne y nachos<br>Flan casero de durazno`,
+              image: false,
+              showimageonclick:false,
+              x: 375,
               y: 0
           },
       ];
@@ -201,13 +222,11 @@
           const noteSize = 180;  // Approximate size for each note
   
           data.forEach((note) => {
-              // Create sticky note element
               const sticky = document.createElement('div');
               sticky.className = 'sticky-note';
   
-              // Position sticky note based on row and column
-              sticky.style.top = `${note.y}px`;  // Adjust top offset by row
-              sticky.style.left = `${note.x}px`;  // Adjust left offset by column
+              sticky.style.top = `${note.y}px`;
+              sticky.style.left = `${note.x}px`; 
               
               if (note.image){
                 sticky.innerHTML = `
@@ -221,39 +240,37 @@
                   <div class="title">${note.title}</div>`;
               }
   
-              // Event listener to open overlay with full information
               sticky.addEventListener('click', () => {
                   openOverlay(note);
               });
   
-              // Append sticky note to container
               container.appendChild(sticky);
           });
       }
   
-      // Function to open overlay with note information
       function openOverlay(note) {
-        document.getElementById('overlay-title').textContent = note.title;
-          document.getElementById('overlay-image').src = note.image;
+        document.getElementById('overlay-title').textContent = note.title.replace("<br>", " ");
+          if (note.showimageonclick){document.getElementById('overlay-image').src = note.image;}
+          else{document.getElementById('overlay-image').style.display = "none"}
           document.getElementById('overlay-description').innerHTML = note.description;
           document.getElementById('overlay-title').style.fontFamily = "Verdana";
           document.getElementById('overlay-image').style.fontFamily = "Verdana";
           document.getElementById('overlay-description').style.fontFamily = "Verdana";
     const overlay = document.getElementById('overlay');
-    overlay.style.display = 'block'; // Set display to block to make it visible
+    overlay.style.display = 'block'; 
 
-    // Use setTimeout to allow the display property change to take effect
+
     setTimeout(() => {
-        overlay.classList.add('show'); // Add 'show' class to trigger fade-in transition
-    }, 10); // Small delay to ensure display update before opacity transition
+        overlay.classList.add('show');
+    }, 10);
 }
 
 function closeOverlay() {
     const overlay = document.getElementById('overlay');
-    overlay.classList.remove('show'); // Fade out
+    overlay.classList.remove('show');
     setTimeout(() => {
         overlay.style.display = 'none'; // Hide completely after fade-out
-    }, 300); // Match this with the CSS transition time
+    }, 300); 
 }
   
       // Event listener to close overlay on Escape key press
