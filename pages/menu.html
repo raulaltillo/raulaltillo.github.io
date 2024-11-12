@@ -18,7 +18,6 @@
     <a href="./horario.html">Horario</a>
     <a class="active" href="#">Menu</a>
     <!--<a href="pages/coding_answers.html">Coding/CS</a>-->
-    <a href="./biblioteca.html">Biblioteca</a>
     <a href="./book_answers.html">Respuestas Libros</a>
     <!--<a href="pages/4dexams.html">examanes</a>-->
     <a href="./selectividad.html">Modelos Selectividad</a>
@@ -62,7 +61,6 @@
   "Viernes 29 Nov": ["Ensalada completa (crema de puerros)", "Canelones (lomo adobado con patatas fritas)", "Fruta del tiempo"]
 }
 
-  // Helper function to get today's date in the correct format (e.g., "Lunes 28 Oct")
   function getFormattedDate() {
     const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
@@ -75,7 +73,6 @@
     return `${dayOfWeek} ${day} ${month}`;
   }
   function parseSpanishDate(dateString) {
-    // Month mapping from Spanish abbreviations to month numbers
     const months = {
         'Ene': 0,  // January
         'Feb': 1,  // February
@@ -91,10 +88,8 @@
         'Dic': 11  // December
     };
 
-    // Split the input string into components
     const [weekday, day, month] = dateString.split(" ");
 
-    // Get the current year (or you can specify a different year if needed)
     const currentYear = new Date().getFullYear();
 
     // Create a Date object
@@ -102,9 +97,7 @@
 
     return date;
 }
-  // Check if today's date is beyond the last date in the menu
 
-  // Get today's menu or indicate if the data is outdated
   function getTodaysMenu() {
     const today = getFormattedDate();
     const todayDate = new Date();
@@ -121,7 +114,7 @@
     }
   }
 
-  // Display the menu at the top of the page
+
     document.getElementById("todaydata").innerHTML = getTodaysMenu();
 </script>
 </div>

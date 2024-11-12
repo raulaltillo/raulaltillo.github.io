@@ -141,35 +141,23 @@
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
     <div class="topnav">
         <a class="active" href="#">Inicio/Tablon</a>
         <a href="pages/horario.html">Horario</a>
         <a href="pages/menu.html">Menu</a>
-        <a href="pages/biblioteca.html">Biblioteca</a>
         <a href="pages/book_answers.html">Respuestas Libros</a>
         <a href="pages/selectividad.html">Modelos Selectividad</a>
         <a href="pages/globales.html">Fecha Globales</a>
     </div>
-
-    <!-- Separator below navbar -->
     <br><br><br><br>
-
-    <!-- Announcement Board -->
     <div class="tablon-anuncios">
         <h1 style="font-family: HACKED;">VSECT</h1>
         <div class="subtitulo" style="color: #000000;">Tablón de anuncios</div>
-        
-        <!-- Image of the announcement board -->
         <div style="position: relative;">
             <img src="images/corcho.jpeg" alt="Imagen del tablón de anuncios" style="width: 100%; border-radius: 12px;border: rgb(190, 136, 86) solid 5px;">
-            
-            <!-- Sticky notes will be added here -->
             <div id="sticky-notes-container"></div>
         </div>
     </div>
-
-    <!-- Overlay for expanded sticky note -->
     <div id="overlay" class="overlay" onclick="closeOverlayOnClickOutside(event)">
         <div class="overlay-content">
             <span class="close-btn" onclick="closeOverlay()">✖</span>
@@ -178,15 +166,12 @@
             <p id="overlay-description"></p>
         </div>
     </div>
-
-    <!-- JavaScript for dynamically adding sticky notes -->
     <script>
             function closeOverlayOnClickOutside(event) {
         if (event.target === document.getElementById('overlay')) {
             closeOverlay();
         }
     }
-      // Sample data for the sticky notes with row and column positions
       const announcements = [
           {
               title: "¿Tablón de anuncios? (info)",
@@ -225,10 +210,8 @@
           },
       ];
   
-      // Function to create and display sticky notes based on row and column positions
       function displayStickyNotes(data) {
           const container = document.getElementById('sticky-notes-container');
-          const noteSize = 180;  // Approximate size for each note
   
           data.forEach((note) => {
               const sticky = document.createElement('div');
@@ -278,18 +261,16 @@ function closeOverlay() {
     const overlay = document.getElementById('overlay');
     overlay.classList.remove('show');
     setTimeout(() => {
-        overlay.style.display = 'none'; // Hide completely after fade-out
+        overlay.style.display = 'none';
     }, 300); 
 }
   
-      // Event listener to close overlay on Escape key press
       document.addEventListener('keydown', (event) => {
           if (event.key === "Escape") {
               closeOverlay();
           }
       });
   
-      // Display the notes on page load
       displayStickyNotes(announcements);
   </script>
   
