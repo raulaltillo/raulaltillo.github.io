@@ -27,21 +27,21 @@
   <br>
   <div style="border: solid 15px #000000; border-radius: 10px; padding:20; margin:20px">
   <div id="scheduleContainer" style="display: none;">
-    <h1 id="classTitle" style="font-size: 2.5em; color: #000000; text-align: center; font-family: Verdana;"></h1>
+    <h1 id="classTitle" style="font-size: 2.5em; color: #000000; text-align: center;"></h1>
     <div id="schedule"></div>
 </div>
   <div style="text-align: center; margin: 20px;">
-    <label for="classSelect" style="font-family:Verdana; font-size: 2em;">Selecciona tu clase:</label>
-    <select id="classSelect" onchange="selectClass()" style="font-family:Verdana; font-size: 2em;">
-      <option value="" style="font-family:Verdana">--Seleccionar Clase--</option>
-      <option value="Salud Lomloe" style="font-family:Verdana">Salud Lomloe</option>
-      <option value="Salud IB" style="font-family:Verdana">Salud IB</option>
-      <option value="Tecnologico Lomloe" style="font-family:Verdana">Tecnologico Lomloe</option>
-      <option value="Tecnologico IB" style="font-family:Verdana">Tecnologico IB</option>
-      <option value="Sociales Lomloe" style="font-family:Verdana">Sociales Lomloe</option>
-      <option value="Sociales IB" style="font-family:Verdana">Sociales IB</option>
+    <label for="classSelect" style="font-size: 2em;">Selecciona tu clase:</label>
+    <select id="classSelect" onchange="selectClass()" style="font-size: 2em;">
+      <option value="">--Seleccionar Clase--</option>
+      <option value="Salud Lomloe">Salud Lomloe</option>
+      <option value="Salud IB">Salud IB</option>
+      <option value="Tecnologico Lomloe">Tecnologico Lomloe</option>
+      <option value="Tecnologico IB">Tecnologico IB</option>
+      <option value="Sociales Lomloe">Sociales Lomloe</option>
+      <option value="Sociales IB">Sociales IB</option>
     </select>
-  <p style="font-family: Verdana;">Esta seleccion se guarda entre sesiones</p>
+  <p>Esta seleccion se guarda entre sesiones</p>
 </div>
 </div>
   <script type="text/javascript">
@@ -83,8 +83,8 @@
     function generateDayColumn(day, subjects, color) {
         return `
             <div class="column" style="background-color:${color};">
-                <h3>${day}</h3>
-                <pre style="font-family:Verdana">${subjects.join("\n")}</pre>
+                <h3 style="font-family:Hacked">${day}</h3>
+                <pre>${subjects.join("\n")}</pre>
             </div>`;
     }
 

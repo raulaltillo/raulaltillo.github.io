@@ -18,17 +18,13 @@
     <meta name="color-scheme" content="light only">
     <meta name="google-site-verification" content="iXNx_a-Ivsx2BtDkC5G5RMdgj7E3izGdgBhJrgkBXXI" /> <!--DO NOT REMOVE-->
     <style>
-        /* General Styles */
         body {
-            font-family: Verdana, Geneva, Tahoma, sans-serif;
             background-color: #f0f0f0;
             margin: 0;
             padding: 0;
         }
 
 
-
-        /* Tablon de anuncios container */
         .tablon-anuncios {
             background-color: #ffffff;
             border: 3px solid #000000;
@@ -38,20 +34,17 @@
             max-width: 900px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             text-align: center;
-            font-family: Verdana;
         }
 
         .tablon-anuncios h1 {
             font-size: 3.5em;
             color: #000000;
-            font-family: Verdana;
             margin-bottom: 20px;
         }
 
         .tablon-anuncios .subtitulo {
             font-size: 1.5em;
             color: #555555;
-            font-family: Verdana;
             margin-bottom: 30px;
         }
 
@@ -85,7 +78,6 @@
         .sticky-note .title {
             font-weight: bold;
             font-size: 1.1em;
-            font-family: Verdana;
         }
 
         /* Full-screen overlay */
@@ -103,14 +95,13 @@
     padding: 40px;
     overflow-y: auto;
     z-index: 1000;
-    font-family: Verdana;
-    opacity: 0; /* Start with opacity 0 */
-    transition: opacity 0.3s ease; /* Add fade transition */
+    opacity: 0;
+    transition: opacity 0.3s ease; 
 }
 
 .overlay.show {
     display: block;
-    opacity: 1; /* Set to full opacity when shown */
+    opacity: 1;
 }
 
         .overlay-content {
@@ -120,7 +111,6 @@
             max-width: 600px;
             margin: auto;
             text-align: left;
-            font-family: Verdana;
         }
 
         .overlay img {
@@ -174,8 +164,8 @@
       const announcements = [
           {
               title: "¿Tablón de anuncios? (info)",
-              description: `<h1 style='font-family:Verdana'>¿Qué es y cuál es su uso?</h1>El tablón de anuncios es una forma de comunicar y promocionar proyectos, actividades y eventos que están ocurriendo en el colegio. Aquí puedes anunciar eventos como la tómbola, jumper day, voluntariados, actividades deportivas, y mucho más.
-              <h1 style='font-family:Verdana'>Como lo puedo usar?</h1>Para publicar en el tablón de anuncios, envía un correo a raulaltillo@gmail.com USANDO TU CORREO PERSONAL (el colegio bloquea emails a externos) con la siguiente información:<br><br>Título del anuncio<br>Imagen o gráfico que acompañe el mensaje (opcional, pero recomendable)<br>Descripción clara y breve del evento o proyecto, incluyendo fechas y lugar si es relevante.<br><br>
+              description: `<h1>¿Qué es y cuál es su uso?</h1>El tablón de anuncios es una forma de comunicar y promocionar proyectos, actividades y eventos que están ocurriendo en el colegio. Aquí puedes anunciar eventos como la tómbola, jumper day, voluntariados, actividades deportivas, y mucho más.
+              <h1>Como lo puedo usar?</h1>Para publicar en el tablón de anuncios, envía un correo a raulaltillo@gmail.com USANDO TU CORREO PERSONAL (el colegio bloquea emails a externos) con la siguiente información:<br><br>Título del anuncio<br>Imagen o gráfico que acompañe el mensaje (opcional, pero recomendable)<br>Descripción clara y breve del evento o proyecto, incluyendo fechas y lugar si es relevante.<br><br>
               La nota se quedará en el tablón de anuncios hasta que el evento termine o cuando tú decidas retirarla. Si quieres que se retire en una fecha específica, indícalo en el correo.`,
               image: false,
               x: 650,
@@ -183,28 +173,28 @@
           },
           {
               title: "Jumper day",
-              description: `Es un evento que se realiza cada año el 11 de diciembre, en el cual podemos vestir la ropa que queramos, siempre y cuando llevemos algo navideño y 1 euro.<br><h2 style='font-family:Verdana'>¿A qué ONG va el dinero recaudado?</h2>La ONG se llama <a style='font-family:Verdana' href="https://fundacionkirira.es">Fundación Kirira</a>, la cual, a través de donaciones, contribuye a la erradicación de la violencia por razones culturales.`,
+              description: `Es un evento que se realiza cada año el 11 de diciembre, en el cual podemos vestir la ropa que queramos, siempre y cuando llevemos algo navideño y 1 euro.<br><h2>¿A qué ONG va el dinero recaudado?</h2>La ONG se llama <a href="https://fundacionkirira.es">Fundación Kirira</a>, la cual, a través de donaciones, contribuye a la erradicación de la violencia por razones culturales.`,
               image: "./images/jumper.png",
               x: 0,
               y: 0
           },
           {
               title: "Jornada<br>cientifica",
-              description: `Este evento se llevará a cabo el día 29 de noviembre, y el 2 y 3 de diciembre.<h2 style='font-family:Verdana'>¿Qué se hace?</h2>La mayoría de los cursos solo participarán, excepto Bachillerato, que tendrá la oportunidad de ayudar en el evento como voluntario.`,
+              description: `Este evento se llevará a cabo el día 29 de noviembre, y el 2 y 3 de diciembre.<h2>¿Qué se hace?</h2>La mayoría de los cursos solo participarán, excepto Bachillerato, que tendrá la oportunidad de ayudar en el evento como voluntario.`,
               image: false,
               x: 200,
               y: 0
           },
           {
               title: "Jornada<br>gastroeducativa",
-              description: `Este evento será el 21 de noviembre, en el cual se comerá comida mexicana en el comedor.<h2 style='font-family:Verdana'>¿Qué se comerá?</h2>Sopa de pollo mexicana<br>Chili con carne y nachos<br>Flan casero de durazno`,
+              description: `Este evento será el 21 de noviembre, en el cual se comerá comida mexicana en el comedor.<h2>¿Qué se comerá?</h2>Sopa de pollo mexicana<br>Chili con carne y nachos<br>Flan casero de durazno`,
               image: false,
               x: 375,
               y: 0
           },
           {
               title: "Dia de acción<br>de gracias",
-              description: `Este evento se da el 28 de noviembre. El colegio lo celebra ofreciendo comida especial en el comedor.<h2 style='font-family:Verdana'>¿Qué se comerá?</h2>Crema de calabaza<br>Pavo asado y pure de patatas<br>Tarta de manzana`,
+              description: `Este evento se da el 28 de noviembre. El colegio lo celebra ofreciendo comida especial en el comedor.<h2>¿Qué se comerá?</h2>Crema de calabaza<br>Pavo asado y pure de patatas<br>Tarta de manzana`,
               image: false,
               x: 200,
               y: 100
@@ -244,8 +234,6 @@
       function openOverlay(note) {
         document.getElementById('overlay-title').textContent = note.title.replace("<br>", " ");
           document.getElementById('overlay-description').innerHTML = note.description;
-          document.getElementById('overlay-title').style.fontFamily = "Verdana";
-          document.getElementById('overlay-description').style.fontFamily = "Verdana";
     const overlay = document.getElementById('overlay');
     overlay.style.display = 'block'; 
 
