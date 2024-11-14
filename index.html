@@ -1,162 +1,197 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T470HXGPQZ"></script>
-    <script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T470HXGPQZ"></script>
+  <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-T470HXGPQZ');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="description" content="Pagina web de Raul, Altillo">
-    <title>VSECT Inicio</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="main.css">
-    <meta name="color-scheme" content="light only">
-    <meta name="google-site-verification" content="iXNx_a-Ivsx2BtDkC5G5RMdgj7E3izGdgBhJrgkBXXI" /> <!--DO NOT REMOVE-->
-    <style>
-        body {
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
+    gtag('config', 'G-T470HXGPQZ');   
 
+  </script>
+  <meta charset="UTF-8">
+  <meta name="description" content="Pagina web de Raul, Altillo">
+  <title>VSECT Inicio</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="main.css">
+  <meta name="color-scheme" content="light only">
+  <meta name="google-site-verification" content="iXNx_a-Ivsx2BtDkC5G5RMdgj7E3izGdgBhJrgkBXXI" /> <style>
+    body {
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
 
-        .tablon-anuncios {
-            background-color: #ffffff;
-            border: 3px solid #000000;
-            border-radius: 12px;
-            padding: 30px;
-            margin: 20px auto;
-            max-width: 900px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            text-align: center;
-        }
+    .tablon-anuncios {
+      background-color: #ffffff;
+      border: 3px solid #000000;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 20px auto;
+      max-width: 900px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
 
-        .tablon-anuncios h1 {
-            font-size: 3.5em;
-            color: #000000;
-            margin-bottom: 20px;
-        }
+    .tablon-anuncios h1 {
+      font-size: 3.5em;
+      color: #000000;
+      margin-bottom: 20px;
+    }
 
-        .tablon-anuncios .subtitulo {
-            font-size: 1.5em;
-            color: #555555;
-            margin-bottom: 30px;
-        }
+    .tablon-anuncios .subtitulo {
+      font-size: 1.5em;
+      color: #555555;
+      margin-bottom: 30px;
+    }
 
-        /* Sticky note style */
-        .sticky-note {
-            background-color: #ffe599;
-            border: 2px solid #ccad00;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px;
-            min-width: 150px; /* Minimum width for short content */
-            max-width: 300px; /* Optional max-width to limit note size */
-            width: auto; /* Allows width to adjust based on content */
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-            position: absolute;
+    /* Sticky note style */
+    .sticky-note {
+      background-color: #ffe599;
+      border: 2px solid #ccad00;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px;
+      min-width: 150px; /* Minimum width for short content */
+      max-width: 300px; /* Optional max-width to limit note size */
+      width: auto; /* Allows width to adjust based on content */
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      position: absolute;
+    }
 
-        }
-        .sticky-note:hover {
-            background-color: #c8b47a;
-            border: 2px solid #a78e00;
-        }
+    .sticky-note:hover {
+      background-color: #c8b47a;
+      border: 2px solid #a78e00;
+    }
 
-        .sticky-note img {
-            width: 150px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
+    .sticky-note img {
+      width: 150px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
 
-        .sticky-note .title {
-            font-weight: bold;
-            font-size: 1.1em;
-        }
+    .sticky-note .title {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
 
-        /* Full-screen overlay */
-        .overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #ffffff;
-    font-size: 1.2em;
-    text-align: center;
-    padding: 40px;
-    overflow-y: auto;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease; 
-}
+    /* Full-screen overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #ffffff;
+      font-size: 1.2em;
+      text-align: center;
+      padding: 40px;
+      overflow-y: auto;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease; 
+    }
 
-.overlay.show {
-    display: block;
-    opacity: 1;
-}
+    .overlay.show {
+      display: block;
+      opacity: 1;
+    }
 
-        .overlay-content {
-            background-color: #333;
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 600px;
-            margin: auto;
-            text-align: left;
-        }
+    .overlay-content {
+      background-color: #333;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      text-align: left;
+    }
 
-        .overlay img {
-            max-width: 100%;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
+    .overlay img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
 
-        .overlay .close-btn {
-            color: #ffffff;
-            font-size: 1.5em;
-            cursor: pointer;
-            float: right;
-        }
-        .overlay .close-btn:hover {
-            color: #820000;
-        }
-    </style>
+    .overlay .close-btn {
+      color: #ffffff;
+      font-size: 1.5em;
+      cursor: pointer;
+      float: right;
+    }
+    .overlay .close-btn:hover {
+      color: #820000;
+    }
+
+    footer {
+      background-color: #333; 
+      color: white;
+      font-size:125%;
+      padding: 15px 0;
+      text-align: center;
+      width: 100%;
+      border-radius: 20px;
+      border: #000000 solid 5px;
+      text-shadow: 2px 2px 8px #7d7d7d;
+    }
+
+    footer .container {
+      max-width: 900px; 
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around; 
+      align-items: center;
+    }
+
+    footer a{
+      color: white;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    footer a:hover{
+        text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-    <div class="topnav">
-        <a class="active" href="#">Inicio/Tablon</a>
-        <a href="pages/horario.html">Horario</a>
-        <a href="pages/menu.html">Menu</a>
-        <a href="pages/book_answers.html">Respuestas Libros</a>
-        <a href="pages/selectividad.html">Modelos Selectividad</a>
-        <a href="pages/globales.html">Fecha Globales</a>
+  <div class="topnav">
+    <a class="active" href="#">Inicio/Tablon</a>
+    <a href="pages/horario.html">Horario</a>
+    <a href="pages/menu.html">Menu</a>
+    <a href="pages/book_answers.html">Respuestas Libros</a>
+    <a href="pages/selectividad.html">Modelos Selectividad</a>
+    <a href="pages/globales.html">Fecha Globales</a>
+  </div>
+  <br><br><br><br>
+  <div class="tablon-anuncios">
+    <h1 style="font-family: HACKED;">VSECT</h1>
+    <div class="subtitulo" style="color: #000000;">Tablón de anuncios</div>
+    <div style="position: relative;">
+      <img src="images/corcho.jpeg" alt="Imagen del tablón de anuncios" style="width: 100%; border-radius: 12px;border: rgb(190, 136, 86) solid 5px;">
+      <div id="sticky-notes-container"></div>
     </div>
-    <br><br><br><br>
-    <div class="tablon-anuncios">
-        <h1 style="font-family: HACKED;">VSECT</h1>
-        <div class="subtitulo" style="color: #000000;">Tablón de anuncios</div>
-        <div style="position: relative;">
-            <img src="images/corcho.jpeg" alt="Imagen del tablón de anuncios" style="width: 100%; border-radius: 12px;border: rgb(190, 136, 86) solid 5px;">
-            <div id="sticky-notes-container"></div>
-        </div>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link">FORMULARIO DE SUGERENCIAS</a>
+
+    <footer> 
+      <div class="container">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link">Formulario de Sugerencias</a>
+        <a onclick="copiarEmail(event)">Email de contacto</a>
+      </div>
+    </footer>
+  </div>
+
+  <div id="overlay" class="overlay" onclick="closeOverlayOnClickOutside(event)">
+    <div class="overlay-content">
+      <span class="close-btn" onclick="closeOverlay()">✖</span>
+      <h2 id="overlay-title"></h2>
+      <p id="overlay-description"></p>
     </div>
-    <div id="overlay" class="overlay" onclick="closeOverlayOnClickOutside(event)">
-        <div class="overlay-content">
-            <span class="close-btn" onclick="closeOverlay()">✖</span>
-            <h2 id="overlay-title"></h2>
-            <p id="overlay-description"></p>
-        </div>
-    </div>
-    <script>
+  </div>
+
+  <script>
             function closeOverlayOnClickOutside(event) {
         if (event.target === document.getElementById('overlay')) {
             closeOverlay();
@@ -265,6 +300,37 @@ function closeOverlay() {
       });
   
       displayStickyNotes(announcements);
-  </script>
+      function copiarEmail(event) {
+  event.preventDefault();
+
+  // Get the email button element
+  const emailButton = event.target; 
+
+  // Create the popup element
+  const popup = document.createElement('div');
+  popup.textContent = "Email de contacto copiado: raulaltillo@gmail.com";
+  popup.style.position = 'absolute';
+  popup.style.top = `${emailButton.offsetTop - 50}px`; // Adjust position above the button
+  popup.style.left = `${emailButton.offsetLeft}px`; 
+  popup.style.backgroundColor = 'white';
+  popup.style.padding = '10px 20px';
+  popup.style.border = '1px solid black';
+  popup.style.zIndex = '1000';
+
+  // Add the popup to the page
+  document.body.appendChild(popup);
+
+  // Remove the popup after a short delay
+  setTimeout(() => {
+    document.body.removeChild(popup);
+  }, 2000);
+  event.preventDefault(); // Evita que el enlace abra el cliente de correo
+  const email = "raulaltillo@gmail.com"; 
+  navigator.clipboard.writeText(email)
+    .catch(err => {
+      console.error("Error al copiar al portapapeles: ", err);
+    });
+}
+</script>
 </body>
 </html>
