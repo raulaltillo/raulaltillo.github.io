@@ -147,6 +147,7 @@
             <img src="images/corcho.jpeg" alt="Imagen del tablón de anuncios" style="width: 100%; border-radius: 12px;border: rgb(190, 136, 86) solid 5px;">
             <div id="sticky-notes-container"></div>
         </div>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link">FORMULARIO DE SUGERENCIAS</a>
     </div>
     <div id="overlay" class="overlay" onclick="closeOverlayOnClickOutside(event)">
         <div class="overlay-content">
@@ -164,9 +165,15 @@
       const announcements = [
           {
               title: "¿Tablón de anuncios? (info)",
-              description: `<h1>¿Qué es y cuál es su uso?</h1>El tablón de anuncios es una forma de comunicar y promocionar proyectos, actividades y eventos que están ocurriendo en el colegio. Aquí puedes anunciar eventos como la tómbola, jumper day, voluntariados, actividades deportivas, y mucho más.
-              <h1>Como lo puedo usar?</h1>Para publicar en el tablón de anuncios, envía un correo a raulaltillo@gmail.com USANDO TU CORREO PERSONAL (el colegio bloquea emails a externos) con la siguiente información:<br><br>Título del anuncio<br>Imagen o gráfico que acompañe el mensaje (opcional, pero recomendable)<br>Descripción clara y breve del evento o proyecto, incluyendo fechas y lugar si es relevante.<br><br>
-              La nota se quedará en el tablón de anuncios hasta que el evento termine o cuando tú decidas retirarla. Si quieres que se retire en una fecha específica, indícalo en el correo.`,
+              description: `<h1>¿Qué es y cuál es su uso?</h1>
+El tablón de anuncios es una herramienta para comunicar y promocionar proyectos, actividades y eventos que se están realizando en el colegio. Aquí puedes anunciar eventos como la tómbola, el jumper day, oportunidades de voluntariado, actividades deportivas y mucho más.
+<h1>¿Cómo puedo usarlo?</h1>
+Para publicar en el tablón de anuncios, completa este <a href="https://docs.google.com/forms/d/e/1FAIpQLSdmnggx-5wUoGMO4ITCJbgukaWyXNRC6FT-Jjg7nE5E1BIvWA/viewform?usp=sf_link">formulario</a> con la siguiente información en mente:
+<br><br>
+Título del anuncio<br>
+Imagen o gráfico que acompañe el mensaje (opcional, pero recomendable)<br>
+Descripción clara y breve del evento o proyecto, incluyendo fechas y lugar si es relevante.<br><br>
+La nota se mantendrá en el tablón de anuncios hasta que el evento termine o cuando tú decidas retirarla.`,
               image: false,
               x: 650,
               y: 0
@@ -259,6 +266,5 @@ function closeOverlay() {
   
       displayStickyNotes(announcements);
   </script>
-  
 </body>
 </html>
