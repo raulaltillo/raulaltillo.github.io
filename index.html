@@ -219,34 +219,39 @@ Descripción clara y breve del evento o proyecto, incluyendo fechas y lugar si e
 La nota se mantendrá en el tablón de anuncios hasta que el evento termine o cuando tú decidas retirarla.`,
               image: false,
               x: 650,
-              y: 0
+              y: 0,
+              date: false
           },
           {
               title: "Jumper day",
               description: `Es un evento que se realiza cada año el 11 de diciembre, en el cual podemos vestir la ropa que queramos, siempre y cuando llevemos algo navideño y 1 euro.<br><h2>¿A qué ONG va el dinero recaudado?</h2>La ONG se llama <a href="https://fundacionkirira.es">Fundación Kirira</a>, la cual, a través de donaciones, contribuye a la erradicación de la violencia por razones culturales.`,
               x: 0,
-              y: 0
+              y: 0,
+              date: new Date(2024, 11, 12)
           },
           {
               title: "Jornada<br>cientifica",
               description: `Este evento se llevará a cabo el día 29 de noviembre, y el 2 y 3 de diciembre.<h2>¿Qué se hace?</h2>La mayoría de los cursos solo participarán, excepto Bachillerato, que tendrá la oportunidad de ayudar en el evento como voluntario.`,
               image: false,
               x: 200,
-              y: 0
+              y: 0,
+              date: new Date(2024, 10, 30)
           },
           {
               title: "Jornada<br>gastroeducativa",
               description: `Este evento será el 21 de noviembre, en el cual se comerá comida mexicana en el comedor.<h2>¿Qué se comerá?</h2>Sopa de pollo mexicana<br>Chili con carne y nachos<br>Flan casero de durazno`,
               image: false,
               x: 375,
-              y: 0
+              y: 0,
+              date: new Date(2024, 10, 22)
           },
           {
               title: "Dia de acción<br>de gracias",
               description: `Este evento se da el 28 de noviembre. El colegio lo celebra ofreciendo comida especial en el comedor.<h2>¿Qué se comerá?</h2>Crema de calabaza<br>Pavo asado y pure de patatas<br>Tarta de manzana`,
               image: false,
               x: 0,
-              y: 375
+              y: 375,
+              date: new Date(2024, 10, 29)
           },
           {
               title: "Maker faire",
@@ -255,7 +260,8 @@ La nota se mantendrá en el tablón de anuncios hasta que el evento termine o cu
               <br><br><br><img src="./images/postermaker.jpg">`,
               image: "./images/postermaker.jpg",
               x: 0,
-              y: 75
+              y: 75,
+              date: new Date(2025, 3, 6)
           },
           {
               title: "Mercado Navideño<br>Benéfico",
@@ -264,7 +270,8 @@ La nota se mantendrá en el tablón de anuncios hasta que el evento termine o cu
 <br><br><img src="./images/christmas.png">`,
               image: "./images/christmas.png",
               x: 200,
-              y: 100
+              y: 100,
+              date: new Date(2024, 11, 15)
           },
       ];
   
@@ -272,6 +279,9 @@ La nota se mantendrá en el tablón de anuncios hasta que el evento termine o cu
           const container = document.getElementById('sticky-notes-container');
   
           data.forEach((note) => {
+              if (note.date){
+                if (new Date() > note.date){console.log("REMOVE MEEE:" + note.title);return}
+              }
               const sticky = document.createElement('div');
               sticky.className = 'sticky-note';
   
