@@ -67,6 +67,29 @@
       border: 2px solid #a78e00;
     }
 
+    .special-note{
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px;
+      min-width: 150px; /* Minimum width for short content */
+      max-width: 300px; /* Optional max-width to limit note size */
+      width: auto; /* Allows width to adjust based on content */
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: inline-block;
+      position: absolute;
+      background-color: #99acff;
+      border: 2px solid #0081cc;
+    }
+    .special-note:hover{
+      background-color: #837ac8;
+      border: 2px solid #0024a7;
+    }
+    .special-note .title {
+      font-weight: bold;
+      font-size: 1.1em;
+    }
+
     .sticky-note img {
       width: 150px;
       border-radius: 8px;
@@ -220,7 +243,8 @@ La nota se mantendrá en el tablón de anuncios hasta que el evento termine o cu
               image: false,
               x: 650,
               y: 0,
-              date: false
+              date: false,
+              special:true,
           },
           {
               title: "Jumper day",
@@ -283,7 +307,10 @@ La nota se mantendrá en el tablón de anuncios hasta que el evento termine o cu
                 if (new Date() > note.date){console.log("REMOVE MEEE:" + note.title);return}
               }
               const sticky = document.createElement('div');
-              sticky.className = 'sticky-note';
+              if(note.special){
+                sticky.className = 'special-note';
+              }
+              else{sticky.className = 'sticky-note';}
   
               sticky.style.top = `${note.y}px`;
               sticky.style.left = `${note.x}px`; 
