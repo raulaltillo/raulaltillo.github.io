@@ -38,8 +38,8 @@
     </select>
   <br>
   <br>
-  <label for="colorSelect" style="font-size:2em">Selecciona un color: </label>
-  <input type="color" id="colorSelect" onchange="changeColor()" style="font-size:2em">
+  <label for="colorSelect" style="font-size:2em">Selecciona un color:</label>
+  <input type="color" id="colorSelect" oninput="changeColor()" style="font-size:2em">
   <p>Esta seleccion se guarda entre sesiones</p>
 </div>
 </div>
@@ -115,11 +115,10 @@ const classes={
     ];
 
     function changeColor() {
-        const newColor = document.getElementById("colorSelect").value;
-        localStorage.setItem("selectedColor", newColor);
-        updateScheduleColors(newColor);
-    }
-
+    const newColor = document.getElementById("colorSelect").value;
+    localStorage.setItem("selectedColor", newColor);
+    updateScheduleColors(newColor);
+}
     function updateScheduleColors(baseColor) {
         const updatedColors = colors(baseColor);
         const selectedClass = document.getElementById("classSelect").value;
