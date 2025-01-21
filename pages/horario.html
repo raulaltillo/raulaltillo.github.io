@@ -26,7 +26,7 @@
     <div id="schedule"></div>
 </div>
   <div style="text-align: center; margin: 20px;">
-    <label for="classSelect" style="font-size: 2em;">Selecciona tu clase:</label>
+    <label for="classSelect" style="font-size: 2em;">Clase:</label>
     <select id="classSelect" onchange="selectClass()" style="font-size: 2em;">
       <option value="">--Seleccionar Clase--</option>
       <option value="Salud Lomloe">Salud Lomloe</option>
@@ -38,7 +38,7 @@
     </select>
   <br>
   <br>
-  <label for="colorSelect" style="font-size:2em">Selecciona un color:</label>
+  <label for="colorSelect" style="font-size:2em">Color:</label>
   <input type="color" id="colorSelect" oninput="changeColor()" style="font-size:2em">
   <p>Esta seleccion se guarda entre sesiones</p>
 </div>
@@ -136,7 +136,7 @@ const classes={
             </div>`;
     }
 
-    function generateScheduleHTML(classSchedule, colorPalette = colors(selectedColor)) {
+    function generateScheduleHTML(classSchedule, colorPalette = colors(document.getElementById("colorSelect").value)) {
         return `<div class="row">
             ${classSchedule.map((subjects, index) => generateDayColumn(days[index], subjects, colorPalette[index])).join("")}
         </div>`;
