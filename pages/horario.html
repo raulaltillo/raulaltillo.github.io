@@ -10,6 +10,19 @@
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="../main.css">
   <meta name="color-scheme" content="light only">
+  <style>
+    .column {
+    border-radius: 15px; /* Rounded corners */
+    padding: 10px; /* Padding inside the columns */
+    flex: 1; /* Ensure columns take equal width */
+    margin:1px
+}
+
+.row {
+    display: flex;
+    justify-content: space-between; /* Distribute columns evenly */
+}
+  </style>
 </head>
 <body>
   <div class="topnav">
@@ -43,7 +56,7 @@
   <p>Esta seleccion se guarda entre sesiones</p>
 </div>
 </div>
-  <script type="text/javascript">
+  <script defer type="text/javascript">
 function LightenDarkenColor(col, amt) {
     let usePound = false;
 
@@ -129,12 +142,12 @@ const classes={
     }
 
     function generateDayColumn(day, subjects, color) {
-        return `
-            <div class="column" style="background-color:${color}">
-                <h3 style="font-family:Hacked">${day}</h3>
-                <pre>${subjects.join("\n")}</pre>
-            </div>`;
-    }
+    return `
+        <div class="column" style="background-color:${color};">
+            <h3 style="font-family:Hacked">${day}</h3>
+            <pre>${subjects.join("\n")}</pre>
+        </div>`;
+}
 
     function generateScheduleHTML(classSchedule, colorPalette = colors(document.getElementById("colorSelect").value)) {
         return `<div class="row">
