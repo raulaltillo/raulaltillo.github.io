@@ -19,6 +19,18 @@
     text-align: center;
     font-size:175% /* Should be removed. Only for demonstration */
   }
+  .topnav .feedback-btn {
+    margin-left: auto; /* Push the button to the right */
+    background-color: #04AA6D; /* Green background */
+    color: white;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  .topnav .feedback-btn:hover {
+    background-color: #037f50; /* Darker green on hover */
+  }
     body {
       margin: 0;
       background-color: #ffffff
