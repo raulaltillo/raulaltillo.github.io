@@ -25,9 +25,18 @@
     color: white;
     padding: 14px 16px;
     text-decoration: none;
-    font-size: 17px;
+    font-size: 1.4vw;
   }
-  
+.topnav .title {
+    color: #f2f2f2;
+    font-family: Hacked;
+    align-self: center;
+    font-size: 1.4vw;
+    text-shadow: 2px 2px 8px #000000;
+    position: absolute; /* Position the title absolutely */
+    left: 50%; /* Move the title to the horizontal center */
+    transform: translateX(-50%); /* Adjust for the title's own width */
+}
   .topnav .feedback-btn:hover {
     background-color: #037f50; /* Darker green on hover */
   }
