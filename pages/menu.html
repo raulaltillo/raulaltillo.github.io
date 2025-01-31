@@ -159,7 +159,7 @@
     const currentYear = new Date().getFullYear();
 
     // Create a Date object
-    const date = new Date(currentYear, months[month], parseInt(day));
+    const date = new Date(currentYear, months[month], parseInt(day), 23, 59);
 
     return date;
 }
