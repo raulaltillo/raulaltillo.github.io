@@ -15,19 +15,22 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
       margin: 0;
+      padding-top: 60px; /* Add padding to avoid touching the navbar */
       background-color: #f7f7f7;
       flex-direction: column; /* Stacks tables vertically */
-      overflow-y: auto;
+      overflow-y: hidden; /* Prevent vertical scrolling */
     }
+  
     .table-container {
       margin-bottom: 20px;
       max-width: 100%;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      overflow-x: auto;
+      overflow-y: auto; /* Handle horizontal overflow */
+      height: auto;
       width: 90%;
     }
+  
     table {
       width: 100%;
       border-collapse: collapse;
@@ -62,11 +65,11 @@
     }
   
     /* Alternate row colors for readability */
-    td:nth-child(even) td {
+    tr:nth-child(even) {
       background-color: #f9f9f9;
     }
   
-    td:nth-child(odd) td {
+    tr:nth-child(odd) {
       background-color: #fff;
     }
   </style>
@@ -94,19 +97,19 @@
   </tr>
   <tr>
     <th>Lomloe</th>
-    <td>Lengua & Ingles</td>
-    <td>Biologia</td>
-    <td>Fisica y quimica</td>
-    <td>Filosofia & Ingles</td>
-    <td>Matematicas</td>
+    <td>Lengua<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+    <td>Biologia<br>[9:30-11:00]</td>
+    <td>Fisica y quimica<br>[9:30-11:00]</td>
+    <td>Filosofia<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+    <td>Matematicas<br>[13:00-14:30]</td>
   </tr>
   <tr>
     <th>IB</th>
-    <td>Lengua & Ingles</td>
-    <td>Biologia</td>
-    <td>Fisica y quimica</td>
-    <td>SAS & Ingles</td>
-    <td>Matematicas</td>
+    <td>Lengua<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+    <td>Biologia<br>[9:30-11.00]</td>
+    <td>Fisica y quimica<br>[9:30-11:00]</td>
+    <td>SAS<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+    <td>Matematicas<br>[13:00-14:30]</td>
   </tr>
 </table>
 </div>
@@ -122,19 +125,19 @@
     </tr>
     <tr>
       <th>Lomloe</th>
-      <td>Lengua & Ingles</td>
-      <td>Economia</td>
-      <td>Historia</td>
-      <td>Filosofia & Ingles</td>
-      <td>Matematicas</td>
+      <td>Lengua<br>[9:30-11.00]<br>Ingles<br>[15:30-16:45]</td>
+      <td>Economia<br>[9:30-11:00]</td>
+      <td>Historia<br>[9:30-11:00]</td>
+      <td>Filosofia<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+      <td>Matematicas<br>[13:00-14:30]</td>
     </tr>
     <tr>
       <th>IB</th>
-      <td>Lengua & Ingles</td>
-      <td>Economia</td>
-      <td>Historia</td>
-      <td>SAS & Ingles</td>
-      <td>Matematicas</td>
+      <td>Lengua<br>[9.30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+      <td>Economia<br>[9:30-11:00]</td>
+      <td>Historia<br>[9:30-11:00]</td>
+      <td>SAS<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+      <td>Matematicas<br>[13:00-14:30]</td>
     </tr>
   </table>
 </div>
@@ -150,19 +153,19 @@
     </tr>
     <tr>
       <th>Lomloe</th>
-      <td>Lengua & Ingles</td>
-      <td>Dibujo Tecnico</td>
-      <td>Fisica y Quimica</td>
-      <td>Filosofia & Ingles</td>
-      <td>Matematicas</td>
+      <td>Lengua<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+      <td>Dibujo Tecnico<br>[9:30-11:00]</td>
+      <td>Fisica y Quimica<br>[9:30-11:00]</td>
+      <td>Filosofia<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+      <td>Matematicas<br>[13:00-14:30]</td>
     </tr>
     <tr>
       <th>IB</th>
-      <td>Lengua & Ingles</td>
-      <td>Dibujo Tecnico</td>
-      <td>Fisica IB</td>
-      <td>SAS & Ingles</td>
-      <td>Matematicas</td>
+      <td>Lengua<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+      <td>Dibujo Tecnico<br>[9:30-11:00]</td>
+      <td>Fisica IB<br>[9:30-11:00]</td>
+      <td>SAS<br>[9:30-11:00]<br>Ingles<br>[15:30-16:45]</td>
+      <td>Matematicas<br>[13:00-14:30]</td>
     </tr>
   </table>
   </div>

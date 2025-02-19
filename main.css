@@ -46,6 +46,7 @@
     }
 
     .topnav {
+      z-index: 10;
       background-color: #333;
       overflow: hidden;
       justify-content: left;
