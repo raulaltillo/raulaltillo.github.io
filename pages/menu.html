@@ -36,107 +36,25 @@
 </center>
 <script>
   const menu = {
-  "Lunes 3 Mar": [
-    "Espaguetis con gambas",
-    "Albóndigas marroquíes con especias",
-    "Fruta del tiempo"
-  ],
-  "Martes 4 Mar": [
-    "Arroz con pollo",
-    "Fogonero a la plancha con verduras al horno",
-    "Fruta del tiempo"
-  ],
-  "Miércoles 5 Mar": [
-    "Crema de calabaza",
-    "Huevo frito con patatas (revuelto de champiñones)",
-    "Fruta del tiempo"
-  ],
-  "Jueves 6 Mar": [
-    "Cocido madrileño",
-    "Pizza",
-    "Natillas"
-  ],
-  "Viernes 7 Mar": [
-    "Lentejas estofadas",
-    "Pescadito de la Bahía con ensalada",
-    "Fruta del tiempo"
-  ],
-  "Lunes 10 Mar": [
-    "Crema de calabacín",
-    "Pollo guisado con patatas panaderas",
-    "Fruta del tiempo"
-  ],
-  "Martes 11 Mar": [
-    "Berza jerezana",
-    "Huevos rellenos (huevos con tomate). Lechuga y maíz",
-    "Yogur"
-  ],
-  "Miércoles 12 Mar": [
-    "Fideuá de marisco",
-    "Lomo de cerdo plancha (hamburguesa). Pimientos asados",
-    "Fruta del tiempo"
-  ],
-  "Jueves 13 Mar": [
-    "Ensalada completa (Lentejas con chorizo)",
-    "Carne mechada con arroz salteado",
-    "Fruta del tiempo"
-  ],
-  "Viernes 14 Mar": [
-    "Arroz con tomate",
-    "Merluza a la plancha. Coliflores",
-    "Fruta del tiempo"
-  ],
-  "Lunes 17 Mar": [
-    "Espaguetis boloñesa",
-    "Fogonero a la plancha. Verduras al horno",
-    "Fruta del tiempo"
-  ],
-  "Martes 18 Mar": [
-    "Patatas con chocos",
-    "Lomo de cerdo plancha (adobado). Ensalada",
-    "Fruta del tiempo"
-  ],
-  "Miércoles 19 Mar": [
-    "Crema de brócoli",
-    "Pavo guisado con patatas panaderas",
-    "Fruta del tiempo"
-  ],
-  "Jueves 20 Mar": [
-    "(Menú Japonés) Ramen de verduras",
-    "Katsu-Kare de lomo. Arroz salteado",
-    "Flan de bizcocho casero"
-  ],
-  "Viernes 21 Mar": [
-    "Lentejas estofadas",
-    "Revuelto de pimientos y patatas",
-    "Fruta del tiempo"
-  ],
-  "Lunes 24 Mar": [
-    "Sopa de fideos",
-    "Pollo empanado con champiñones",
-    "Fruta del tiempo"
-  ],
-  "Martes 25 Mar": [
-    "Crema de verduras variadas",
-    "Pizza (cerdo guisado con arroz salteado)",
-    "Fruta del tiempo"
-  ],
-  "Miércoles 26 Mar": [
-    "Ensalada de pasta (macarrones con tomate)",
-    "Tortilla de patatas con judías verdes",
-    "Fruta del tiempo"
-  ],
-  "Jueves 27 Mar": [
-    "Ensalada completa (lentejas estofadas)",
-    "Pollo al horno con patatas fritas",
-    "Fruta del tiempo"
-  ],
-  "Viernes 28 Mar": [
-    "Arroz tres delicias",
-    "Caella al limón. Picadillo de tomate y patatas",
-    "Fruta del tiempo"
-  ]
+  "Lunes 31 Mar": ["Crema de calabaza", "Canelones (San Jacobo con patatas panaderas)", "Fruta del tiempo"],
+  "Martes 1 Abr": ["Berza Jerezana", "Pinchitos de pollo", "Fruta del tiempo"],
+  "Miércoles 2 Abr": ["Patatas con chocos", "Hamburguesa con kétchup y ensalada", "Fruta del tiempo"],
+  "Jueves 3 Abr": ["Gazpacho (sopa de fideos)", "Huevo frito con patatas", "Natillas"],
+  "Viernes 4 Abr": ["Arroz con tomate", "Fogonero a la plancha", "Pimientos asados"],
+  "Lunes 7 Abr": ["Macarrones con tomate y queso rallado", "Pollo guisado con champiñones", "Fruta del tiempo"],
+  "Martes 8 Abr": ["Crema de zanahorias", "Carne mechada con arroz salteado", "Natillas"],
+  "Miércoles 9 Abr": ["Lentejas con chorizo", "Huevos rellenos (huevos con tomate) Lechuga y maíz", "Fruta del tiempo"],
+  "Jueves 10 Abr": ["Ensalada completa (crema de puerros)", "Pizza (flamenquín con patatas fritas)", "Fruta del tiempo"],
+  "Lunes 21 Abr": ["Estofado de cerdo con patatas", "Fogonero a la plancha", "Verduras al horno"],
+  "Martes 22 Abr": ["Garbanzos con calabaza", "Lomo de cerdo plancha (adobado) Ensalada", "Fruta del tiempo"],
+  "Miércoles 23 Abr": ["Gazpacho (sopa de picadillo)", "Revuelto de patatas jamón y champiñones", "Fruta del tiempo"],
+  "Jueves 24 Abr": ["Espaguetis carbonara (con tomate)", "Caella al limón", "Pimientos asados"],
+  "Viernes 25 Abr": ["Crema de calabacín", "Pollo empanado con patatas panaderas", "Fruta del tiempo"],
+  "Lunes 28 Abr": ["Brócoli con bechamel y queso (crema de brócoli)", "Albóndigas en salsa con patatas panaderas", "Fruta del tiempo"],
+  "Martes 29 Abr": ["Lentejas con chorizo", "Tortilla de patatas", "Tomate aliñado"],
+  "Miércoles 30 Abr": ["Ensalada de pasta (macarrones con tomate)", "Merluza a la plancha con zanahorias", "Fruta del tiempo"]
 };
+
   function getFormattedDate() {
     const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
