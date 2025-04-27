@@ -16,23 +16,22 @@
 </head>
 <body>
   <div class="topnav">
+    <img src="../images/RALogoWhite.png" width="50px" class="title">
     <a href="./horario.html">Horario</a>
     <a class="active" href="#">Menu</a>
     <a href="./book_answers.html">Respuestas Libros</a>
     <a href="./selectividad.html">Selectividad</a>
-    <p class="title">RAULALTILLO</p>
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
     <!--<a href="pages/coding_answers.html">Coding/CS</a>-->
   </div>
+  <div id="content">
   <br>
   <br>
   <br>
   <br>
 <center>
-
-  <h1 style="color:#000000; font-size: 300%;font-family: Hacked;" id="menu">Menu</h1>
-  <pre style="font-size: 175%;", id="todaydata">Algo ha fallado</pre>
-  <img src="../images/menu.png" width="1000px" style="border: solid 15px #000000; border-radius: 10px;">
+  <pre style="font-size: 200%;color: #ffffff;font-family: Verdana;font-weight:bold;", id="todaydata">Algo ha fallado</pre>
+  <img src="../images/menu.png" width="1000px" style="border: solid 15px #aeaeae; border-radius: 10px;">
 </center>
 <script>
   const menu = {
@@ -54,7 +53,6 @@
   "Martes 29 Abr": ["Lentejas con chorizo", "Tortilla de patatas", "Tomate aliñado"],
   "Miércoles 30 Abr": ["Ensalada de pasta (macarrones con tomate)", "Merluza a la plancha con zanahorias", "Fruta del tiempo"]
 };
-
   function getFormattedDate() {
     const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
@@ -112,4 +110,7 @@
     document.getElementById("todaydata").innerHTML = getTodaysMenu();
 </script>
 </div>
+<script async src="../scripts/fade.js"></script>
+
+
 </body>

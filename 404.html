@@ -1,11 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
+  <title>Página no encontrada | Raulaltillo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../main.css"> <!-- your main site CSS -->
+  <meta name="color-scheme" content="light only">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T470HXGPQZ"></script>
   <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-T470HXGPQZ');
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-T470HXGPQZ');
   </script>
-  <meta http-equiv="refresh" content="0; url=https://raulaltillo.github.io/pages/horario.html"/>
-  </head>
+  <style>
+    body {
+      font-family: 'Cal Sans', sans-serif;
+      background-color: #000000;
+      text-align: center;
+      padding: 25px;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="content">
+    <h1 style="color: white;">404 - Página no encontrada</h1>
+    <p style="color: white;">Redirigiendo al horario...</p>
+    <img src="./images/404.jpg" width="500px" height="auto">
+  </div>
+  <script>
+    window.addEventListener('load', function() {
+      const content = document.getElementById('content');
+      setTimeout(() => {
+        content.style.opacity = '0';
+      }, 1500); // Wait 1.5s showing the message
+
+      setTimeout(() => {
+        window.location.href = './pages/horario.html';
+      }, 2000); // Redirect after 2s
+    });
+  </script>
+
+</body>
+</html>

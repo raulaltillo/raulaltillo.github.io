@@ -1,5 +1,8 @@
 <head>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-T470HXGPQZ"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
   <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -27,24 +30,25 @@
 </head>
 <body>
   <div class="topnav">
+    <img src="../images/RALogoWhite.png" width="50px" class="title">
     <a href="./horario.html" class="active" >Horario</a>
     <a href="./menu.html">Menu</a>
     <a href="./book_answers.html">Respuestas Libros</a>
     <a href="./selectividad.html">Selectividad</a>
-    <p class="title">RAULALTILLO</p>
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
     <!--<a href="pages/coding_answers.html">Coding/CS</a>-->
   </div>
+  <div id="content">
   <br>
   <br>
   <br>
-  <div style="border: solid 15px #000000; border-radius: 10px; padding:20; margin:20px">
+  <div style="border: solid 15px #0b0b0b; border-radius: 10px; padding:20; margin:20px">
   <div id="scheduleContainer" style="display: none;">
     <div id="schedule"></div>
 </div>
   <div style="text-align: center; margin: 20px;">
-    <label for="classSelect" style="font-size: 2em;">Clase:</label>
-    <select id="classSelect" onchange="selectClass()" style="font-size: 2em;">
+    <label for="classSelect" style="font-size: 2em;color: #ffffff;font-family: Cal Sans;">Clase:</label>
+    <select id="classSelect" onchange="selectClass()" style="font-size: 2em;font-family: Cal Sans;">
       <option value="">--Seleccionar Clase--</option>
       <option value="Salud Lomloe">Salud Lomloe</option>
       <option value="Salud IB">Salud IB</option>
@@ -57,9 +61,9 @@
     
   <br>
   <br>
-  <label for="colorSelect" style="font-size:2em">Color:</label>
+  <label for="colorSelect" style="font-size:2em;color: #ffffff;font-family: Cal Sans;" >Color:</label>
   <input type="color" id="colorSelect" oninput="changeColor()" style="font-size:2em">
-  <p>Esta seleccion se guarda entre sesiones</p>
+  <p style="color: #ffffff;font-family: Cal Sans;">Esta seleccion se guarda entre sesiones</p>
 </div>
 </div>
   <script defer type="text/javascript">
@@ -187,6 +191,6 @@ const classes={
         updateScheduleColors(savedColor);
     };
     </script>
-
-
+  </div>
+  <script async src="../scripts/fade.js"></script>
 </body>
