@@ -38,8 +38,9 @@
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
     <!--<a href="pages/coding_answers.html">Coding/CS</a>-->
   </div>
-  <div id="weatherIframeContainer" class="weather-iframe-container">
+  <div id="weatherIframeContainer" class="weather-iframe-container" style="background-color: black;color: white;font-family: Cal Sans;">
     <iframe name="iframe_aemet_id33044" src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/jerez-de-la-frontera-id11020?w=g4p011100000ohmffffffx000000t999999r1s8n2" scrolling="no"></iframe>
+    Informacion de: <a href="https://www.aemet.es" style="color: white;">aemet.es</a>
   </div>
   <div id="content">
   <br>
@@ -51,7 +52,7 @@
 </div>
   <div style="text-align: center; margin: 20px;">
     <label for="classSelect" style="font-size: 2em;color: #ffffff;font-family: Cal Sans;">Clase:</label>
-    <select id="classSelect" onchange="selectClass()" style="font-size: 2em;font-family: Cal Sans;">
+    <select id="classSelect" onchange="selectClass()" style="font-size: 2em;font-family: Cal Sans;cursor: pointer;">
       <option value="">--Seleccionar Clase--</option>
       <option value="Salud Lomloe">Salud Lomloe</option>
       <option value="Salud IB">Salud IB</option>
@@ -65,7 +66,7 @@
   <br>
   <br>
   <label for="colorSelect" style="font-size:2em;color: #ffffff;font-family: Cal Sans;" >Color:</label>
-  <input type="color" id="colorSelect" oninput="changeColor()" style="font-size:2em">
+  <input type="color" id="colorSelect" oninput="changeColor()" style="font-size:2em;cursor:pointer">
   <p style="color: #ffffff;font-family: Cal Sans;">Esta seleccion se guarda entre sesiones</p>
 </div>
 </div>

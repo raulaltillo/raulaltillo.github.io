@@ -76,6 +76,7 @@
     position: absolute; /* Position the title absolutely */
     left: 50%; /* Move the title to the horizontal center */
     transform: translateX(-50%); /* Adjust for the title's own width */
+    cursor:pointer;
 }
   .topnav a {
       float: left;
