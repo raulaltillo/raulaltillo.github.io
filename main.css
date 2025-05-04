@@ -10,6 +10,8 @@
   #content {
     opacity: 0;
     transition: opacity 0.5s ease;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
   }
   #content.visible {
     opacity: 1;
@@ -55,6 +57,9 @@
       margin: 0;
       background-color: #1a1a1a
     }
+  ::-webkit-scrollbar { 
+      display: none;  /* Safari and Chrome */
+  }
 
     .topnav {
       z-index: 10;
