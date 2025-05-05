@@ -12,7 +12,7 @@ window.addEventListener('load', function() {
 
       setTimeout(() => {
         window.location.href = href; // Just normally move the user after fade
-      }, 500); // Match the fade-out time (in ms)
+      }, 250); // Match the fade-out time (in ms)
     });
   });
 
