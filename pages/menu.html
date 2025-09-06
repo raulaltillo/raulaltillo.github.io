@@ -11,14 +11,14 @@
     <link rel="icon" href="../favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../main.css">
     <title>Horario de 1 Bach | Raulaltillo </title>
-    <meta name="description" content="Busca aqui tu horario de clase, disponible en cualquier momento y en cualquier dispositivo" />
+    <meta name="description" content="Mira aqui el menu del dia" />
 </head>
 <body>
   <div class="topnav">
     <img class="title" id="weather-icon"  src="../images/weather-icon-illustration03-Graphics-10205167-1.png" alt="Clima actual" width="50px">
     <a href="./horario.html">Horario</a>
     <a class="active" href="#">Menu</a>
-    <a href="./book_answers.html">Respuestas Libros</a>
+    <!--<a href="./book_answers.html">Respuestas Libros</a>--->
     <a href="./selectividad.html">Selectividad</a>
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
     <!--<a href="pages/coding_answers.html">Coding/CS</a>-->
@@ -32,29 +32,35 @@
   <br>
   <br>
 <center>
-  <!--<pre style="font-size: 200%;color: #ffffff;font-family: Verdana;font-weight:bold;", id="todaydata">Algo ha fallado</pre> -->
+  <pre style="font-size: 200%;color: #ffffff;font-family: Verdana;font-weight:bold;", id="todaydata">Algo ha fallado</pre>
   <img src="../images/menu.png" width="90%" style="border: solid 15px #aeaeae; border-radius: 10px;">
 </center>
 <script>
-  const menu = {
-  "Lunes 5 May": ["Macarrones con tomate y queso rallado", "Fogonero a la plancha con pimientos asados", "Fruta del tiempo"],
-  "Martes 6 May": ["Crema de calabacín", "Pizza (pollo guisado con patatas fritas)", "Fruta del tiempo"],
-  "Miércoles 7 May": ["Patatas aliñadas con atún y huevo duro (patatas con chocos)", "Lomo cerdo plancha (adobado). Verduras al horno", "Fruta del tiempo"],
-  "Jueves 8 May": ["Paella de marisco", "Huevos rellenos (con tomate) Lechuga y maíz", "Helado"],
-  "Viernes 9 May": ["Garbanzos con chorizo", "Carne mechada. Zanahorias", "Fruta del tiempo"],
-  "Lunes 12 May": ["Patatas con chocos", "Caella al limón Pisto", "Fruta del tiempo"],
-  "Martes 13 May": ["Lentejas con chorizo", "Revuelto de jamón y champiñones", "Helado"],
-  "Miércoles 14 May": ["Arroz campero", "Merluza a la plancha", "Picadillo de tomate y pimiento", "Fruta del tiempo"],
-  "Jueves 15 May": ["Ensalada completa (sopa de fideos)", "Canelones (albóndigas en salsa. Zanahorias)", "Melocotón en almíbar"],
-  "Viernes 16 May": ["Crema de zanahorias", "Pollo empanado con patatas panaderas", "Fruta del tiempo"],
-  "Lunes 20 May": ["Arroz tres delicias (con tomate)", "Fogonero a la plancha. Coliflores salteadas", "Fruta del tiempo"],
-  "Martes 21 May": ["Berza jerezana", "Tortilla de patatas. Tomate aliñado", "Fruta del tiempo"],
-  "Lunes 26 May": ["Gazpacho (cocido madrileño)", "Merluza a la plancha con patatas panaderas", "Fruta del tiempo"],
-  "Martes 27 May": ["Arroz con tomate", "Huevos rellenos. Lechuga y maíz (tortilla de patatas)", "Helado"],
-  "Miércoles 28 May": ["Espaguetis carbonara (con tomate)", "San Jacobo Pimientos asados", "Fruta del tiempo"],
-  "Jueves 29 May": ["DAHL HINDÚ DE LENTEJAS", "POLLO AL CURRY CON ARROZ", "LASSI DE PLÁTANO"],
-  "Viernes 30 May": ["Crema de puerros", "Albóndigas en salsa con zanahorias", "Fruta del tiempo"]
-  };
+const menu = {
+  "Lunes 8 Sept": ["Arroz con pollo", "Lomo adobado. Judías verdes salteadas", "Fruta del tiempo"],
+  "Martes 9 Sept": ["Berza jerezana", "Huevos rellenos (con tomate). Lechuga y maíz", "Fruta del tiempo"],
+  "Miércoles 10 Sept": ["Crema de zanahorias", "Albóndigas en salsa con patata asada", "Fruta del tiempo"],
+  "Jueves 11 Sept": ["Macarrones con tomate y queso rallado", "Fogonero a la plancha. Menestra de verduras", "Helado"],
+  "Viernes 12 Sept": ["Gazpacho (crema de calabaza)", "Pizza (croquetas). Patatas panaderas", "Fruta del tiempo"],
+
+  "Lunes 15 Sept": ["Lentejas con chorizo", "Fogonero a la plancha. Ensalada de lechugas variadas", "Fruta del tiempo"],
+  "Martes 16 Sept": ["Crema de calabacín", "Pollo empanado con patatas panaderas", "Fruta del tiempo"],
+  "Miércoles 17 Sept": ["Cocido madrileño", "Revuelto de jamón y champiñones", "Fruta del tiempo"],
+  "Jueves 18 Sept": ["Arroz tres delicias", "Carne mechada. Zanahorias rehogadas", "Yogur"],
+  "Viernes 19 Sept": ["Ensalada de pasta (pasta con tomate)", "Salchichas al vino. Champiñones salteados", "Fruta del tiempo"],
+
+  "Lunes 22 Sept": ["Ensalada completa (crema de alcachofas)", "Pollo al curry con arroz salteado", "Fruta del tiempo"],
+  "Martes 23 Sept": ["Patatas con chocos", "Lomo de cerdo a la plancha con verduras al horno (lomo adobado)", "Helado"],
+  "Jueves 25 Sept": ["Crema de puerros", "Huevo frito con patatas (revuelto de jamón)", "Fruta del tiempo"],
+  "Viernes 26 Sept": ["Pasta con bechamel, carne picada y queso", "Merluza a la plancha con pimientos asados", "Fruta del tiempo"],
+
+  "Lunes 29 Sept": ["Sopa de letras", "Pollo al horno con zanahorias rehogadas", "Fruta del tiempo"],
+  "Martes 30 Sept": ["Lentejas estofadas", "Tortilla de patatas. Lechuga y tomate", "Natillas"],
+  "Miércoles 1 Oct": ["Crema de brócoli", "Pavo guisado con patatas fritas", "Fruta del tiempo"],
+  "Jueves 2 Oct": ["Garbanzos con calabaza", "San Jacobo. Pisto", "Fruta del tiempo"],
+  "Viernes 3 Oct": ["Arroz campero", "Fogonero plancha. Picadillo (tomate–pimiento)", "Fruta del tiempo"]
+};
+
   function getFormattedDate() {
     const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
