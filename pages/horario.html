@@ -45,10 +45,6 @@
       <br>
   <br>
   <br>
-  
-  <h1 style="text-align: center;color: white;font-family: Arial, Helvetica, sans-serif;font-size: 300%;">Aun falta informacion para esto!</h1>
-  <h1 style="text-align: center;color: white;font-family: Arial, Helvetica, sans-serif;font-size: 200%;">Quieres ayudar entregando tu horario? Usa <a href="https://forms.gle/T9s3GpN34AojRxGt7">este link</a></h1>
-  <!-------
   <div style="border: solid 15px #0b0b0b; border-radius: 10px; padding:20; margin:20px">
   <div id="scheduleContainer" style="display: none;">
     <div id="schedule"></div>
@@ -101,36 +97,36 @@ function LightenDarkenColor(col, amt) {
 }
 
 const classes={ 
-     "Salud Lomloe":[["Filosofia", "Biologia", "Ingles", "", "TIC", "Fisica", "", "Frances", "Deporte"],
-                    ["Biologia", "Frances", "PS", "", "Lengua", "Mates", "", "ToK", "Ingles"],
-                    ["Lengua", "Fisica", "TIC", "", "Deporte", "Filosofia", "", "Mates", "Ingles"],
-                    ["Mates", "ToK/CAS", "Fisica", "", "Ingles", "Filosofia", "", "Biologia", "Lengua"],
-                    ["Lengua", "Biologia", "Fisica", "", "TIC", "PS", "", "Mates", "Ingles"]], 
-     "Salud IB":[["Frances", "Mngrf/CAS", "Ingles", "", "Mates", "Fisica", "", "Deporte", "Biologia"],
-                    ["Lengua", "Deporte", "Frances", "", "Mates", "Biologia", "", "PS", "Ingles"],
-                    ["Mates", "Fisica", "Lengua", "", "Biologia", "SAS", "", "Frances", "Ingles"],
-                    ["ToK", "Biologia", "Fisica", "", "Ingles", "Mates", "", "SAS", "Lengua"],
-                    ["Tok", "SAS", "Fisica", "", "PS", "Frances", "", "Lengua", "Ingles"]], 
-     "Tecnologico Lomloe":[["PS", "DT", "Ingles", "", "Lengua", "Mates", "", "Frances", "Fisica"],
-                    ["TIC", "Frances", "ToK/CAS", "", "Lengua", "Filosofia", "", "Mates", "Ingles"],
-                    ["DT", "Deporte", "Fisica", "", "TIC", "Mates", "", "PS", "Ingles"],
-                    ["Filosofia", "TIC", "Lengua", "", "Ingles", "Fisica", "", "ToK", "DT"],
-                    ["DT", "Fisica", "Lengua", "", "Mates", "Filosofia", "", "Deporte", "Ingles"]],
-      "Tecnologico IB":[["DT", "Mngrf/CAS", "Ingles", "", "Mates", "SD", "", "Frances", "Fisica"],
-                    ["Lengua", "Frances", "SD", "", "Mates", "DT", "", "Deporte", "Ingles"],
-                    ["Mates", "DT", "Lengua", "", "Fisica", "SAS", "", "SD", "Ingles"],
-                    ["ToK", "Fisica", "SD", "", "Ingles", "Mates", "", "SAS", "Lengua"],
-                    ["ToK", "SAS", "Fisica", "", "Deporte", "DT", "", "Lengua", "Ingles"]],
-      "Sociales Lomloe":[["Lengua", "PS", "Ingles", "", "Historia", "TIC", "", "Frances", "Mates"],
-                    ["Economia", "Frances", "TIC", "", "Filosofia", "Historia", "", "Lengua", "Ingles"],
-                    ["Lengua", "TIC", "PS", "", "Economia", "Mates", "", "ToK", "Ingles"],
-                    ["Mates", "Lengua", "Filosofia", "", "Ingles", "Historia", "", "Deporte", "Economia"],
-                    ["Historia", "Economia", "ToK/CAS", "", "Mates", "Deporte", "", "Filosofia", "Ingles"]],
-      "Sociales IB":[["Frances", "Mates", "Ingles", "", "Historia", "Gestion", "", "Deporte", "Lengua"],
-                    ["Gestion", "Deporte", "Frances", "", "SAS", "Historia", "", "PS", "Ingles"],
-                    ["SAS", "ToK", "Mates", "", "Gestion", "Lengua", "", "Frances", "Ingles"],
-                    ["Lengua", "ToK", "SAS", "", "Ingles", "Historia", "", "Mates", "Gestion"],
-                    ["Historia", "Lengua", "Mates", "", "PS", "Frances", "", "Mngrf/CAS", "Ingles"]],
+     "Salud Lomloe":[["TOK", "Biologia", "Filosofia", "", "Historia", "Mates", "", "Lengua", "Quimica"],
+                    ["Lengua", "Exam Practice", "Mates", "", "Quimica", "Biologia", "", "Ingles", "Frances"],
+                    ["Quimica", "Filosofia", "Mates", "", "TIC", "Historia", "", "Frances", "Exam Practice"],
+                    ["Ingles", "Quimica", "Lengua", "", "Historia", "PS", "", "TIC", "Biologia"],
+                    ["Ingles", "Biologia", "Mates", "", "Lengua", "Historia", "", "Filosofia", "TIC"]], 
+     "Salud IB":[["Historia", "Biologia", "SAS", "", "Mates", "TOK", "", "Lengua", "Quimica"],
+                    ["Frances IB", "Exam Practice", "SAS", "", "Quimica", "Biologia", "", "Ingles", "Frances"],
+                    ["Quimica", "SAS", "Lengua", "", "Historia", "Mates", "", "Frances", "Exam Practice"],
+                    ["Ingles", "Quimica", "Mates", "", "Lengua", "Historia", "", "Frances IB", "Biologia"],
+                    ["Ingles", "Biologia", "Frances IB", "", "Mates", "Lengua", "", "SAS", "Biologia IB"]], 
+      "Tecnologico Lomloe":[["PSP", "Historia", "Lengua", "", "Fisica", "Mates", "", "Filosofia", "TIC"],
+                    ["Dibujo Tecnico", "Exam Practice", "Fisica", "", "Historia", "Filosofia", "", "English", "Frances"],
+                    ["Historia", "Dibujo Tecnico", "Mates", "", "Lengua", "Fisica", "", "Frances", "Exam Practice"],
+                    ["English", "TIC", "Lengua", "", "Mates", "TOK", "", "Dibujo Tecnico", "Filosofia"],
+                    ["English", "Lengua", "Historia", "", "Fisica", "Mates", "", "TIC", "Dibujo Tecnico"]],
+      "Tecnologico IB":[["Historia", "Fisica", "SAS", "", "Mates", "TOK", "", "Lengua", "SD"],
+ ["SD", "Ingles", "SAS", "", "Dibujo Tecnico", "Fisica", "", "Ingles", "Frances"],
+ ["Dibujo Tecnico", "Lengua", "Geografia", "", "Historia", "Mates", "", "Frances", "Ingles"],
+ ["Ingles", "Dibujo Tecnico", "Mates", "", "Historia", "Lengua", "", "SD", "Fisica"],
+ ["Ingles", "Dibujo Tecnico", "Historia", "", "Mates", "Lengua", "", "SAS", "Fisica"]],
+      "Sociales Lomloe":[["Economia", "TIC", "Lengua", "", "Geografia", "Filosofia", "", "PS", "Mates"],
+                    ["Geografia", "Ingles", "Historia", "", "TIC", "Mates", "", "Ingles", "Frances"],
+                    ["TIC", "Mates", "Lengua", "", "TOK", "Economia", "", "Frances", "Ingles"],
+                    ["Ingles", "Filosofia", "Historia", "", "Geografia", "Economia", "", "Mates", "Lengua"],
+                    ["Ingles", "Historia", "Mates", "", "Filosofia", "Economia", "", "Geografia", "Lengua"]],
+      "Sociales IB":[["Historia", "TOK", "Gestion", "", "Mates Aplicadas", "Lengua", "", "Geografia", "SAS"],
+                    ["Frances IB", "Ingles", "Geografia", "",  "Mates", "Gestion", "",  "Ingles", "Frances"],
+                    ["Gestion", "Lengua", "Geografia", "",  "Historia", "SAS", "", "Frances", "Ingles NS"],
+                    ["Ingles", "Lengua", "SAS", "",  "Mates", "Historia", "",  "Frances IB", "Gestion"],
+                    ["Ingles", "Geografia", "Frances IB", "",  "Mates", "SAS", "",  "Lengua", "Gestion"]],
 };
     const days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"];
     var defaultColor = "#2d9e00"; // Default color if no color is saved
@@ -197,7 +193,6 @@ const classes={
         }
         updateScheduleColors(savedColor);
     };
-    </script>
-   -------></div>
+    </script></div>
   <script async src="../scripts/fade.js"></script>
 </body>
