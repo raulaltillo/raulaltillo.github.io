@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Práctica de valencias</title>
+<style>
+  :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+  body { margin: 0; min-height: 100dvh; display: grid; place-items: center; background:#f5f6f8; }
+  .card {
+    background: #fff; padding: 24px 28px; border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08); width: min(680px, 92vw);
+    text-align: center;
+  }
+  .symbol { font-size: clamp(48px, 10vw, 96px); font-weight: 800; letter-spacing: .02em; margin: 6px 0; }
+  .name   { font-size: clamp(18px, 3.2vw, 26px); margin: 0 0 18px 0; color:#222; }
+  .input-row { display:flex; gap:12px; justify-content:center; align-items:center; margin: 8px 0 10px; }
+  input[type="text"] {
+    font-size: clamp(18px, 3vw, 22px);
+    padding: 10px 14px; width: min(480px, 80vw);
+    border: 2px solid #d7dbe0; border-radius: 10px; text-align:center; outline: none;
+  }
+  input[type="text"]:focus { border-color:#4f7cff; box-shadow: 0 0 0 3px rgba(79,124,255,.18); }
+  button {
+    font-size: 16px; padding: 10px 14px; border: 0; border-radius: 10px; cursor: pointer;
+    background:#4f7cff; color:#fff; font-weight:600;
+  }
+  .status { margin-top: 10px; min-height: 24px; }
+  .ok    { color: #0a8b3b; }
+  .bad   { color: #c62828; }
+  .hint  { color: #333; }
+  .score { margin-top: 12px; font-size: 14px; color:#555; }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div id="symbol" class="symbol">—</div>
+    <div id="name" class="name">—</div>
+    <div class="input-row">
+      <input id="answer" type="text" placeholder="Escribe todas las valencias (p. ej.: -1 1 3 5 7)" autocomplete="off" />
+      <button id="checkBtn">Comprobar</button>
+    </div>
+    <div id="status" class="status hint">Escribe TODAS las valencias separadas por espacios y pulsa Enter.</div>
+    <div id="score" class="score">Aciertos: 0/0</div>
+  </main>
+
+<script>
+/* ====== Datos: símbolo -> { nombre, vals (array de enteros) } ====== */
+const ELEMENTOS = {
+  "H":  {name:"Hidrógeno", vals:[-1, 1]},
+  "F":  {name:"Flúor", vals:[-1]},
+  "Cl": {name:"Cloro", vals:[-1, 1, 3, 5, 7]},
+  "Br": {name:"Bromo", vals:[-1, 1, 3, 5, 7]},
+  "I":  {name:"Yodo", vals:[-1, 1, 3, 5, 7]},
+  "O":  {name:"Oxígeno", vals:[-2]},
+  "S":  {name:"Azufre", vals:[-2, 2, 4, 6]},
+  "Se": {name:"Selenio", vals:[-2, 2, 4, 6]},
+  "Te": {name:"Teluro", vals:[-2, 2, 4, 6]},
+
+  "N":  {name:"Nitrógeno", vals:[-3, 1, 2, 3, 4, 5]},
+  "P":  {name:"Fósforo", vals:[-3, 1, 3, 5]},
+  "As": {name:"Arsénico", vals:[-3, 3, 5]},
+  "Sb": {name:"Antimonio", vals:[-3, 3, 5]},
+  "B":  {name:"Boro", vals:[-3, 3]},
+  "C":  {name:"Carbono", vals:[-4, 2, 4]},
+  "Si": {name:"Silicio", vals:[-4, 4]},
+  "Ge": {name:"Germanio", vals:[-4, 2, 4]},
+
+  "Li": {name:"Litio", vals:[1]},
+  "Na": {name:"Sodio", vals:[1]},
+  "K":  {name:"Potasio", vals:[1]},
+  "Rb": {name:"Rubidio", vals:[1]},
+  "Cs": {name:"Cesio", vals:[1]},
+  "Fr": {name:"Francio", vals:[1]},
+  "Ag": {name:"Plata", vals:[1]},
+  "Be": {name:"Berilio", vals:[2]},
+  "Mg": {name:"Magnesio", vals:[2]},
+  "Ca": {name:"Calcio", vals:[2]},
+  "Sr": {name:"Estroncio", vals:[2]},
+  "Ba": {name:"Bario", vals:[2]},
+  "Ra": {name:"Radio", vals:[2]},
+  "Zn": {name:"Cinc", vals:[2]},
+  "Cd": {name:"Cadmio", vals:[2]},
+  "Bi": {name:"Bismuto", vals:[3, 5]},
+
+  "Cu": {name:"Cobre", vals:[1, 2]},
+  "Hg": {name:"Mercurio", vals:[1, 2]},
+  "Al": {name:"Aluminio", vals:[3]},
+  "Ga": {name:"Galio", vals:[3]},
+  "In": {name:"Indio", vals:[3]},
+  "Tl": {name:"Talio", vals:[1, 3]},
+  "Au": {name:"Oro", vals:[1, 3]},
+  "Fe": {name:"Hierro", vals:[2, 3]},
+  "Co": {name:"Cobalto", vals:[2, 3]},
+  "Ni": {name:"Níquel", vals:[2, 3]},
+  "Sn": {name:"Estaño", vals:[2, 4]},
+  "Pb": {name:"Plomo", vals:[2, 4]},
+  "Pt": {name:"Platino", vals:[2, 4]},
+  "Pd": {name:"Paladio", vals:[2, 4]},
+  "Ir": {name:"Iridio", vals:[2, 3, 4]},
+  "Cr": {name:"Cromo", vals:[2, 3, 6]},
+  "Mn": {name:"Manganeso", vals:[2, 3, 4, 6, 7]},
+};
+
+/* ====== Utilidades ====== */
+const $ = sel => document.querySelector(sel);
+const SEP_REGEX = /[,\s/;]+/;
+
+function parseToken(tok) {
+  let t = tok.trim();
+  if (!t) return null;
+  if (t.endsWith('+')) t = t.slice(0, -1);
+  if (t.startsWith('+')) t = t.slice(1);
+  const n = parseInt(t, 10);
+  return Number.isNaN(n) ? null : n;
+}
+function parseInput(s) {
+  const tokens = s.trim().split(SEP_REGEX);
+  const out = new Set();
+  for (const t of tokens) {
+    const v = parseToken(t);
+    if (v !== null) out.add(v);
+  }
+  return out.size ? out : null;
+}
+function canonical(vals) {
+  const arr = Array.from(vals);
+  arr.sort((a,b) => {
+    if (a < 0 && b >= 0) return -1;
+    if (a >= 0 && b < 0) return 1;
+    const d = Math.abs(a) - Math.abs(b);
+    return d !== 0 ? d : a - b;
+  });
+  return arr.map(x => x.toString()).join(' ');
+}
+function setEq(a, b) {
+  if (a.size !== b.size) return false;
+  for (const v of a) if (!b.has(v)) return false;
+  return true;
+}
+function diff(a, b) { // a\b
+  const d = new Set();
+  for (const v of a) if (!b.has(v)) d.add(v);
+  return d;
+}
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+/* ====== Lógica del juego ====== */
+let order = Object.keys(ELEMENTOS);
+let idx = 0;
+let esperandoSiguiente = false;
+let preguntas = 0;
+let aciertos = 0;
+let simboloActual = null;
+
+function reshuffle() {
+  order = Object.keys(ELEMENTOS);
+  shuffle(order);
+  idx = 0;
+}
+
+function siguienteSimbolo() {
+  if (idx >= order.length) {
+    reshuffle();
+    $("#status").className = "status hint";
+    $("#status").textContent = "— Nueva ronda barajada —";
+  }
+  return order[idx++];
+}
+
+function nuevaPregunta() {
+  esperandoSiguiente = false;
+  $("#answer").value = "";
+  $("#answer").focus();
+
+  simboloActual = siguienteSimbolo();
+  const { name } = ELEMENTOS[simboloActual];
+  $("#symbol").textContent = simboloActual;
+  $("#name").textContent = name;
+  $("#status").className = "status hint";
+  $("#status").textContent = "Escribe TODAS sus valencias, separadas por espacios, y pulsa Enter.";
+}
+
+function actualizarMarcador() {
+  $("#score").textContent = `Aciertos: ${aciertos}/${preguntas}`;
+}
+
+function comprobar() {
+  if (esperandoSiguiente) {
+    nuevaPregunta();
+    return;
+  }
+  const entrada = $("#answer").value.trim();
+  const respuesta = parseInput(entrada);
+  if (!respuesta) {
+    $("#status").className = "status hint";
+    $("#status").textContent = "Entrada no válida. Usa números separados por espacios/comas (/ ;).";
+    return;
+  }
+
+  const correctas = new Set(ELEMENTOS[simboloActual].vals);
+  preguntas += 1;
+
+  if (setEq(respuesta, correctas)) {
+    aciertos += 1;
+    $("#status").className = "status ok";
+    $("#status").textContent = `✅ ¡Correcto! ${canonical(respuesta)}. Pulsa Enter para continuar.`;
+    esperandoSiguiente = true;
+    $("#checkBtn").textContent = "Siguiente";
+  } else {
+    const faltan = diff(correctas, respuesta);
+    const sobran = diff(respuesta, correctas);
+    const partes = [];
+    if (faltan.size) partes.push(`Faltan: ${canonical(faltan)}`);
+    if (sobran.size) partes.push(`Sobran: ${canonical(sobran)}`);
+    const detalle = partes.join(" | ");
+    $("#status").className = "status bad";
+    $("#status").textContent = `❌ No es exacto. ${detalle} • Solución: ${canonical(correctas)}. Pulsa Enter para continuar.`;
+    esperandoSiguiente = true;
+    $("#checkBtn").textContent = "Siguiente";
+  }
+  actualizarMarcador();
+}
+
+/* ====== Eventos ====== */
+$("#checkBtn").addEventListener("click", comprobar);
+$("#answer").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    comprobar();
+  }
+});
+
+/* Init */
+reshuffle();
+nuevaPregunta();
+actualizarMarcador();
+</script>
+</body>
+</html>
