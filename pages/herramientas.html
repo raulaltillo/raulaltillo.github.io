@@ -1,0 +1,113 @@
+<head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T470HXGPQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T470HXGPQZ');
+</script>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../main.css">
+    <title>Herramientas | Raulaltillo </title>
+    <meta name="description" content="Mira aqui las herramientas de raulaltillo" />
+    <style>
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+            gap: 50px;
+            padding: 50px;
+
+        }
+        .card {
+            background: #2d2d2d;
+            border: solid 15px #0b0b0b;
+            border-radius: 10px;
+            padding: 20px;
+            color: #e0e0e0;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .card h3 {
+            margin: 10px 0;
+            font-size: 2em;
+            font-family: Hacked;
+            color: #e0e0e0;
+        }
+        .card p {
+            color: #e0e0e0;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1.5em;
+        }
+        .card a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+  <div class="topnav">
+    <img class="title" id="weather-icon"  src="../images/weather-icon-illustration03-Graphics-10205167-1.png" alt="Clima actual" width="50px">
+    <a href="./horario.html">Horario</a>
+    <a href="./menu.html">Menu</a>
+    <a href="./selectividad.html">Selectividad</a>
+    <a href="#" class="active">Herramientas</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
+  </div>
+  <div id="weatherIframeContainer" class="weather-iframe-container">
+    <iframe name="iframe_aemet_id33044" src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/jerez-de-la-frontera-id11020?w=g4p011100000ohmffffffx000000t999999r1s8n2" scrolling="no"></iframe>
+  </div>
+  <div id="content">
+    <br><br><br>
+    <div class="cards-grid" id="tools-grid">
+      <!-- Cards will be dynamically added here -->
+    </div>
+  </div>
+
+<script>
+const tools = [
+    {
+        title: "Practica de Valencias Inorganicas",
+        description: "Practica las valencias de los elementos químicos de forma interactiva",
+        image: "../images/chemistry.png",
+        link: "../utilidades/valencias.html"
+    },
+    // Add more tools here as needed
+];
+
+function createCard(tool) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    
+    const content = document.createElement('a');
+    content.href = tool.link;
+    content.innerHTML = `
+        <img src="${tool.image}" alt="${tool.title}">
+        <h3>${tool.title}</h3>
+        <p>${tool.description}</p>
+    `;
+    
+    card.appendChild(content);
+    return card;
+}
+
+function populateTools() {
+    const grid = document.getElementById('tools-grid');
+    tools.forEach(tool => {
+        grid.appendChild(createCard(tool));
+    });
+}
+
+// Initialize cards when page loads
+window.addEventListener('load', populateTools);
+</script>
+<script async src="../scripts/fade.js"></script>
+</body>

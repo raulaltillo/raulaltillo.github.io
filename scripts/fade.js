@@ -4,15 +4,16 @@ window.addEventListener('load', function() {
 
   document.querySelectorAll('.topnav a').forEach(link => {
     link.addEventListener('click', function(e) {
-      e.preventDefault();
       const href = this.getAttribute('href');
-
+      if (href === '#') return; // Don't fade if it's the current page
+      
+      e.preventDefault();
       const content = document.getElementById('content');
       content.classList.remove('visible');
 
       setTimeout(() => {
-        window.location.href = href; // Just normally move the user after fade
-      }, 250); // Match the fade-out time (in ms)
+        window.location.href = href;
+      }, 250);
     });
   });
 
