@@ -1,59 +1,93 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T470HXGPQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-T470HXGPQZ');
+</script>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quiz de Nomenclatura Orgánica (generador)</title>
+  <title>Organica | Raulaltillo</title>
+  <link rel="icon" href="../favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../main.css">
   <style>
     :root{ --bg:#0f172a; --panel:#111827; --ink:#e5e7eb; --muted:#9ca3af; --accent:#22d3ee; --ok:#22c55e; --err:#ef4444; }
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{ margin:0; font:16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial; color:var(--ink); background:linear-gradient(120deg,#0b1023,#111827 50%,#0b1023); display:flex; align-items:center; justify-content:center; padding:24px; }
-    .app{ width:100%; max-width:960px; background:rgba(17,24,39,.8); backdrop-filter: blur(6px); border:1px solid #1f2937; border-radius:20px; padding:24px; box-shadow:0 20px 80px rgba(0,0,0,.35) }
-    h1{ margin:0 0 8px; font-weight:800; letter-spacing:.2px }
+    body{
+      color:var(--ink);
+      background:#1a1a1a;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    .app{ 
+      width:100%; 
+      max-width:1000px; 
+      background:#2d2d2d; 
+      backdrop-filter: blur(6px);
+      border:solid 15px #0b0b0b; 
+      border-radius:10px; 
+      padding:24px; 
+      margin: 20px auto;
+    }
+    h1{ margin:0 0 8px; font-weight:800; letter-spacing:.2px; font-family: Hacked; }
     .sub{ color:var(--muted); margin-bottom:24px }
     .grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px }
-    .card{ background:rgba(2,6,23,.6); border:1px solid #1f2937; border-radius:16px; padding:16px }
-    .label{ color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.08em }
+    .card{ background:#2d2d2d; border:solid 15px #0b0b0b; border-radius:10px; padding:16px }
+    .label{ color:#e0e0e0; font-size:12px; text-transform:uppercase; letter-spacing:.08em; font-family: Hacked }
     .big{ font-size:24px; font-weight:700; margin:4px 0 0 }
     .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace }
-    input[type=text]{ width:100%; padding:12px 14px; border-radius:12px; border:1px solid #334155; background:#0b1328; color:var(--ink) }
+    input[type=text]{ width:100%; padding:12px 14px; border-radius:12px; border:1px solid #000000; background:#1a1a1a; color:#e0e0e0 }
     input[type=text]::placeholder{ color:#6b7280 }
-    .row{ display:flex; gap:10px; align-items:center }
-    .row.wrap{ flex-wrap:wrap }
-    .btn{ appearance:none; border:none; background:var(--accent); color:#052029; font-weight:800; padding:12px 16px; border-radius:12px; cursor:pointer; transition:filter .2s }
-    .btn:hover{ filter:brightness(1.05) }
-    .btn.secondary{ background:#334155; color:#e5e7eb }
-    .note{ color:var(--muted); font-size:13px }
-    .badge{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#0b1328; border:1px solid #1f2937; color:#a3a3a3 }
-    .result{ margin-top:8px; font-weight:700 }
-    .ok{ color:var(--ok) }
-    .err{ color:var(--err) }
-    .muted{ color:var(--muted) }
+    .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+    .btn{ appearance:none; border:none; background:#2D7A5E; color:#e0e0e0; font-weight:800; padding:12px 16px; border-radius:12px; cursor:pointer; transition:background-color 0.3s }
+    .btn:hover{ background-color:#1e5542 }
+    .btn.secondary{ background:#3d3d3d; color:#e0e0e0 }
+    .note{ color:#e0e0e0; font-size:13px }
+    .badge{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#1a1a1a; border:1px solid #1f2937; color:#e0e0e0 }
+    .status{ margin-top:8px; font-weight:700 }
+    .ok{ color:#22c55e }
+    .bad{ color:#ef4444 }
+    .hint{ color:#e0e0e0 }
     .footer{ margin-top:16px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap }
     .switch{ display:inline-flex; align-items:center; gap:8px; cursor:pointer; user-select:none }
     .switch input{ display:none }
-    .pill{ width:42px; height:24px; background:#334155; border-radius:999px; position:relative; transition:background .2s }
+    .pill{ width:42px; height:24px; background:#3d3d3d; border-radius:999px; position:relative; transition:background .2s }
     .pill::after{ content:""; position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%; background:#e5e7eb; transition:transform .2s }
     .switch input:checked + .pill{ background:var(--accent) }
     .switch input:checked + .pill::after{ transform:translateX(18px) }
     .tiny{ font-size:12px }
-    .kbd{ font-size:12px; border:1px solid #374151; background:#0b1328; padding:.2em .45em; border-radius:6px }
+    .kbd{ font-size:12px; border:1px solid #374151; background:#1a1a1a; padding:.2em .45em; border-radius:6px }
   </style>
 </head>
 <body>
-  <div class="app">
-    <h1>Quiz de Nomenclatura Orgánica</h1>
-    <div class="sub">Generación aleatoria de compuestos (alcanos, alquenos, alcoholes, cetonas, ácidos y ésteres). El nombre se evalúa con orientación IUPAC (menor conjunto de locantes) y se omiten locantes cuando son únicos.</div>
+  <div class="topnav">
+    <img class="title" id="weather-icon" src="../images/weather-icon-illustration03-Graphics-10205167-1.png" alt="Clima actual" width="50px">
+    <a href="../pages/horario.html">Horario</a>
+    <a href="../pages/menu.html">Menu</a>
+    <a href="../pages/selectividad.html">Selectividad</a>
+    <a href="../pages/herramientas.html" class="active">Herramientas</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
+  </div>
+
+  <div id="weatherIframeContainer" class="weather-iframe-container">
+    <iframe name="iframe_aemet_id33044" src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/jerez-de-la-frontera-id11020?w=g4p011100000ohmffffffx000000t999999r1s8n2" scrolling="no"></iframe>
+  </div>
+  <div id="content">
+    <br><br><br>
+    <div class="app">
+      <h1>Formulacion organica IUPAC</h1>
 
     <div class="grid">
       <div class="card">
-        <div class="label">Fórmula semidesarrollada (orientada C1 → …)</div>
+        <div class="label">Formula semidesarrollada</div>
         <div id="semi" class="big mono">—</div>
       </div>
       <div class="card">
         <div class="label">Datos</div>
-        <div class="row wrap" style="gap:8px; margin-top:6px">
+        <div class="row" style="gap:8px; margin-top:6px">
           <span class="badge" id="badgeFam">Familia: <span id="familia">—</span></span>
           <span class="badge" id="badgeFor">Fórmula: <span id="formula">—</span></span>
         </div>
@@ -63,362 +97,559 @@
     <div class="card" style="margin-top:16px">
       <div class="label">Tu respuesta</div>
       <div class="row" style="margin-top:6px">
-        <input id="respuesta" type="text" placeholder="Ej.: but-2-eno, 2-propanol, 2-metilbutano, etil etanoato" />
-        <button id="btnCheck" class="btn">Comprobar</button>
-        <button id="btnSkip" class="btn secondary" title="Nueva molécula (no puntúa)">Saltar</button>
+        <input id="answer" type="text" placeholder="Ej.: 4-bromo-2,3-dimetilhex-2-eno / butanona / 2-propanol" />
+        <button id="checkBtn" class="btn">Comprobar <span class="kbd">Enter</span></button>
+        <button id="skipBtn" class="btn secondary" title="Nueva molécula (no puntúa)">Saltar</button>
       </div>
-      <div id="feedback" class="result muted">—</div>
+      <div id="status" class="status hint">—</div>
       <div id="reveal" class="note" style="display:none"></div>
     </div>
 
     <div class="footer">
-      <div class="row tiny muted">
-        <span>Marcador:</span>
-        <span id="score">0</span>/<span id="tries">0</span>
+      <div class="row tiny hint">
+        <span id="score">Aciertos: 0/0</span>
       </div>
-      <div class="row tiny muted">
-        <label class="switch" title="Permite pequeños errores de tecleo">
-          <input id="fuzzy" type="checkbox" checked>
-          <span class="pill"></span>
-          <span>Tolerancia a typos</span>
-        </label>
+      <div class="row tiny hint">
         <label class="switch" title="Mostrar/ocultar la familia">
-          <input id="showFam" type="checkbox">
-          <span class="pill"></span>
-          <span>Mostrar familia</span>
+          <input id="showFam" type="checkbox"><span class="pill"></span><span>Mostrar familia</span>
         </label>
         <label class="switch" title="Mostrar/ocultar la fórmula molecular">
-          <input id="showFor" type="checkbox">
-          <span class="pill"></span>
-          <span>Mostrar fórmula</span>
+          <input id="showFor" type="checkbox"><span class="pill"></span><span>Mostrar fórmula</span>
         </label>
       </div>
     </div>
   </div>
 
   <script>
-    // ===== Utilidades =====
-    const PREFIJOS = {1:"met",2:"et",3:"prop",4:"but",5:"pent",6:"hex",7:"hept",8:"oct",9:"non",10:"dec"};
-    const SUBS_NOMBRE = {1:"metil", 2:"etil"};
-    const FAMILIAS = ["alcano","alqueno","alcohol","cetona","acido","ester"];
+    /* ===========================
+       Utilidades básicas y datos
+       =========================== */
+    const $ = (sel)=>document.querySelector(sel);
 
-    const r = (a,b)=> Math.floor(Math.random()*(b-a+1))+a;
-    const choice = arr => arr[Math.floor(Math.random()*arr.length)];
-    function nombreCadena(n){return PREFIJOS[n] || `C${n}`}
+    const PREFIJOS = {1:"met",2:"et",3:"prop",4:"but",5:"pent",6:"hex",7:"hept",8:"oct",9:"non",10:"dec"};
+    const ROOT = (n)=>PREFIJOS[n] || `C${n}`;
+
+    // Sustituyentes disponibles como prefijos (cuando NO son grupo principal)
+    // clave -> {nombre, alphaKey} (alphaKey ignora prefijos multiplicativos)
+    const SUBS_TYPES = {
+      metil:  {name:"metil",  alpha:"metil"},
+      etil:   {name:"etil",   alpha:"etil"},
+      fluoro: {name:"fluoro", alpha:"fluoro"},
+      cloro:  {name:"cloro",  alpha:"cloro"},
+      bromo:  {name:"bromo",  alpha:"bromo"},
+      iodo:   {name:"iodo",   alpha:"iodo"},
+      nitro:  {name:"nitro",  alpha:"nitro"},
+      hidroxi:{name:"hidroxi",alpha:"hidroxi"},
+      amino:  {name:"amino",  alpha:"amino"},
+      metoxi: {name:"metoxi", alpha:"alcoxi-metoxi"},
+      etoxi:  {name:"etoxi",  alpha:"alcoxi-etoxi"},
+    };
+    const MULTI_PREFIX = (k)=> (k===2?'di':k===3?'tri':k===4?'tetra':k===5?'penta':k===6?'hexa':`x${k}`);
+
+    const rint = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+    const choice = (arr)=>arr[Math.floor(Math.random()*arr.length)];
 
     function normalizeName(s){
       return s.toLowerCase()
-        .replaceAll(/[\s–—]/g,"-")
-        .replaceAll("ácido","acido")
+        .replaceAll(/[–—]/g,"-")
         .normalize('NFD').replace(/[\u0300-\u036f]/g,"") // sin acentos
-        .replaceAll(/-{2,}/g,"-")
+        .replace(/\s+/g,"-")
+        .replace(/,{2,}/g,",")
+        .replace(/-{2,}/g,"-")
         .replace(/^-|-$|\.|,/g,"");
     }
 
-    // Levenshtein para tolerancia a typos
-    function lev(a,b){
-      const m=a.length, n=b.length; if(!m) return n; if(!n) return m;
-      const dp=Array.from({length:m+1},(_,i)=>Array(n+1).fill(0));
-      for(let i=0;i<=m;i++) dp[i][0]=i; for(let j=0;j<=n;j++) dp[0][j]=j;
-      for(let i=1;i<=m;i++) for(let j=1;j<=n;j++){
-        const cost=a[i-1]===b[j-1]?0:1;
-        dp[i][j]=Math.min(dp[i-1][j]+1, dp[i][j-1]+1, dp[i-1][j-1]+cost);
-      }
-      return dp[m][n];
+    // Orden alfabético de prefijos ignorando multiplicativos (di-, tri- no cuentan)
+    function alphaKeyOf(type){ return SUBS_TYPES[type]?.alpha || type; }
+
+    /* =========================================
+       Modelo simplificado de molécula lineal
+       - n: número de C en cadena principal
+       - fg: grupo principal (string) o null
+       - posFG: locante(s) del grupo principal
+       - db: posiciones de dobles (i -> entre i e i+1)
+       - tb: posiciones de triples
+       - subs: [{pos, type}]  (pueden repetirse tipos/posiciones)
+       ========================================= */
+
+    // Familias principales soportadas (según PDF: ácidos > nitrilos > aldehídos > cetonas > alcoholes > aminas > (éteres como sustituyentes) > insaturación > alcanos)
+    const FAMILIAS = ["acido","nitrilo","aldehido","cetona","alcohol","amina","alqueno","alquino","alcano","halogenuro","nitro"];
+
+    // Generadores de estructuras
+    function genCadena(nMin=2,nMax=9){ return rint(nMin,nMax); }
+
+    function genUnsat(n, minPos = 1){
+    // a lo sumo UNA insaturación
+    const t = choice(["none","ene","ino","ene","none"]);
+    if(t === "none") return { db: [], tb: [] };
+    const pos = rint(minPos, Math.max(minPos, n-1));
+    return t === "ene" ? { db: [pos], tb: [] } : { db: [], tb: [pos] };
     }
 
-    function rndExcluding(low, high, excluded){
-      const opts=[]; for(let i=low;i<=high;i++) if(!excluded.includes(i)) opts.push(i);
-      return opts.length? choice(opts): null;
+
+    function genSustituyentes(n, fg){
+      // de 0 a 3 sustituyentes (evitando C1 si es ácido/nitrilo/aldehido)
+      const count = rint(0,3);
+      const pool = Object.keys(SUBS_TYPES).filter(t=>{
+        if(fg==="alcohol" && t==="hidroxi") return false;
+        if(fg==="amina" && t==="amino") return false;
+        return true;
+      });
+      const out = [];
+      for(let i=0;i<count;i++){
+        const type = choice(pool);
+        let p = rint(1,n);
+        if((fg==="acido"||fg==="nitrilo"||fg==="aldehido") && p===1) p = n>1?2:1; // no colgar en el C del sufijo principal
+        out.push({pos:p, type});
+      }
+      return out;
     }
 
-    // ===== Semidesarrolladas =====
-    function semiAlcano(n, sub){
-      let base;
-      if(n===1) base=["CH4"]; else if(n===2) base=["CH3","CH3"]; else base=["CH3", ...Array(n-2).fill("CH2"), "CH3"];
-      if(sub){
-        const [pos,tam]=sub, idx=pos-1; let frag=base[idx];
-        if(frag==="CH3"||frag==="CH2") frag="CH";
-        const rama = (tam===1?"(CH3)":"(CH2CH3)");
-        base[idx]=frag+rama;
+    function genMolecula(){
+      // Escoge familia y construye coherentemente
+      const fam = choice(FAMILIAS);
+      let n = genCadena(2,9);
+      let fg = null, posFG=[], db=[], tb=[], subs=[], formula="";
+
+      if(fam==="acido"){
+        n = genCadena(1,8);
+        fg="acido"; posFG=[1]; ({db,tb}={db:[],tb:[]}); subs = []; // sin subs para simplificar
+        formula = n===1? "CH2O2" : `C${n}H${2*n}O2`;
+      } else if(fam==="nitrilo"){
+        n = genCadena(2,9);
+        fg="nitrilo"; posFG=[1]; ({db,tb}={db:[],tb:[]}); subs = genSustituyentes(n, fg);
+        formula = `C${n}H${2*n-1}N`;
+      } else if(fam==="aldehido"){
+        n = genCadena(2,9);
+        fg="aldehido"; posFG=[1];
+        ({db,tb}=genUnsat(n, 2)); // <— mínimo 2, no tocar C1
+        subs = genSustituyentes(n, fg);
+        formula = `C${n}H${2*n}O`; // aprox
+
+      } else if(fam==="cetona"){
+        n = genCadena(3,9);
+        fg="cetona"; posFG=[ rint(2, n-1) ]; ({db,tb}={db:[],tb:[]}); subs = genSustituyentes(n, fg);
+        formula = `C${n}H${2*n}O`;
+      } else if(fam==="alcohol"){
+        n = genCadena(1,9);
+        fg="alcohol"; posFG=[ n===1?1:rint(1,n) ]; ({db,tb}=genUnsat(n)); subs = genSustituyentes(n, fg);
+        formula = `C${n}H${2*n+2}O`;
+      } else if(fam==="amina"){
+        n = genCadena(1,9);
+        fg="amina"; posFG=[ n===1?1:rint(1,n) ]; ({db,tb}=genUnsat(n)); subs = genSustituyentes(n, fg);
+        formula = `C${n}H${2*n+3}N`;
+      } else if(fam==="alqueno"){
+        n = genCadena(2,9);
+        ({db,tb}=genUnsat(n)); if(db.length===0){ db=[rint(1,n-1)]; tb=[]; } // aseguramos doble
+        subs = genSustituyentes(n, null); formula = `C${n}H${2*n}`;
+      } else if(fam==="alquino"){
+        n = genCadena(2,9);
+        ({db,tb}=genUnsat(n)); if(tb.length===0){ tb=[rint(1,n-1)]; db=[]; } // aseguramos triple
+        subs = genSustituyentes(n, null); formula = `C${n}H${2*n-2}`;
+      } else if(fam==="halogenuro"){
+        n = genCadena(2,9);
+        fg=null; ({db,tb}={db:[],tb:[]});
+        // al menos 1 halógeno
+        let k = rint(1,3);
+        subs = [];
+        while(k--) subs.push({pos:rint(1,n), type:choice(["fluoro","cloro","bromo","iodo"])});
+        subs = subs.concat(genSustituyentes(n, null));
+        formula = `C${n}H${2*n+2}`; // aproximada
+      } else if(fam==="nitro"){
+        n = genCadena(2,9);
+        fg=null; ({db,tb}=genUnsat(n)); // nitro sólo como prefijo
+        let k=rint(1,2); subs=[];
+        while(k--) subs.push({pos:rint(1,n), type:"nitro"});
+        subs = subs.concat(genSustituyentes(n, null));
+        formula = `C${n}H${2*n+2}N${subs.filter(s=>s.type==='nitro').length}`; // aprox
+      } else { // alcano
+        n = genCadena(1,10);
+        fg=null; ({db,tb}={db:[],tb:[]}); subs = genSustituyentes(n, null);
+        formula = `C${n}H${2*n+2}`;
       }
-      return base.join("-");
+
+      return {n, fg, posFG, db, tb, subs, formula};
     }
 
-    function semiAlqueno(n,posDoble,sub){
-      const u=[];
-      for(let i=1;i<=n;i++){
-        let frag = (i===1||i===n)?"CH3":"CH2";
-        if(i===posDoble||i===posDoble+1){ frag = (i===1||i===n)?"CH2":"CH"; }
-        u.push(frag);
-      }
-      if(sub){
-        const [p,tam]=sub, idx=p-1; let frag=u[idx];
-        if(frag==="CH3"||frag==="CH2"||frag==="CHOH"||frag==="CH") frag="CH";
-        u[idx]=frag+(tam===1?"(CH3)":"(CH2CH3)");
-      }
-      const partes=[]; for(let i=0;i<n;i++){partes.push(u[i]); if(i===posDoble-1) partes.push("="); else if(i<n-1) partes.push("-");}
-      return partes.join("");
-    }
+    /* =====================================
+       Orientación (menor conjunto de locantes)
+       - compara izquierda→derecha vs derecha→izquierda
+       - prioridad: grupo principal > dobles > triples > sustituyentes
+       - si hay empate en insaturaciones, se prioriza el doble (PDF)
+       ===================================== */
+    function mirrorPos(n,p){ return n+1-p; }
+    function mirrorList(n,arr){ return arr.map(p=>mirrorPos(n,p)).sort((a,b)=>a-b); }
+    function mirrorBonds(n,arr){ return arr.map(p=>(n-p)).sort((a,b)=>a-b); } // dobles/triples entre i e i+1
 
-    function semiAlcohol(n,posOH,sub){
-      if(n===1) return "CH3-OH";
-      const base=["CH3", ...Array(n-2).fill("CH2"), "CH3"]; const idx=posOH-1;
-      base[idx] = (idx===0||idx===n-1)?"CH2OH":"CHOH";
-      if(sub){
-        const [p,tam]=sub, pidx=p-1; if(pidx!==idx){
-          let frag=base[pidx]; if(frag==="CH3"||frag==="CH2"||frag==="CHOH") frag="CH"; base[pidx]=frag+(tam===1?"(CH3)":"(CH2CH3)");
+    function orientationKey(mol, flip){
+      const n = mol.n;
+      const fg = mol.fg;
+      let fgLoc = [];
+      if(fg==="acido"||fg==="nitrilo"||fg==="aldehido"){ fgLoc=[1]; }
+      else if(fg==="cetona"||fg==="alcohol"||fg==="amina"){ fgLoc = flip? mirrorList(n, mol.posFG): [...mol.posFG].sort((a,b)=>a-b); }
+      else fgLoc=[];
+
+      const dLoc = flip? mirrorBonds(n, mol.db): [...mol.db].sort((a,b)=>a-b);
+      const tLoc = flip? mirrorBonds(n, mol.tb): [...mol.tb].sort((a,b)=>a-b);
+
+      const sLoc = (flip? mol.subs.map(s=>mirrorPos(n,s.pos)) : mol.subs.map(s=>s.pos)).sort((a,b)=>a-b);
+
+      return [fgLoc, dLoc, tLoc, sLoc];
+    }
+    function lexLess(a,b){
+      // compara dos arrays de arrays lexicográficamente
+      const L = Math.min(a.length,b.length);
+      for(let i=0;i<L;i++){
+        const x=a[i], y=b[i];
+        for(let j=0;j<Math.min(x.length,y.length);j++){
+          if(x[j]!==y[j]) return x[j]<y[j];
         }
+        if(x.length!==y.length) return x.length<y.length;
       }
-      return base.join("-");
+      return false;
     }
 
-    function semiCetona(n,pos){
-      // butan-2-ona -> CH3-CO-CH2-CH3 (orientada con C1 a la izquierda)
-      const left = pos; const right=n-left;
-      const parts=[];
-      if(left===1){parts.push("CO");}
-      else if(left===2){parts.push("CH3","-","CO");}
-      else {parts.push("CH3"); for(let i=0;i<left-2;i++) parts.push("-","CH2"); parts.push("-","CO");}
-      if(right>=1){ if(right===1) parts.push("-","CH3"); else {parts.push("-","CH2"); for(let i=0;i<right-2;i++) parts.push("-","CH2"); parts.push("-","CH3");} }
-      return parts.join("");
+    function orient(mol){
+    const n = mol.n;
+    const anchorFG = (mol.fg === "acido" || mol.fg === "nitrilo" || mol.fg === "aldehido");
+
+    // Si el FG es terminal, fuerza C1 en el lado del FG
+    if(anchorFG){
+        if(mol.posFG[0] !== 1){
+        // aplicar espejo una vez
+        const subs = mol.subs.map(s=>({pos:n+1-s.pos, type:s.type}));
+        const posFG = mol.posFG.map(p=>n+1-p);
+        const db = mol.db.map(p=>(n-p)).sort((a,b)=>a-b);
+        const tb = mol.tb.map(p=>(n-p)).sort((a,b)=>a-b);
+        return {...mol, subs, posFG, db, tb, flipped:true};
+        }
+        return {...mol, flipped:false};
     }
 
-    function semiAcido(n){
-      // Mostrar carboxilo a la izquierda para que C1 esté a la izquierda: HOOC-...
-      if(n===1) return "HOOC-H";
-      if(n===2) return "HOOC-CH3";
-      return "HOOC-"+Array(n-1).fill("CH2").slice(0,n-2).join("-")+(n>2? (n-2>0?"-":"")+"CH3":"");
+    // Si no es FG terminal, usa la comparación lexicográfica original
+    const keyL = orientationKey(mol,false);
+    const keyR = orientationKey(mol,true);
+    const useR = lexLess(keyR, keyL);
+    if(!useR) return {...mol, flipped:false};
+    const subs = mol.subs.map(s=>({pos:n+1-s.pos, type:s.type}));
+    const posFG = mol.posFG.map(p=>n+1-p);
+    const db = mol.db.map(p=>(n-p)).sort((a,b)=>a-b);
+    const tb = mol.tb.map(p=>(n-p)).sort((a,b)=>a-b);
+    return {...mol, subs, posFG, db, tb, flipped:true};
     }
 
-    function semiEster(nAc,nAl){
-      // Acilo a la izquierda (C=O como C1): R-COO-R'
-      let acilo = nAc===1?"H-COO-":(nAc===2?"CH3-COO-":"CH3-"+Array(nAc-2).fill("CH2").join("-")+"-COO-");
-      if(nAl===1) return acilo+"CH3"; if(nAl===2) return acilo+"CH2-CH3"; return acilo+"CH3-"+Array(nAl-1).fill("CH2").join("-");
+
+    /* =============================
+       Semidesarrolladas (C1 a izq.)
+       ============================= */
+    function semiBase(n){
+      if(n===1) return ["CH3"];
+      if(n===2) return ["CH3","CH3"];
+      return ["CH3", ...Array(n-2).fill("CH2"), "CH3"];
+    }
+    function addBranch(frag, idx, tag){ // convierte CH3/CH2/CHOH en CH(...ramas)
+      let f = frag[idx];
+      if(f==="CH3"||f==="CH2"||f==="CHOH"||f==="CH2OH") f="CH";
+      frag[idx] = f + tag;
     }
 
-    // ===== Nombres (con orientación y supresión de locantes cuando procede) =====
-    function nombreAlcano(n,sub){
-      if(!sub) return nombreCadena(n)+"ano";
-      const [pos,tam]=sub; return `${pos}-${SUBS_NOMBRE[tam]}${nombreCadena(n)}ano`;
+    function semiString(m){
+    const {n, fg, posFG, db, tb, subs} = m;
+    let fr = semiBase(n);
+
+    if(fg==="acido"){
+        if(n===1) return "H-COOH";
+        return "CH3-"+(n===2?"":"CH2-".repeat(n-2)).replace(/-$/,"")+"-COOH";
+    }
+    if(fg==="nitrilo"){
+        const cola = (n>=2? ("-CH3"+(n>=3? "-"+Array(n-2).fill("CH2").join("-"):"")) : "");
+        return "NC"+(cola? "-"+cola : "");
+    }
+    if(fg==="aldehido"){
+        if(n===1) return "H-CHO";
+        // No devolvemos aún: colocamos CHO en C1 y seguimos para insertar =/≡ si toca
+        fr[0] = "CHO";
+    }
+    if(fg==="cetona"){
+        const p = posFG[0];
+        const left = p, right = n-p;
+        const parts = [];
+        if(left===1){ parts.push("CO"); }
+        else if(left===2){ parts.push("CH3","-","CO"); }
+        else { parts.push("CH3"); for(let i=0;i<left-2;i++) parts.push("-","CH2"); parts.push("-","CO"); }
+        if(right>=1){
+        if(right===1) parts.push("-","CH3");
+        else { parts.push("-","CH2"); for(let i=0;i<right-2;i++) parts.push("-","CH2"); parts.push("-","CH3"); }
+        }
+        // en cetonas ya ensamblamos string completo
+        const s = parts.join("");
+        // (por simplicidad no añadimos sustituyentes visualmente aquí)
+        return s;
+    }
+    if(fg==="alcohol"){
+        const p = posFG[0]-1;
+        if(n===1) return "CH3-OH";
+        fr[p] = (p===0||p===n-1) ? "CH2OH" : "CHOH";
+    }
+    if(fg==="amina"){
+        const p = posFG[0]-1;
+        fr[p] = (fr[p]==="CH3"||fr[p]==="CH2") ? "CH(NH2)" : (fr[p]+"(NH2)");
     }
 
-    function nombreAlqueno(n,posDoble,sub){
-      // Omitir locante del doble enlace sólo si n<=3 (único posible)
-      const base = (n<=3) ? `${nombreCadena(n)}eno` : `${nombreCadena(n)}-${posDoble}-eno`;
-      if(!sub) return base;
-      const [p,tam]=sub; return `${p}-${SUBS_NOMBRE[tam]}${base}`;
+    // Insaturaciones (una)
+    if(db.length && fr.length>1){
+        const i = db[0];
+        const parts=[]; for(let k=0;k<n;k++){ parts.push(fr[k]); if(k===i-1) parts.push("="); else if(k<n-1) parts.push("-"); }
+        return parts.join("");
+    } else if(tb.length && fr.length>1){
+        const i = tb[0];
+        const parts=[]; for(let k=0;k<n;k++){ parts.push(fr[k]); if(k===i-1) parts.push("≡"); else if(k<n-1) parts.push("-"); }
+        return parts.join("");
     }
 
-    function nombreAlcohol(n,posOH,sub){
-      // Omitir locante del OH si n<=2 (único posible)
-      const base = (n<=2) ? `${nombreCadena(n)}anol` : `${nombreCadena(n)}an-${posOH}-ol`;
-      if(!sub) return base;
-      const [p,tam]=sub; return `${p}-${SUBS_NOMBRE[tam]}${base}`;
+    // Sustituyentes simples en la cadena (visual)
+    subs.forEach(({pos,type})=>{
+        const idx = pos-1;
+        const tag = (type==="metil")?"(CH3)":
+                    (type==="etil")?"(CH2CH3)":
+                    (type==="metoxi")?"(OCH3)":
+                    (type==="etoxi")?"(OCH2CH3)":
+                    (type==="hidroxi")?"(OH)":
+                    (type==="amino")?"(NH2)":
+                    (type==="fluoro")?"(F)":
+                    (type==="cloro")?"(Cl)":
+                    (type==="bromo")?"(Br)":
+                    (type==="iodo")?"(I)":
+                    (type==="nitro")?"(NO2)":"";
+        if(tag){ addBranch(fr, idx, tag); }
+    });
+    return fr.join("-");
     }
 
-    function nombreCetona(n,pos){
-      // Posición única si n=3 o n=4 -> omitir locante
-      const unico = (n===3) || (n===4);
-      return unico? `${nombreCadena(n)}anona` : `${nombreCadena(n)}an-${pos}-ona`;
+
+    /* =========================
+       Construcción del nombre
+       ========================= */
+    function locantsToString(locs){ return locs.sort((a,b)=>a-b).join(","); }
+
+    function groupSubstituents(subs){
+      // agrupamos por tipo -> {type: [pos,...]}
+      const map = {};
+      subs.forEach(s=>{
+        if(!map[s.type]) map[s.type]=[];
+        map[s.type].push(s.pos);
+      });
+      // ordenar posiciones y formatear con multiplicativos
+      const entries = Object.entries(map).map(([type, locs])=>{
+        locs.sort((a,b)=>a-b);
+        const k = locs.length;
+        const pref = (k>1? MULTI_PREFIX(k):"");
+        const name = SUBS_TYPES[type].name;
+        const head = locs.join(",");
+        return {
+          type,
+          alpha: alphaKeyOf(type),
+          text: `${head}-${pref?pref:""}${name}`
+        };
+      });
+      // ordenar por alfa (ignorando multi)
+      entries.sort((a,b)=> a.alpha.localeCompare(b.alpha));
+      return entries.map(e=>e.text).join("-");
     }
 
-    function nombreAcido(n){ return `acido ${nombreCadena(n)}anoico`; }
-    function nombreEster(nAc,nAl){ return `${nombreCadena(nAl)}il ${nombreCadena(nAc)}anoato`; }
-
-    // ===== Fórmulas moleculares (aprox) =====
-    function formulaMol(fam, n, sub, extra){
-      function satC(n){return [n, 2*n+2]}
-      if(fam==="alcano"){ const carb = n + (sub? sub[1]:0); const [c,h]=satC(carb); return `C${c}H${h}`; }
-      if(fam==="alqueno"){ const carb = n + (sub? sub[1]:0); return `C${carb}H${2*carb}`; }
-      if(fam==="alcohol"){ const carb = n + (sub? sub[1]:0); return `C${carb}H${2*carb+2}O`; }
-      if(fam==="cetona"){ return `C${n}H${2*n}O`; }
-      if(fam==="acido"){ return `C${n}H${2*n}O2`; }
-      if(fam==="ester"){ const [nAc,nAl]=extra; const carb=nAc+nAl; return `C${carb}H${2*carb}O2`; }
-      return "?";
+    function nombreBaseConInsat(n, db, tb){
+      // una sola insaturación como asumimos en generador
+      if(db.length===0 && tb.length===0) return ROOT(n)+"ano";
+      if(db.length===1 && tb.length===0) return `${ROOT(n)}-${db[0]}-eno`;
+      if(tb.length===1 && db.length===0) return `${ROOT(n)}-${tb[0]}-ino`;
+      // mixto (raro aquí), usamos en/ino
+      const en = db.length? `${db.join(",")}-en` : "";
+      const yn = tb.length? `${tb.join(",")}-in` : "";
+      const sep = en&&yn ? "-" : "";
+      return `${ROOT(n)}-${en}${sep}${yn}o`;
     }
 
-    // ===== Orientación para menor conjunto de locantes =====
-    function orientAlcano(n, sub){
-      if(!sub) return {sub:null, flipped:false};
-      const [p,t]=sub; const q = n+1-p; // espejo
-      if(q < p) return {sub:[q,t], flipped:true};
-      return {sub:[p,t], flipped:false};
+    function nombrePrincipal(m){
+    const {n, fg, posFG, db, tb} = m;
+
+    if(fg==="acido")   return `acido ${ROOT(n)}anoico`;
+    if(fg==="nitrilo") return `${ROOT(n)}onitrilo`; // simplificado
+
+    if(fg==="aldehido"){
+        // si hay insaturación: ...-enal / ...-inal
+        if(db.length===1 && tb.length===0){
+        return `${ROOT(n)}-${db[0]}-enal`;
+        }
+        if(tb.length===1 && db.length===0){
+        return `${ROOT(n)}-${tb[0]}-inal`;
+        }
+        // saturado
+        return `${ROOT(n)}anal`;
     }
 
-    function orientAlqueno(n, d, sub){
-      // Compara (d, s) vs (n-d, n+1-s) lexicográficamente
-      const candA = [d, sub? sub[0]:Infinity];
-      const candB = [n-d, sub? (n+1-sub[0]):Infinity];
-      const useB = (candB[0] < candA[0]) || (candB[0]===candA[0] && candB[1] < candA[1]);
-      if(useB){ return {d:n-d, sub: sub? [n+1-sub[0], sub[1]]: null, flipped:true}; }
-      return {d, sub, flipped:false};
+    if(fg==="cetona"){
+        const unico = (n===3)||(n===4);
+        const p = posFG[0];
+        return unico? `${ROOT(n)}anona` : `${ROOT(n)}an-${p}-ona`;
     }
 
-    function orientAlcohol(n, pOH, sub){
-      const candA = [pOH, sub? sub[0]:Infinity];
-      const candB = [n+1-pOH, sub? (n+1-sub[0]):Infinity];
-      const useB = (candB[0] < candA[0]) || (candB[0]===candA[0] && candB[1] < candA[1]);
-      if(useB){ return {pOH:n+1-pOH, sub: sub? [n+1-sub[0], sub[1]]: null, flipped:true}; }
-      return {pOH, sub, flipped:false};
+    if(fg==="alcohol"){
+        if(n<=2) return `${ROOT(n)}anol`;
+        return `${ROOT(n)}an-${posFG[0]}-ol`;
     }
 
-    function orientCetona(n, pos){
-      const alt = n - pos; // espejo
-      if(alt < pos) return {pos:alt, flipped:true};
-      return {pos, flipped:false};
+    if(fg==="amina"){
+        if(n<=2) return `${ROOT(n)}anamina`;
+        return `${ROOT(n)}an-${posFG[0]}-amina`;
     }
 
-    // ===== Generadores =====
-    function genAlcano(){
-      const n=r(2,8); let sub=null; if(n>=3 && Math.random()<0.6){ sub=[rndExcluding(2,n-1,[]), choice([1,2])] }
-      const o = orientAlcano(n, sub);
-      const nombre=nombreAlcano(n,o.sub); const semi=semiAlcano(n,o.sub); const formula=formulaMol("alcano",n,o.sub);
-      return {familia:"alcano", nombre, semi, formula, meta:{n, sub:o.sub}};
+    // hidrocarburos
+    if(db.length || tb.length) return nombreBaseConInsat(n, db, tb);
+    return `${ROOT(n)}ano`;
     }
 
-    function genAlqueno(){
-      const n=r(2,8); let d=r(1,n-1); if(n>=4 && (d===1||d===n-1) && Math.random()<0.5) d=r(2,n-2);
-      let sub=null; if(n>=4 && Math.random()<0.45){ sub=[rndExcluding(2,n-1,[]), choice([1,2])]; }
-      const o = orientAlqueno(n,d,sub);
-      const nombre=nombreAlqueno(n,o.d,o.sub); const semi=semiAlqueno(n,o.d,o.sub); const formula=formulaMol("alqueno",n,o.sub);
-      return {familia:"alqueno", nombre, semi, formula, meta:{n, d:o.d, sub:o.sub}};
+
+    function nombreCompleto(m){
+      // 1) orientar para LCML
+      m = orient(m);
+
+      // 2) nombre principal (cadena)
+      const base = nombrePrincipal(m);
+
+      // 3) prefijos de sustituyentes (si m.fg no "acido" con restricción)
+      const pref = m.subs.length? groupSubstituents(m.subs) : "";
+
+      // 4) juntar
+      return pref ? `${pref}-${base}` : base;
     }
 
-    function genAlcohol(){
-      const n=r(1,8); const pOH=(n===1)?1:r(1,n); let sub=null; if(n>=4 && Math.random()<0.4){ const p=rndExcluding(2,n-1,[pOH]); if(p) sub=[p, choice([1,2])]; }
-      const o = orientAlcohol(n,pOH,sub);
-      const nombre=nombreAlcohol(n,o.pOH,o.sub); const semi=semiAlcohol(n,o.pOH,o.sub); const formula=formulaMol("alcohol",n,o.sub);
-      return {familia:"alcohol", nombre, semi, formula, meta:{n, pOH:o.pOH, sub:o.sub}};
+    // Variantes aceptadas: forma antigua (2-buteno) y sin locante cuando único (ya contemplado en base)
+    function altForm(nombre){
+    let s = nombre;
+    // but-2-eno -> 2-buteno ; propan-2-ol -> 2-propanol ; butan-2-ona -> 2-butanona
+    s = s.replace(/^(.+?)-(\d+)-(eno|ino)$/, (_,$1,$2,$3)=> `${$2}-${$1}${$3}`);
+    s = s.replace(/^(.*?)([a-z]+)an-(\d+)-ol$/, (_,$1,$2,$3)=> `${$3}-${$1}${$2}anol`);
+    s = s.replace(/^([a-z]+)an-(\d+)-ona$/, (_,$1,$2)=> `${$2}-${$1}anona`);
+    // hex-2-enal -> 2-hexenal ; hex-3-inal -> 3-hexinal
+    s = s.replace(/^(.+?)-(\d+)-enal$/, (_,$1,$2)=> `${$2}-${$1}enal`);
+    s = s.replace(/^(.+?)-(\d+)-inal$/, (_,$1,$2)=> `${$2}-${$1}inal`);
+    return s;
     }
 
-    function genCetona(){
-      const n=r(3,8); let pos=(n>=4)? r(2,n-2):1; const o=orientCetona(n,pos);
-      const nombre=nombreCetona(n,o.pos); const semi=semiCetona(n,o.pos); const formula=formulaMol("cetona",n);
-      return {familia:"cetona", nombre, semi, formula, meta:{n, pos:o.pos}};
+
+    /* =========================
+       Fórmula molecular simple
+       ========================= */
+    function formulaMol(m){
+      if(m.fg==="acido") return m.formula;
+      if(m.fg==="nitrilo") return m.formula;
+      if(m.fg==="aldehido") return m.formula;
+      if(m.fg==="cetona") return m.formula;
+      if(m.fg==="alcohol") return m.formula;
+      if(m.fg==="amina") return m.formula;
+      // hidrocarburos/halógenos/nitro aprox
+      return m.formula;
     }
 
-    function genAcido(){
-      const n=r(1,8); const nombre=nombreAcido(n); const semi=semiAcido(n); const formula=formulaMol("acido",n);
-      return {familia:"acido", nombre, semi, formula, meta:{n}};
+    /* =========================
+       Quiz (lógica de teclado)
+       ========================= */
+
+    // Estado del juego (siguiendo tu patrón de Enter)
+    let esperandoSiguiente = false;
+    let aciertos = 0;
+    let preguntas = 0;
+
+    // Estado de molécula actual
+    let MOL = null;
+
+    function actualizarMarcador(){
+      $("#score").textContent = `Aciertos: ${aciertos}/${preguntas}`;
     }
 
-    function genEster(){
-      const nAc=r(1,8), nAl=r(1,6); const nombre=nombreEster(nAc,nAl); const semi=semiEster(nAc,nAl); const formula=formulaMol("ester",null,null,[nAc,nAl]);
-      return {familia:"ester", nombre, semi, formula, meta:{nAc, nAl}};
+    function renderMolecula(){
+      const semi = semiString(MOL);
+      $("#semi").textContent = semi;
+      $("#familia").textContent = MOL.fg ? MOL.fg : (MOL.db.length?"alqueno": MOL.tb.length?"alquino":"alcano");
+      $("#formula").textContent = formulaMol(MOL);
+      $("#status").className = "status hint";
+      $("#status").textContent = "Escribe el nombre IUPAC y pulsa Enter.";
+      $("#reveal").style.display = "none";
+      $("#answer").value = "";
+      $("#answer").focus();
+      // visibilidad
+      $("#badgeFam").style.display = $("#showFam").checked ? "inline-block":"none";
+      $("#badgeFor").style.display = $("#showFor").checked ? "inline-block":"none";
     }
 
-    function genCompuesto(){
-      switch(choice(FAMILIAS)){
-        case "alcano": return genAlcano();
-        case "alqueno": return genAlqueno();
-        case "alcohol": return genAlcohol();
-        case "cetona": return genCetona();
-        case "acido": return genAcido();
-        case "ester": return genEster();
+    function nuevaPregunta(){
+      esperandoSiguiente = false;
+      MOL = genMolecula();
+      MOL = orient(MOL);
+      renderMolecula();
+      $("#checkBtn").textContent = "Comprobar";
+    }
+
+    function nombresAceptados(m){
+      const canonical = nombreCompleto(m);
+      const alt = altForm(canonical);
+      const set = new Set();
+      set.add(normalizeName(canonical));
+      set.add(normalizeName(alt));
+      // casos sin locante único (ya en canonical si aplica)
+      return set;
+    }
+
+    function comprobar(){
+      if(esperandoSiguiente){
+        nuevaPregunta();
+        return;
       }
-    }
-
-    // ===== Variantes aceptadas (locante opcional y forma prefijada 2-buteno) =====
-    function altPrefijada(nombre){
-      // Convierte "but-2-eno" -> "2-buteno" ; "propan-2-ol" -> "2-propanol" ; mantiene sustituyentes al inicio
-      const s = nombre;
-      // alcohol
-      let m = s.match(/^(.*?)([a-z]+)an-(\d+)-ol$/); // ej: propan-2-ol
-      if(m){ const base=m[1]+m[2]+"anol"; return `${m[3]}-${base}`; }
-      // alqueno
-      m = s.match(/^([a-z]+)-(\d+)-eno$/); // but-2-eno
-      if(m){ return `${m[2]}-${m[1]}eno`; }
-      // cetona con locante
-      m = s.match(/^([a-z]+)an-(\d+)-ona$/);
-      if(m){ return `${m[2]}-${m[1]}anona`; }
-      return s;
-    }
-
-    function nombresAceptados(comp){
-      const canonical = comp.nombre;
-      const acc = new Set();
-      acc.add(normalizeName(canonical));
-      // Variante prefijada (2-buteno, 2-propanol, 2-butanona)
-      acc.add(normalizeName(altPrefijada(canonical)));
-
-      // Si el locante es prescindible, añadimos versión sin locante
-      if(comp.familia==="alqueno"){
-        const n = comp.meta.n; if(n<=3){ acc.add(normalizeName(`${nombreCadena(n)}eno`)); }
+      const entradaRaw = $("#answer").value.trim();
+      if(!entradaRaw){
+        $("#status").className = "status hint";
+        $("#status").textContent = "Escribe un nombre.";
+        return;
       }
-      if(comp.familia==="alcohol"){
-        const n = comp.meta.n; if(n<=2){ acc.add(normalizeName(`${nombreCadena(n)}anol`)); }
-      }
-      if(comp.familia==="cetona"){
-        const n = comp.meta.n; if(n && (n===3||n===4)){ acc.add(normalizeName(`${nombreCadena(n)}anona`)); }
-      }
-      return acc;
-    }
+      const entrada = normalizeName(entradaRaw);
+      const aceptados = nombresAceptados(MOL);
 
-    // ===== Quiz Logic =====
-    let current=null, score=0, tries=0;
-    const elSemi=document.getElementById('semi');
-    const elFam=document.getElementById('familia');
-    const elFormula=document.getElementById('formula');
-    const elBadgeFam=document.getElementById('badgeFam');
-    const elBadgeFor=document.getElementById('badgeFor');
-    const elAns=document.getElementById('respuesta');
-    const elFeedback=document.getElementById('feedback');
-    const elReveal=document.getElementById('reveal');
-    const elScore=document.getElementById('score');
-    const elTries=document.getElementById('tries');
-    const btnCheck=document.getElementById('btnCheck');
-    const btnSkip=document.getElementById('btnSkip');
-    const chkFuzzy=document.getElementById('fuzzy');
-    const chkShowFam=document.getElementById('showFam');
-    const chkShowFor=document.getElementById('showFor');
-
-    function renderNew(){
-      current = genCompuesto();
-      elSemi.textContent = current.semi;
-      elFam.textContent = current.familia;
-      elFormula.textContent = current.formula;
-      elFeedback.textContent = '—'; elFeedback.className='result muted';
-      elReveal.style.display='none'; elReveal.textContent='';
-      elAns.value=''; elAns.focus();
-      // aplicar visibilidad
-      elBadgeFam.style.display = chkShowFam.checked? 'inline-block':'none';
-      elBadgeFor.style.display = chkShowFor.checked? 'inline-block':'none';
-    }
-
-    function check(){
-      const userRaw = elAns.value.trim(); if(!userRaw) return;
-      const user = normalizeName(userRaw);
-      const accepted = nombresAceptados(current);
-
-      let correct = accepted.has(user);
-      if(!correct && chkFuzzy.checked){
-        // distancia mínima contra cualquiera de los aceptados
-        let minD = Infinity; for(const a of accepted){ const d=lev(user,a); if(d<minD) minD=d; }
-        const expLen = Math.min(...Array.from(accepted).map(a=>a.length));
-        correct = minD <= Math.max(2, Math.ceil(expLen*0.15));
-      }
-
-      tries++; if(correct) score++;
-      elScore.textContent = String(score); elTries.textContent = String(tries);
-
-      if(correct){
-        elFeedback.textContent = '✅ ¡Correcto!'; elFeedback.className='result ok';
-        elReveal.style.display='block'; elReveal.textContent = `Nombre esperado: ${current.nombre}`;
-        setTimeout(renderNew, 900);
+      preguntas += 1;
+      if(aceptados.has(entrada)){
+        aciertos += 1;
+        $("#status").className = "status ok";
+        $("#status").textContent = `✅ ¡Correcto! ${Array.from(aceptados)[0]}. Pulsa Enter para continuar.`;
+        $("#reveal").style.display = "block";
+        $("#reveal").textContent = `Solución canónica: ${nombreCompleto(MOL)}`;
+        esperandoSiguiente = true;
+        $("#checkBtn").textContent = "Siguiente";
       } else {
-        elFeedback.textContent = '❌ Incorrecto'; elFeedback.className='result err';
-        elReveal.style.display='block'; elReveal.textContent = `Solución: ${current.nombre}`;
+        $("#status").className = "status bad";
+        $("#status").textContent = `❌ Incorrecto. Pulsa Enter para continuar.`;
+        $("#reveal").style.display = "block";
+        $("#reveal").textContent = `Solución: ${nombreCompleto(MOL)}`;
+        esperandoSiguiente = true;
+        $("#checkBtn").textContent = "Siguiente";
       }
+      actualizarMarcador();
     }
 
-    btnCheck.addEventListener('click', check);
-    btnSkip.addEventListener('click', renderNew);
-    elAns.addEventListener('keydown', e=>{ if(e.key==='Enter') check(); });
-    chkShowFam.addEventListener('change', ()=>{ elBadgeFam.style.display = chkShowFam.checked? 'inline-block':'none'; });
-    chkShowFor.addEventListener('change', ()=>{ elBadgeFor.style.display = chkShowFor.checked? 'inline-block':'none'; });
+    /* ====== Eventos ====== */
+    $("#checkBtn").addEventListener("click", comprobar);
+    $("#skipBtn").addEventListener("click", nuevaPregunta);
+    $("#answer").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        comprobar();
+      }
+    });
+    $("#showFam").addEventListener("change", ()=>{ $("#badgeFam").style.display = $("#showFam").checked ? "inline-block":"none"; });
+    $("#showFor").addEventListener("change", ()=>{ $("#badgeFor").style.display = $("#showFor").checked ? "inline-block":"none"; });
 
-    renderNew();
+    // Arranque
+    nuevaPregunta();
   </script>
+  </div>
+  <script async src="../scripts/fade.js"></script>
 </body>
 </html>
