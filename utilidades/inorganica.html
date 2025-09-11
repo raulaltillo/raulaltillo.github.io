@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Formulación inorgánica | Raulaltillo</title>
+<link rel="icon" href="../favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="../main.css">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T470HXGPQZ"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date()); gtag('config', 'G-T470HXGPQZ');
+</script>
+<style>
+  body { 
+    font-family:Arial, Helvetica, sans-serif;
+    margin: 0; 
+    min-height: 100dvh; 
+    place-items: center; 
+    background:#1a1a1a; 
+  }
+  .card {
+    background: #2d2d2d;
+    color: #ffffff;
+    padding: 24px 28px;
+    border-radius: 16px;
+    border: solid 15px #0b0b0b;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    width: min(820px, 92vw);
+    text-align: center;
+    margin: 20px auto;
+  }
+  .symbol { font-size: clamp(38px, 6vw, 60px); font-weight: 800; letter-spacing: .02em; margin: 6px 0; }
+  .name   { font-size: clamp(16px, 2.8vw, 22px); margin: 0 0 18px 0; color:#e0e0e0; }
+  .input-row { display:flex; gap:12px; justify-content:center; align-items:center; margin: 8px 0 10px; flex-wrap: wrap; }
+  input[type="text"] {
+    font-size: clamp(18px, 3vw, 22px);
+    padding: 10px 14px;
+    width: min(520px, 80vw);
+    border: 2px solid #3d3d3d;
+    background: #2d2d2d;
+    color: #ffffff;
+    border-radius: 10px;
+    text-align: center;
+    outline: none;
+  }
+  input[type="text"]:focus { 
+    border-color:#2D7A5E; 
+    box-shadow: 0 0 0 3px rgba(45,122,94,.18); 
+  }
+  select {
+    background:#2d2d2d; color:#fff; border:2px solid #3d3d3d; border-radius:10px; padding:10px 12px;
+    font-size: 14px; min-width:220px;
+  }
+  button {
+    font-size: 16px;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    background:#2D7A5E;
+    color:#ffffff;
+    font-weight:600;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  button:hover { background-color: #1e5542; }
+  .status { margin-top: 10px; min-height: 24px; }
+  .ok    { color: #4CAF50; }
+  .bad   { color: #f44336; }
+  .hint  { color: #e0e0e0; }
+  .score { margin-top: 12px; font-size: 14px; color:#e0e0e0; }
+  .row { display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap: wrap; margin-bottom:10px; }
+  .pill { background:#1f1f1f; border:1px solid #3d3d3d; padding:6px 10px; border-radius:999px; font-size:12px; color:#cfcfcf; }
+  .tip { font-size:12px; color:#bdbdbd; margin-top:6px; }
+  .symbol sub {
+  font-size: 0.6em;     /* más pequeño que la letra */
+  line-height: 0;       /* evita que empuje el alto de línea */
+  vertical-align: -0.3em; /* baja un pelín el subíndice */
+}
+
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <img class="title" id="weather-icon" src="../images/weather-icon-illustration03-Graphics-10205167-1.png" alt="Clima actual" width="50px">
+    <a href="../pages/horario.html">Horario</a>
+    <a href="../pages/menu.html">Menu</a>
+    <a href="../pages/selectividad.html">Selectividad</a>
+    <a href="../pages/herramientas.html" class="active">Herramientas</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
+  </div>
+
+  <div id="weatherIframeContainer" class="weather-iframe-container">
+    <iframe name="iframe_aemet_id33044" src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/jerez-de-la-frontera-id11020?w=g4p011100000ohmffffffx000000t999999r1s8n2" scrolling="no"></iframe>
+  </div>
+
+  <div id="content">
+    <br><br><br>
+    <main class="card">
+      <div class="row">
+        <span class="pill">Modo</span>
+        <select id="mode">
+          <option value="mix">Mezcla (todo)</option>
+          <option value="sal">Sales binarias (metal + no metal)</option>
+          <option value="oxido">Óxidos (básicos y ácidos)</option>
+          <option value="hidruro_m">Hidruros metálicos</option>
+          <option value="hidr_acido">Hidruros volátiles / Hidrácidos (HX, H2X)</option>
+          <option value="oxoacido">Oxoácidos</option>
+        </select>
+        <button id="newBtn" title="Nueva fórmula">Nueva</button>
+      </div>
+
+      <div id="symbol" class="symbol">—</div>
+      <div id="name" class="name">Escribe el nombre correcto de la fórmula mostrada</div>
+
+      <div class="input-row">
+        <input id="answer" type="text" placeholder="Ej.: trióxido de difósforo | óxido de fósforo(III) | ácido clorhídrico | dihidrogeno(tetraoxidoclorato)" autocomplete="off" />
+        <button id="checkBtn">Comprobar</button>
+      </div>
+
+      <div id="status" class="status hint">Usa cualquiera de las nomenclaturas válidas.</div>
+      <div id="score" class="score">Aciertos: 0/0</div>
+      <div class="tip">Consejo: se aceptan tildes/diacríticos opcionales y espacios/tildes flexibles.</div>
+    </main>
+  </div>
+
+<script>
+/* ===== ELEMENTOS y datos base ===== */
+const ELEMENTOS = {
+  // No metales y metaloides relevantes para sales/óxidos/ácidos
+  "H":  {name:"Hidrógeno", vals:[-1, 1]},
+  "F":  {name:"Flúor", vals:[-1]},
+  "Cl": {name:"Cloro", vals:[-1, 1, 3, 5, 7]},
+  "Br": {name:"Bromo", vals:[-1, 1, 3, 5, 7]},
+  "I":  {name:"Yodo", vals:[-1, 1, 3, 5, 7]},
+  "O":  {name:"Oxígeno", vals:[-2]},
+  "S":  {name:"Azufre", vals:[-2, 2, 4, 6]},
+  "Se": {name:"Selenio", vals:[-2, 2, 4, 6]},
+  "Te": {name:"Teluro", vals:[-2, 2, 4, 6]},
+  "N":  {name:"Nitrógeno", vals:[-3, 1, 2, 3, 4, 5]},
+  "P":  {name:"Fósforo", vals:[-3, 1, 3, 5]},
+  "As": {name:"Arsénico", vals:[-3, 3, 5]},
+  "Sb": {name:"Antimonio", vals:[-3, 3, 5]},
+  "B":  {name:"Boro", vals:[-3, 3]},
+  "C":  {name:"Carbono", vals:[-4, 2, 4]},
+  "Si": {name:"Silicio", vals:[-4, 2, 4]},
+  "Ge": {name:"Germanio", vals:[-4, 2, 4]},
+  // Metales (positivos)
+  "Li": {name:"Litio", vals:[1]},
+  "Na": {name:"Sodio", vals:[1]},
+  "K":  {name:"Potasio", vals:[1]},
+  "Rb": {name:"Rubidio", vals:[1]},
+  "Cs": {name:"Cesio", vals:[1]},
+  "Fr": {name:"Francio", vals:[1]},
+  "Ag": {name:"Plata", vals:[1]},
+  "Be": {name:"Berilio", vals:[2]},
+  "Mg": {name:"Magnesio", vals:[2]},
+  "Ca": {name:"Calcio", vals:[2]},
+  "Sr": {name:"Estroncio", vals:[2]},
+  "Ba": {name:"Bario", vals:[2]},
+  "Ra": {name:"Radio", vals:[2]},
+  "Zn": {name:"Cinc", vals:[2]},
+  "Cd": {name:"Cadmio", vals:[2]},
+  "Bi": {name:"Bismuto", vals:[3,5]},
+  "Cu": {name:"Cobre", vals:[1,2]},
+  "Hg": {name:"Mercurio", vals:[1,2]},
+  "Al": {name:"Aluminio", vals:[3]},
+  "Ga": {name:"Galio", vals:[3]},
+  "In": {name:"Indio", vals:[3]},
+  "Tl": {name:"Talio", vals:[1,3]},
+  "Au": {name:"Oro", vals:[1,3]},
+  "Fe": {name:"Hierro", vals:[2,3]},
+  "Co": {name:"Cobalto", vals:[2,3]},
+  "Ni": {name:"Níquel", vals:[2,3]},
+  "Sn": {name:"Estaño", vals:[2,4]},
+  "Pb": {name:"Plomo", vals:[2,4]},
+  "Pt": {name:"Platino", vals:[2,4]},
+  "Pd": {name:"Paladio", vals:[2,4]},
+  "Ir": {name:"Iridio", vals:[2,3,4]},
+  "Cr": {name:"Cromo", vals:[2,3,6]},
+  "Mn": {name:"Manganeso", vals:[2,3,4,6,7]},
+};
+
+// raíces "-uro" (aniones monoatómicos)
+const UROS = {
+  F:"fluoruro", Cl:"cloruro", Br:"bromuro", I:"yoduro",
+  O:"óxido", S:"sulfuro", Se:"selenuro", Te:"telururo",
+  N:"nitruro", P:"fosfuro", As:"arseniuro", Sb:"antimoniuro",
+  B:"boruro", C:"carburo", Si:"siliciuro", Ge:"germanuro", H:"hidruro"
+};
+
+// nombres comunes de hidruros volátiles
+const HIDRUROS_VOL = {
+  BH3:"borano", CH4:"metano", SiH4:"silano", NH3:"amoniaco",
+  PH3:"fosfano", AsH3:"arsano", SbH3:"estibano", BiH3:"bismutano"
+};
+
+// raíces para oxoaniones “...ato”
+const ATOS = {
+  Cl:"clorato", Br:"bromato", I:"yodato",
+  S:"sulfato", Se:"selenato", Te:"telurato",
+  N:"nitrato", P:"fosfato", C:"carbonato",
+  Si:"silicato", B:"borato", Cr:"cromato", Mn:"manganato"
+};
+
+// prefijos numéricos
+const PREF = ["","mono","di","tri","tetra","penta","hexa","hepta","octa","nona","deca"];
+
+const METALS = Object.keys(ELEMENTOS).filter(z=>ELEMENTOS[z].vals.some(v=>v>0)&&!["H","B","C","Si","Ge","N","P","As","Sb","O","S","Se","Te","F","Cl","Br","I"].includes(z));
+const NONMETALS_ANION = ["F","Cl","Br","I","S","Se","Te","N","P","As","Sb","C","Si","Ge"]; // para sales binarias
+const NONMETALS_OXO = ["Cl","Br","I","S","Se","Te","N","P","C","Si","B"]; // centro de oxoácidos (y Cr, Mn caso especial)
+const SPECIAL_METAL_OXO = ["Cr","Mn"]; // evitan nombre tradicional de ácido
+
+/* ===== Utilidades ===== */
+const $ = s=>document.querySelector(s);
+
+function gcd(a,b){return b?gcd(b,a%b):Math.abs(a);}
+function lcm(a,b){return Math.abs(a*b)/gcd(a,b);}
+function toRoman(n){
+  const map = [[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+  let r=""; for (const [v,s] of map){while(n>=v){r+=s;n-=v;}} return r;
+}
+function norm(s){
+  if(!s) return "";
+  return s
+    .toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"") // sin tildes
+    .replace(/[’']/g,"")
+    .replace(/[\u2010-\u2015\-]+/g,"-")
+    .replace(/[()]/g, m=>m) // conservar paréntesis
+    .replace(/[^a-z0-9()\-\s]/g," ") // limpiar
+    .replace(/\s+/g," ").trim();
+}
+function withMono(word){ // “monoxido” único caso de contracción aceptada, pero lo tratamos en normalización flexible
+  return word.replace(/\bmono oxido\b/g,"monoxido");
+}
+function fmtFormula(parts) { // parts: [{sym, n}]
+  return parts.map(({ sym, n }) => sym + (n > 1 ? `<sub>${n}</sub>` : "")).join("");
+}
+function simplify(a,b){
+  const g=gcd(a,b); return [a/g,b/g];
+}
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+/* ===== Generación de compuestos ===== */
+// Sales binarias (metal + no metal con su n.o. negativo único)
+function genBinarySalt(){
+  const Me = pick(METALS);
+  const meName = ELEMENTOS[Me].name;
+  const zMe = pick(ELEMENTOS[Me].vals.filter(v=>v>0));
+  const X = pick(NONMETALS_ANION);
+  const xNeg = {F:-1,Cl:-1,Br:-1,I:-1,S:-2,Se:-2,Te:-2,N:-3,P:-3,As:-3,Sb:-3,C:-4,Si:-4,Ge:-4}[X];
+  const m = Math.abs(xNeg), n = zMe;
+  const [m2,n2] = simplify(m,n);
+  const formula = fmtFormula([{sym:Me,n:m2},{sym:X,n:n2}]);
+  const metalOx = (m2*Math.abs(xNeg))/n2; // número de oxidación real del metal
+  return { type:"sal", formula, Me, meName, X, xNeg, coefL:m2, coefR:n2, oxMe:metalOx };
+}
+
+// Óxidos (básicos y ácidos sencillos)
+function genOxide(){
+  const isBasic = Math.random()<0.5;
+  if(isBasic){
+    const Me = pick(METALS);
+    const zMe = pick(ELEMENTOS[Me].vals.filter(v=>v>0));
+    // Me^z+ con O^2- -> Me2 O_z  (luego simplificar)
+    const [a,b] = simplify(2,zMe);
+    const formula = fmtFormula([{sym:Me,n:a},{sym:"O",n:b}]);
+    return { type:"oxido_basico", formula, Me, oxMe:zMe, a, b };
+  }else{
+    const X = pick(["C","Si","N","P","S","Se","Te","B","Cl","Br","I"]);
+    const zX = pick(ELEMENTOS[X].vals.filter(v=>v>0));
+    const [a,b] = simplify(2,zX);
+    const formula = fmtFormula([{sym:X,n:a},{sym:"O",n:b}]);
+    return { type:"oxido_acido", formula, X, oxX:zX, a, b };
+  }
+}
+
+// Hidruros metálicos MeH_n
+function genMetalHydride(){
+  const Me = pick(METALS);
+  const zMe = pick(ELEMENTOS[Me].vals.filter(v=>v>0));
+  const formula = fmtFormula([{sym:Me,n:1},{sym:"H",n:zMe}]);
+  return { type:"hidruro_m", formula, Me, zMe };
+}
+
+// Hidrácidos / haluros y anfígenos de hidrógeno
+function genHydracid(){
+  const X = pick(["F","Cl","Br","I","S","Se","Te"]);
+  const formula = (X==="S"||X==="Se"||X==="Te") ? fmtFormula([{sym:"H",n:2},{sym:X,n:1}]) : fmtFormula([{sym:"H",n:1},{sym:X,n:1}]);
+  return { type:"hidr_acido", formula, X };
+}
+
+// Hidruros volátiles (BH3, CH4, SiH4, NH3, PH3, AsH3, SbH3, BiH3)
+function genVolatileHydride(){
+  const X = pick(["B","C","Si","N","P","As","Sb","Bi"]);
+  const pos = {B:3,C:4,Si:4,N:3,P:3,As:3,Sb:3,Bi:3}[X];
+  const formula = fmtFormula([{sym:X,n:1},{sym:"H",n:pos}]);
+  return { type:"hidruro_vol", formula, X, pos };
+}
+
+// Oxoácidos (regla impar/par)
+function genOxoacid(){
+  let X = pick([...NONMETALS_OXO, ...SPECIAL_METAL_OXO]);
+  // Elegir n.o. positivo válido (evitamos casos raros como N=+1)
+  const posList = ELEMENTOS[X].vals.filter(v=>v>0);
+  let ox = pick(posList.filter(v=>[1,3,5,7,2,4,6].includes(v)));
+  if (["N"].includes(X)) ox = pick([3,5]); // lo más típico
+  if (["S"].includes(X)) ox = pick([2,4,6]);
+  const H = (ox%2===0)?2:1;
+  const O = (ox%2===0)?(ox/2+1):( (ox+1)/2 );
+  const formula = fmtFormula([{sym:"H",n:H},{sym:X,n:1},{sym:"O",n:O}]);
+  return { type:"oxoacido", formula, X, ox, H, O };
+}
+
+function genProblem(mode){
+  if(mode==="sal") return genBinarySalt();
+  if(mode==="oxido") return genOxide();
+  if(mode==="hidruro_m") return genMetalHydride();
+  if(mode==="hidr_acido") return (Math.random()<0.5?genHydracid():genVolatileHydride());
+  if(mode==="oxoacido") return genOxoacid();
+  // mix
+  const pool = [genBinarySalt, genOxide, genMetalHydride, genHydracid, genVolatileHydride, genOxoacid];
+  return pick(pool)();
+}
+
+/* ===== Construcción de nombres esperados ===== */
+function prefNum(n, allowMono=false){
+  if(n<=0) return "";
+  if(n===1 && !allowMono) return ""; // mono- se puede omitir
+  return PREF[n] || n+"-";
+}
+function metalName(sym){ return ELEMENTOS[sym]?.name || sym; }
+function raizUro(sym){ return UROS[sym] || sym.toLowerCase(); }
+
+function stockNameMetal(metal, ox){ return `${metalName(metal)}(${toRoman(ox)})`; }
+function chargeNameMetal(metal, ox){ return `${metalName(metal)}(${ox}+)`; }
+
+// Nombres de sales binarias
+function namesBinarySalt(obj){
+  const {formula, Me, meName, X, coefL, coefR, oxMe} = obj;
+  const raiz = raizUro(X);
+  const comp = []; // composición con prefijos
+  comp.push(`${prefNum(coefR,true)}${raiz} de ${prefNum(coefL,true)}${meName}`.replace(/\s+/g," ").trim());
+  // Stock
+  const stock = `${raiz} de ${stockNameMetal(Me, oxMe)}`;
+  const carga = `${raiz} de ${chargeNameMetal(Me, oxMe)}`;
+  // Aceptar formas sin "mono-" excepto monóxido caso oxígeno
+  return new Set([comp[0], stock, carga]);
+}
+
+// Óxidos básicos/ácidos
+function namesOxide(obj){
+  if(obj.type==="oxido_basico"){
+    const {Me, oxMe, a, b} = obj;
+    const comp = `${prefNum(b,true)}óxido de ${prefNum(a,true)}${metalName(Me)}`.trim();
+    const stock = `óxido de ${stockNameMetal(Me, oxMe)}`;
+    const carga = `óxido de ${chargeNameMetal(Me, oxMe)}`;
+    const alsoMono = comp.replace(/\bmono óxido\b/,"monóxido").replace(/\bmono oxido\b/,"monóxido");
+    return new Set([comp, stock, carga, alsoMono]);
+  }else{
+    const {X, oxX, a, b} = obj;
+    const comp = `${prefNum(b,true)}óxido de ${prefNum(a,true)}${ELEMENTOS[X].name}`.trim();
+    const stock = `óxido de ${ELEMENTOS[X].name}(${toRoman(oxX)})`;
+    const alsoMono = comp.replace(/\bmono óxido\b/,"monóxido").replace(/\bmono oxido\b/,"monóxido");
+    return new Set([comp, stock, alsoMono]);
+  }
+}
+
+// Hidruros metálicos
+function namesMetalHydride({Me, zMe}){
+  const raiz = "hidruro";
+  const comp = `${prefNum(zMe,true)}${raiz} de ${metalName(Me)}`.trim();
+  const stock = `${raiz} de ${stockNameMetal(Me, zMe)}`;
+  const carga = `${raiz} de ${chargeNameMetal(Me, zMe)}`;
+  const mono = comp.replace(/\bmono hidruro\b/,"monohidruro");
+  return new Set([comp, stock, carga, mono]);
+}
+
+// Hidrácidos HX/H2X
+function namesHydracid({X, formula}){
+  const nm = ELEMENTOS[X].name;
+  const raiz = raizUro(X);
+  const base = `${raiz} de hidrógeno`;
+  // De hidrógeno (IUPAC moderna)
+  const dh = (X==="S"||X==="Se"||X==="Te") ? `dihidrogeno(${raiz})` : `hidrogeno(${raiz})`;
+  // En disolución: “ácido …hídrico”
+  const ac = `ácido ${nm.toLowerCase().replace(/o$/,"")}hídrico`.replace("hidrogeno",""); // aproximación
+  // Ajuste manual de terminaciones correctas:
+  const acMap = {F:"fluorhídrico", Cl:"clorhídrico", Br:"bromhídrico", I:"yodhídrico",
+                 S:"sulfhídrico", Se:"selenhídrico", Te:"telurhídrico"};
+  const acOk = `ácido ${acMap[X]}`;
+  // Hidruro progenitor (volátiles): fluorano/clorano etc. (solo para HX halógenos)
+  const progen = {F:"fluorano",Cl:"clorano",Br:"bromano",I:"yodano"}[X];
+
+  const set = new Set([base, dh, acOk]);
+  if(progen) set.add(progen);
+  // Aceptar “hidruro de (di)hidrógeno (raíz)” variantes básicas
+  set.add(`${(X==="S"||X==="Se"||X==="Te")?"(di)hidruro":"hidruro"} de ${nm.toLowerCase()}`); // flexible
+  return set;
+}
+
+// Hidruros volátiles (BH3, CH4, …)
+function namesVolHydride({X, pos, formula}){
+  const comp = `${prefNum(pos,true)}hidruro de ${ELEMENTOS[X].name.toLowerCase()}`.trim();
+  const mono = comp.replace(/\bmono hidruro\b/,"monohidruro");
+  const commons = HIDRUROS_VOL[formula] ? [HIDRUROS_VOL[formula]] : [];
+  return new Set([comp, mono, ...commons]);
+}
+
+// Oxoácidos
+function tradAcidName(X, ox){
+  // mapa básico según estados típicos (tradicional)
+  const root = {
+    Cl: "clor", Br:"brom", I:"yod",
+    S:"sulfur", Se:"selen", Te:"telur",
+    N:"nitr", P:"fosf", C:"carb", Si:"silic", B:"bor",
+    Cr:"crom", Mn:"mangan"
+  }[X] || ELEMENTOS[X].name.toLowerCase();
+  // evitamos tradicionales para Cr y Mn (no admitidos)
+  if (SPECIAL_METAL_OXO.includes(X)) return null;
+
+  // ordenar por ox creciente y asignar hipo-/ -oso / -ico / per-
+  const series = {
+    Cl:[1,3,5,7], Br:[1,3,5,7], I:[1,3,5,7],
+    S:[2,4,6], Se:[2,4,6], Te:[2,4,6],
+    N:[3,5], P:[3,5], C:[4], Si:[4], B:[3]
+  }[X];
+  if(!series) return null;
+  const idx = series.indexOf(ox);
+  if(idx===-1) return null;
+  const forms = {
+    1: `hipo${root}oso`, 2: `${root}oso`, 3: `${root}ico`, 4: `per${root}ico`
+  };
+  const name = (series.length===4)? forms[idx+1]
+              : (series.length===3)? (idx===0?`hipo${root}oso`: idx===1?`${root}oso`:`${root}ico`)
+              : (series.length===2)? (idx===0?`${root}oso`:`${root}ico`)
+              : `${root}ico`;
+  // acentos manuales frecuentes:
+  const accent = name
+    .replace("nitrico","nítrico").replace("fosforico","fosfórico")
+    .replace("sulfurico","sulfúrico").replace("bromico","brómico")
+    .replace("yodico","yódico").replace("clorico","clórico")
+    .replace("selenico","selénico").replace("telurico","telúrico")
+    .replace("silicico","silícico").replace("carbonico","carbónico")
+    .replace("arsenico","arsénico").replace("antimonico","antimónico");
+  return `ácido ${accent}`;
+}
+function additionName(X, H, O){
+  const h = H, ox = O-H;
+  const nm = ELEMENTOS[X].name.toLowerCase();
+  return `${prefNum(h,true)}hidroxido${prefNum(ox,true)}oxido${nm}`.replace(/\s+/g," ").trim();
+}
+function hydrogenName(X, H, O){
+  const nm = ATOS[X] || (ELEMENTOS[X].name.toLowerCase()+"ato");
+  return `${prefNum(H,true)}hidrogeno(${prefNum(O,true)}oxido${nm})`.replace(/\s+/g," ").trim();
+}
+function namesOxoacid({X, ox, H, O}){
+  const set = new Set();
+  const trad = tradAcidName(X, ox);
+  if(trad) set.add(trad);
+  set.add(additionName(X,H,O));
+  set.add(hydrogenName(X,H,O));
+  return set;
+}
+
+/* ===== Lógica de juego ===== */
+let preguntas=0, aciertos=0;
+let current=null, expectedNames=new Set();
+
+function newProblem(){
+  const mode = $("#mode").value;
+  current = genProblem(mode);
+  $("#symbol").innerHTML = current.formula;
+  $("#name").textContent = "Nombra la fórmula (aceptamos distintas nomenclaturas)";
+  expectedNames = buildNames(current);
+  $("#status").className="status hint";
+  $("#status").textContent = "Escribe un nombre válido y pulsa Enter.";
+  $("#answer").value=""; $("#answer").focus();
+  $("#checkBtn").textContent = "Comprobar";
+}
+
+function buildNames(obj){
+  if(obj.type==="sal") return namesBinarySalt(obj);
+  if(obj.type==="oxido_basico"||obj.type==="oxido_acido") return namesOxide(obj);
+  if(obj.type==="hidruro_m") return namesMetalHydride(obj);
+  if(obj.type==="hidr_acido") return namesHydracid(obj);
+  if(obj.type==="hidruro_vol") return namesVolHydride(obj);
+  if(obj.type==="oxoacido") return namesOxoacid(obj);
+  return new Set();
+}
+
+function check(){
+  const raw = $("#answer").value;
+  let ans = norm(raw);
+  ans = withMono(ans); // “monoxido/monohidruro”
+  // comparar contra cada nombre esperado normalizado (tildes/espacios flexibles)
+  const ok = Array.from(expectedNames).some(n=>{
+    let tgt = norm(n);
+    tgt = withMono(tgt);
+    return ans===tgt;
+  });
+  preguntas++;
+  if(ok){
+    aciertos++;
+    $("#status").className="status ok";
+    $("#status").textContent = "✅ ¡Correcto! Pulsa Enter para continuar.";
+    $("#checkBtn").textContent = "Siguiente";
+  }else{
+    $("#status").className="status bad";
+    const soluciones = Array.from(expectedNames).slice(0,4).join("  •  "); // muestra hasta 4 variantes
+    $("#status").textContent = `❌ No coincide. Algunas respuestas válidas: ${soluciones}. Pulsa Enter para continuar.`;
+    $("#checkBtn").textContent = "Siguiente";
+  }
+  $("#score").textContent = `Aciertos: ${aciertos}/${preguntas}`;
+}
+
+$("#newBtn").addEventListener("click", newProblem);
+$("#checkBtn").addEventListener("click", ()=>{
+  if($("#checkBtn").textContent==="Siguiente"){ newProblem(); } else { check(); }
+});
+$("#answer").addEventListener("keydown", (e)=>{
+  if(e.key==="Enter"){
+    e.preventDefault();
+    if($("#checkBtn").textContent==="Siguiente"){ newProblem(); } else { check(); }
+  }
+});
+
+// init
+newProblem();
+</script>
+<script async src="../scripts/fade.js"></script>
+</body>
+</html>
