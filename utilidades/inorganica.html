@@ -470,7 +470,7 @@ function newProblem(){
   const mode = $("#mode").value;
   current = genProblem(mode);
   $("#symbol").innerHTML = current.formula;
-  $("#name").textContent = "Nombra la fórmula (aceptamos distintas nomenclaturas)";
+  $("#name").textContent = "Nombra la fórmula";
   expectedNames = buildNames(current);
   $("#status").className="status hint";
   $("#status").textContent = "Escribe un nombre válido y pulsa Enter.";
