@@ -507,7 +507,7 @@ function check(){
   }else{
     $("#status").className="status bad";
     const soluciones = Array.from(expectedNames).slice(0,4).join("  •  "); // muestra hasta 4 variantes
-    $("#status").textContent = `❌ No coincide. Algunas respuestas válidas: ${soluciones}. Pulsa Enter para continuar.`;
+    $("#status").textContent = `❌ No coincide. Algunas respuestas válidas: ${soluciones.toLowerCase()}. Pulsa Enter para continuar.`;
     $("#checkBtn").textContent = "Siguiente";
   }
   $("#score").textContent = `Aciertos: ${aciertos}/${preguntas}`;
