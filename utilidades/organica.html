@@ -131,7 +131,7 @@ const $ = (sel)=>document.querySelector(sel);
 
 // --- Historial para no repetir compuestos (persistente en localStorage) ---
 const HISTORY_KEY = 'organica_seen_cids_v1';
-const SEEN_LIMIT = 100; // límite de CIDs guardados
+const SEEN_LIMIT = 2000; // límite de CIDs guardados
 function loadSeenCIDs(){
   try { return new Set(JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')); }
   catch { return new Set(); }
@@ -142,6 +142,36 @@ function saveSeenCIDs(set){
   localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
 }
 let SEEN_CIDS = loadSeenCIDs();
+
+// --- Slider de longitud (3–9) ---
+function mountLengthSlider(){
+  const actions = document.querySelector('.actions');
+  if(!actions || $('#lenSlider')) return;
+
+  const sliderWrap = document.createElement('div');
+  sliderWrap.className = 'row';
+  sliderWrap.style.gap = '8px';
+  sliderWrap.style.alignItems = 'center';
+
+  sliderWrap.innerHTML = `
+    <label class="hint" style="white-space:nowrap;">Longitud: <strong id="lenVal">5</strong> C</label>
+    <input id="lenSlider" type="range" min="3" max="9" step="1" value="5" style="width:180px; accent-color:#22d3ee;">
+  `;
+
+  // Coloca el slider al inicio del área de acciones
+  actions.insertBefore(sliderWrap, actions.firstChild);
+
+  // Eventos del slider
+  const slider = $('#lenSlider');
+  slider.addEventListener('input', ()=>{
+    $('#lenVal').textContent = slider.value;
+  });
+}
+function getUserLen(){
+  const el = $('#lenSlider');
+  const v = el ? parseInt(el.value,10) : 5;
+  return Math.min(9, Math.max(3, v));
+}
 
 const SUBS_TYPES = {
   metil:{name:"metil"}, etil:{name:"etil"},
@@ -154,8 +184,6 @@ const choice = (arr)=>arr[Math.floor(Math.random()*arr.length)];
 
 /* ========== Generación (más estricta) ========== */
 const FAMILIAS = ["acido","nitrilo","aldehido","cetona","alcohol","amina","alqueno","alquino","alcano","halogenuro","nitro"];
-
-function genCadena(nMin=2,nMax=9){ return rint(nMin,nMax); }
 
 function genUnsat(n, minPos = 1){
   if(n < 2) return { db: [], tb: [] };
@@ -188,49 +216,43 @@ function genSustituyentes(n, fg){
   return out;
 }
 
-function genMolecula(){
+function genMolecula(nOverride){
+  // Longitud fija elegida por el usuario
+  const nFixed = Math.min(9, Math.max(3, nOverride ?? getUserLen()));
   const fam = choice(FAMILIAS);
-  let n = genCadena(2,9);
+  let n = nFixed;
   let fg=null,posFG=[],db=[],tb=[],subs=[],formula="";
 
   if(fam==="acido"){
-    n = genCadena(2,8);
     fg="acido"; posFG=[1]; db=[]; tb=[]; subs=[];
   }else if(fam==="nitrilo"){
-    n = genCadena(2,9);
     fg="nitrilo"; posFG=[1]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
   }else if(fam==="aldehido"){
-    n = genCadena(2,9);
     fg="aldehido"; posFG=[1]; ({db,tb}=genUnsat(n,2)); subs=genSustituyentes(n,fg);
   }else if(fam==="cetona"){
-    n = genCadena(3,9);
     fg="cetona"; posFG=[rint(2,n-1)]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
   }else if(fam==="alcohol"){
-    n = genCadena(1,9);
     fg="alcohol"; posFG=[ n===1?1:rint(1,n) ]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
   }else if(fam==="amina"){
-    n = genCadena(1,9);
     fg="amina"; posFG=[ n===1?1:rint(1,n) ]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
   }else if(fam==="alqueno"){
-    n = genCadena(2,9);
     ({db,tb}=genUnsat(n)); if(!db.length){ db=[rint(1,n-1)]; tb=[]; }
     subs=genSustituyentes(n,null);
   }else if(fam==="alquino"){
-    n = genCadena(2,9);
     ({db,tb}=genUnsat(n)); if(!tb.length){ tb=[rint(1,n-1)]; db=[]; }
     subs=genSustituyentes(n,null);
   }else if(fam==="halogenuro"){
-    n=genCadena(2,9); db=[]; tb=[];
+    db=[]; tb=[];
     let k=rint(1,2); subs=[];
     while(k--) subs.push({pos:rint(1,n), type:choice(["fluoro","cloro","bromo","iodo"])});
     subs=subs.concat(genSustituyentes(n,null));
   }else if(fam==="nitro"){
-    n=genCadena(2,9); ({db,tb}=genUnsat(n));
+    ({db,tb}=genUnsat(n));
     let k=rint(1,2); subs=[];
     while(k--) subs.push({pos:rint(1,n), type:"nitro"});
     subs=subs.concat(genSustituyentes(n,null));
   }else{
-    n=genCadena(1,10); db=[]; tb=[]; subs=genSustituyentes(n,null);
+    db=[]; tb=[]; subs=genSustituyentes(n,null);
   }
 
   // Fórmula (Hill): C, H, luego alfabético
@@ -479,8 +501,10 @@ async function nuevaCadena(){
   $("#status").textContent="Generando y validando...";
 
   const MAX_TRIES = 60; // más intentos para evitar repetir
+  const targetLen = getUserLen();
+
   for(let tries=0; tries<MAX_TRIES; tries++){
-    const cand = orient(genMolecula());
+    const cand = orient(genMolecula(targetLen));
 
     // Coherencias rápidas
     const needsO = ["acido","aldehido","cetona","alcohol"].includes(cand.fg) || cand.subs.some(s=>["metoxi","etoxi","hidroxi","nitro"].includes(s.type));
@@ -508,7 +532,7 @@ async function nuevaCadena(){
   }
 
   $("#status").className="status bad";
-  $("#status").textContent = "No se encontraron moléculas nuevas sin repetir. Puedes limpiar el historial del navegador para empezar de cero (localStorage['"+HISTORY_KEY+"']).";
+  $("#status").textContent = "No se encontraron moléculas nuevas sin repetir. Borra el historial local para reiniciar (localStorage.removeItem('"+HISTORY_KEY+"')).";
   $("#newBtn").disabled = false;
   $("#imgBtn").disabled = true;
 }
@@ -554,6 +578,7 @@ async function generarImagen(){
 }
 
 /* ========== Eventos y arranque ========== */
+mountLengthSlider();
 $("#newBtn").addEventListener("click", nuevaCadena);
 $("#imgBtn").addEventListener("click", generarImagen);
 $("#showFam").addEventListener("change", updateBadges);
@@ -561,6 +586,7 @@ $("#showFor").addEventListener("change", updateBadges);
 
 nuevaCadena();
 </script>
+
   </div>
 <script async src="../scripts/fade.js"></script>
 </body>
