@@ -9,60 +9,44 @@
   gtag('config', 'G-T470HXGPQZ');
 </script>
 <meta charset="utf-8" />
-<title>Organica | Raulaltillo</title>
+<title>Orgánica | Raulaltillo</title>
 <link rel="icon" href="../favicon.ico" type="image/x-icon">
 <link rel="stylesheet" href="../main.css">
 <style>
   :root{ --bg:#0f172a; --panel:#111827; --ink:#e5e7eb; --muted:#9ca3af; --accent:#22d3ee; --ok:#22c55e; --err:#ef4444; }
   *{box-sizing:border-box}
   html,body{height:100%}
-  body{
-    color:var(--ink);
-    background:#1a1a1a;
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  .app{ 
-    width:100%; 
-    max-width:1000px; 
-    background:#2d2d2d; 
-    backdrop-filter: blur(6px);
-    border:solid 15px #0b0b0b; 
-    border-radius:10px; 
-    padding:24px; 
-    margin: 20px auto;
-  }
-  h1{ margin:0 0 8px; font-weight:800; letter-spacing:.2px; font-family: Hacked; }
-  .sub{ color:var(--muted); margin-bottom:24px }
-  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px }
+  body{ color:var(--ink); background:#1a1a1a; font-family: Arial, Helvetica, sans-serif; }
+  .app{ max-width:1100px; background:#2d2d2d; backdrop-filter: blur(6px);
+        border:solid 15px #0b0b0b; border-radius:10px; padding:24px; margin: 20px auto; }
+  h1{ margin:0 0 8px; font-weight:400; letter-spacing:.2px; font-family: Hacked; }
   .card{ background:#2d2d2d; border:solid 15px #0b0b0b; border-radius:10px; padding:16px }
   .label{ color:#e0e0e0; font-size:12px; text-transform:uppercase; letter-spacing:.08em; font-family: Hacked }
   .big{ font-size:24px; font-weight:700; margin:4px 0 0 }
   .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace }
-  input[type=text]{ width:100%; padding:12px 14px; border-radius:12px; border:1px solid #000000; background:#1a1a1a; color:#e0e0e0 }
-  input[type=text]::placeholder{ color:#6b7280 }
   .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap }
-  .btn{ appearance:none; border:none; background:#2D7A5E; color:#e0e0e0; font-weight:800; padding:12px 16px; border-radius:12px; cursor:pointer; transition:background-color 0.3s }
+  .btn{ appearance:none; border:none; background:#2D7A5E; color:#e0e0e0; font-weight:800;
+        padding:12px 16px; border-radius:12px; cursor:pointer; transition:background-color 0.3s }
+  .btn[disabled]{ opacity:.6; cursor:not-allowed }
   .btn:hover{ background-color:#1e5542 }
   .btn.secondary{ background:#3d3d3d; color:#e0e0e0 }
-  .note{ color:#e0e0e0; font-size:13px }
   .badge{ display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; background:#1a1a1a; border:1px solid #1f2937; color:#e0e0e0 }
   .status{ margin-top:8px; font-weight:700 }
-  .ok{ color:#22c55e }
-  .bad{ color:#ef4444 }
-  .hint{ color:#e0e0e0 }
-  .footer{ margin-top:16px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap }
-  .switch{ display:inline-flex; align-items:center; gap:8px; cursor:pointer; user-select:none }
-  .switch input{ display:none }
-  .pill{ width:42px; height:24px; background:#3d3d3d; border-radius:999px; position:relative; transition:background .2s }
-  .pill::after{ content:""; position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%; background:#e5e7eb; transition:transform .2s }
-  .switch input:checked + .pill{ background:var(--accent) }
-  .switch input:checked + .pill::after{ transform:translateX(18px) }
-  .tiny{ font-size:12px }
-  .kbd{ font-size:12px; border:1px solid #374151; background:#1a1a1a; padding:.2em .45em; border-radius:6px }
+  .ok{ color:#22c55e } .bad{ color:#ef4444 } .hint{ color:#e0e0e0 }
 
-  /* Imagen del compuesto (solo la imagen, sin datos de origen) */
-  .molimg-wrap{ margin-top:10px; display:flex; justify-content:center; }
-  #molImg{ width:180px; height:180px; object-fit:contain; background:#1a1a1a; border:1px solid #000; border-radius:8px }
+  /* LAYOUT: izquierda (fórmula + datos) apilados, derecha imagen */
+  .grid2{ display:grid; grid-template-columns: 2fr 1fr; gap:16px; }
+  .leftStack{ display:grid; grid-template-rows:auto auto; gap:16px; }
+
+  .molimg-wrap{ display:flex; justify-content:center; align-items:center; height:100%; }
+  #molImg{ width:100%; max-width:300px; height:auto; aspect-ratio:1/1; object-fit:contain;
+           background:#1a1a1a; border:1px solid #000; border-radius:8px }
+
+  .actions{ margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; }
+
+  @media (max-width: 900px){
+    .grid2{ grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -78,125 +62,128 @@
   <div id="weatherIframeContainer" class="weather-iframe-container">
     <iframe name="iframe_aemet_id33044" src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/jerez-de-la-frontera-id11020?w=g4p011100000ohmffffffx000000t999999r1s8n2" scrolling="no"></iframe>
   </div>
+
   <div id="content">
     <br><br><br>
     <div class="app">
-      <h1>Formulacion organica IUPAC</h1>
+      <h1>Formulacion organica</h1>
 
-      <div class="grid">
-        <div class="card">
-          <div class="label">Formula semidesarrollada</div>
-          <div id="semi" class="big mono">—</div>
-          <div class="molimg-wrap"><img id="molImg" alt="Estructura"></div>
-        </div>
-        <div class="card">
-          <div class="label">Datos</div>
-          <div class="row" style="gap:8px; margin-top:6px">
-            <span class="badge" id="badgeFam">Familia: <span id="familia">—</span></span>
-            <span class="badge" id="badgeFor">Fórmula: <span id="formula">—</span></span>
+      <div class="grid2">
+        <div class="leftStack">
+          <div class="card">
+            <div class="label">Formula semidesarrollada</div>
+            <div id="semi" class="big mono">—</div>
           </div>
-          <!-- (Sin mostrar datos de PubChem: solo imagen arriba) -->
+
+          <div class="card">
+            <div class="label">Datos</div>
+            <div class="row" style="gap:8px; margin-top:6px">
+              <span class="badge" id="badgeFam">Familia: <span id="familia">—</span></span>
+              <span class="badge" id="badgeFor">Fórmula: <span id="formula">—</span></span>
+            </div>
+            <div id="status" class="status hint" style="margin-top:10px">—</div>
+          </div>
+        </div>
+
+        <div class="card molimg-wrap">
+          <img id="molImg" alt="Estructura">
         </div>
       </div>
 
-      <div class="card" style="margin-top:16px">
-        <div class="label">Tu respuesta</div>
-        <div class="row" style="margin-top:6px">
-          <input id="answer" type="text" placeholder="Ej.: 4-bromo-2,3-dimetilhex-2-eno / butanona / 2-propanol" />
-          <button id="checkBtn" class="btn">Comprobar <span class="kbd">Enter</span></button>
-          <button id="skipBtn" class="btn secondary" title="Nueva molécula (no puntúa)">Saltar</button>
-        </div>
-        <div id="status" class="status hint">—</div>
-        <div id="reveal" class="note" style="display:none"></div>
-      </div>
-
-      <div class="footer">
-        <div class="row tiny hint">
-          <span id="score">Aciertos: 0/0</span>
-        </div>
-        <div class="row tiny hint">
-          <label class="switch" title="Mostrar/ocultar la familia">
-            <input id="showFam" type="checkbox"><span class="pill"></span><span>Mostrar familia</span>
-          </label>
-          <label class="switch" title="Mostrar/ocultar la fórmula molecular">
-            <input id="showFor" type="checkbox"><span class="pill"></span><span>Mostrar fórmula</span>
-          </label>
-        </div>
+      <div class="actions">
+        <button id="newBtn" class="btn secondary">Nueva cadena</button>
+        <button id="imgBtn" class="btn">Generar imagen</button>
+        <label class="row hint" style="margin-left:auto">
+          <input id="showFam" type="checkbox" style="accent-color:#22d3ee; margin-right:6px;"> Mostrar familia
+        </label>
+        <label class="row hint">
+          <input id="showFor" type="checkbox" style="accent-color:#22d3ee; margin-right:6px;"> Mostrar fórmula
+        </label>
       </div>
     </div>
 
 <script>
-/* ===========================
-   Utilidades básicas y datos
-   =========================== */
+/* ========== Utilidades y datos ========== */
+// --- Placeholders de imagen ---
+function svgDataUri(svg){ return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); }
+
+const IMG_BLANK = svgDataUri(`
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+  <rect width="100%" height="100%" fill="#0b0b0b"/>
+  <text x="50%" y="50%" fill="#333" font-family="Arial, Helvetica, sans-serif" font-size="20" text-anchor="middle" dominant-baseline="middle">
+    (sin imagen)
+  </text>
+</svg>`);
+
+const IMG_LOADING = svgDataUri(`
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+  <rect width="100%" height="100%" fill="#0b0b0b"/>
+  <g transform="translate(256,256)">
+    <circle r="80" fill="none" stroke="#1f2937" stroke-width="12"/>
+    <path d="M0,-80 A80,80 0 0,1 0,80" fill="none" stroke="#22d3ee" stroke-linecap="round" stroke-width="12">
+      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  <text x="50%" y="85%" fill="#555" font-family="Arial, Helvetica, sans-serif" font-size="16" text-anchor="middle">(generando imagen)</text>
+</svg>`);
+
 const $ = (sel)=>document.querySelector(sel);
 
-// Prefijos raíz
-const PREFIJOS = {1:"met",2:"et",3:"prop",4:"but",5:"pent",6:"hex",7:"hept",8:"oct",9:"non",10:"dec"};
-const ROOT = (n)=>PREFIJOS[n] || `C${n}`;
+// --- Historial para no repetir compuestos (persistente en localStorage) ---
+const HISTORY_KEY = 'organica_seen_cids_v1';
+const SEEN_LIMIT = 100; // límite de CIDs guardados
+function loadSeenCIDs(){
+  try { return new Set(JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')); }
+  catch { return new Set(); }
+}
+function saveSeenCIDs(set){
+  const arr = Array.from(set);
+  const trimmed = arr.length > SEEN_LIMIT ? arr.slice(arr.length - SEEN_LIMIT) : arr;
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+}
+let SEEN_CIDS = loadSeenCIDs();
 
-// Sustituyentes disponibles como prefijos (cuando NO son grupo principal)
 const SUBS_TYPES = {
-  metil:  {name:"metil",  alpha:"metil"},
-  etil:   {name:"etil",   alpha:"etil"},
-  fluoro: {name:"fluoro", alpha:"fluoro"},
-  cloro:  {name:"cloro",  alpha:"cloro"},
-  bromo:  {name:"bromo",  alpha:"bromo"},
-  iodo:   {name:"iodo",   alpha:"iodo"},
-  nitro:  {name:"nitro",  alpha:"nitro"},
-  hidroxi:{name:"hidroxi",alpha:"hidroxi"},
-  amino:  {name:"amino",  alpha:"amino"},
-  metoxi: {name:"metoxi", alpha:"alcoxi-metoxi"},
-  etoxi:  {name:"etoxi",  alpha:"alcoxi-etoxi"},
+  metil:{name:"metil"}, etil:{name:"etil"},
+  fluoro:{name:"fluoro"}, cloro:{name:"cloro"}, bromo:{name:"bromo"}, iodo:{name:"iodo"},
+  nitro:{name:"nitro"}, hidroxi:{name:"hidroxi"}, amino:{name:"amino"},
+  metoxi:{name:"metoxi"}, etoxi:{name:"etoxi"},
 };
-const MULTI_PREFIX = (k)=> (k===2?'di':k===3?'tri':k===4?'tetra':k===5?'penta':k===6?'hexa':`x${k}`);
-
 const rint = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const choice = (arr)=>arr[Math.floor(Math.random()*arr.length)];
 
-function normalizeName(s){
-  return s.toLowerCase()
-    .replaceAll(/[–—]/g,"-")
-    .normalize('NFD').replace(/[\u0300-\u036f]/g,"") // sin acentos
-    .replace(/\s+/g,"-")
-    .replace(/,{2,}/g,",")
-    .replace(/-{2,}/g,"-")
-    .replace(/^-|-$|\.|,/g,"");
-}
-
-// Orden alfabético de prefijos ignorando multiplicativos (di-, tri- no cuentan)
-function alphaKeyOf(type){ return SUBS_TYPES[type]?.alpha || type; }
-
-/* =========================================
-   Modelo de molécula lineal coherente
-   ========================================= */
-
+/* ========== Generación (más estricta) ========== */
 const FAMILIAS = ["acido","nitrilo","aldehido","cetona","alcohol","amina","alqueno","alquino","alcano","halogenuro","nitro"];
 
 function genCadena(nMin=2,nMax=9){ return rint(nMin,nMax); }
 
-// Asegura como máximo UNA insaturación y no “rompe” terminales de FG
 function genUnsat(n, minPos = 1){
+  if(n < 2) return { db: [], tb: [] };
+  const low = Math.max(1, minPos), high = n-1;
+  if(low>high) return { db: [], tb: [] };
   const t = choice(["none","ene","ino","ene","none"]);
-  if(t === "none") return { db: [], tb: [] };
-  const pos = rint(minPos, Math.max(minPos, n-1));
-  return t === "ene" ? { db: [pos], tb: [] } : { db: [], tb: [pos] };
+  if(t==="none") return {db:[],tb:[]};
+  const pos = rint(low,high);
+  return t==="ene" ? {db:[pos], tb:[]} : {db:[], tb:[pos]};
 }
 
 function genSustituyentes(n, fg){
-  // 0–2 sustituyentes para reducir combinatoria y ambigüedad de nombres/imagen
   const count = rint(0,2);
   const pool = Object.keys(SUBS_TYPES).filter(t=>{
-    if(fg==="alcohol" && t==="hidroxi") return false;
+    if(fg==="alcohol" && t==="hidroxi") return false; // evita duplicar FG
     if(fg==="amina" && t==="amino") return false;
     return true;
   });
-  const out = [];
+  const used = new Map();
+  const out=[];
   for(let i=0;i<count;i++){
     const type = choice(pool);
     let p = rint(1,n);
-    if((fg==="acido"||fg==="nitrilo"||fg==="aldehido") && p===1) p = n>1?2:1;
-    out.push({pos:p, type});
+    if((fg==="acido"||fg==="nitrilo"||fg==="aldehido") && p===1) p = Math.min(2,n); // evita C1
+    const k = `${p}`;
+    used.set(k, (used.get(k)||0)+1);
+    if(used.get(k) > 2){ i--; continue; }  // evita >2 ramas en el mismo C
+    out.push({pos:p,type});
   }
   return out;
 }
@@ -204,584 +191,377 @@ function genSustituyentes(n, fg){
 function genMolecula(){
   const fam = choice(FAMILIAS);
   let n = genCadena(2,9);
-  let fg = null, posFG=[], db=[], tb=[], subs=[], formula="";
+  let fg=null,posFG=[],db=[],tb=[],subs=[],formula="";
 
   if(fam==="acido"){
-    n = genCadena(1,8);
-    fg="acido"; posFG=[1]; ({db,tb}={db:[],tb:[]}); subs=[];
-  } else if(fam==="nitrilo"){
+    n = genCadena(2,8);
+    fg="acido"; posFG=[1]; db=[]; tb=[]; subs=[];
+  }else if(fam==="nitrilo"){
     n = genCadena(2,9);
-    fg="nitrilo"; posFG=[1]; ({db,tb}={db:[],tb:[]}); subs = genSustituyentes(n, fg);
-  } else if(fam==="aldehido"){
+    fg="nitrilo"; posFG=[1]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
+  }else if(fam==="aldehido"){
     n = genCadena(2,9);
-    fg="aldehido"; posFG=[1];
-    ({db,tb}=genUnsat(n, 2)); // evita tocar C1
-    subs = genSustituyentes(n, fg);
-  } else if(fam==="cetona"){
+    fg="aldehido"; posFG=[1]; ({db,tb}=genUnsat(n,2)); subs=genSustituyentes(n,fg);
+  }else if(fam==="cetona"){
     n = genCadena(3,9);
-    fg="cetona"; posFG=[ rint(2, n-1) ]; ({db,tb}={db:[],tb:[]}); subs = genSustituyentes(n, fg);
-  } else if(fam==="alcohol"){
+    fg="cetona"; posFG=[rint(2,n-1)]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
+  }else if(fam==="alcohol"){
     n = genCadena(1,9);
-    fg="alcohol"; posFG=[ n===1?1:rint(1,n) ]; ({db,tb}=genUnsat(n)); subs = genSustituyentes(n, fg);
-  } else if(fam==="amina"){
+    fg="alcohol"; posFG=[ n===1?1:rint(1,n) ]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
+  }else if(fam==="amina"){
     n = genCadena(1,9);
-    fg="amina"; posFG=[ n===1?1:rint(1,n) ]; ({db,tb}=genUnsat(n)); subs = genSustituyentes(n, fg);
-  } else if(fam==="alqueno"){
+    fg="amina"; posFG=[ n===1?1:rint(1,n) ]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
+  }else if(fam==="alqueno"){
     n = genCadena(2,9);
-    ({db,tb}=genUnsat(n)); if(db.length===0){ db=[rint(1,n-1)]; tb=[]; }
-    subs = genSustituyentes(n, null);
-  } else if(fam==="alquino"){
+    ({db,tb}=genUnsat(n)); if(!db.length){ db=[rint(1,n-1)]; tb=[]; }
+    subs=genSustituyentes(n,null);
+  }else if(fam==="alquino"){
     n = genCadena(2,9);
-    ({db,tb}=genUnsat(n)); if(tb.length===0){ tb=[rint(1,n-1)]; db=[]; }
-    subs = genSustituyentes(n, null);
-  } else if(fam==="halogenuro"){
-    n = genCadena(2,9);
-    fg=null; ({db,tb}={db:[],tb:[]});
-    let k = rint(1,2);
-    subs = [];
+    ({db,tb}=genUnsat(n)); if(!tb.length){ tb=[rint(1,n-1)]; db=[]; }
+    subs=genSustituyentes(n,null);
+  }else if(fam==="halogenuro"){
+    n=genCadena(2,9); db=[]; tb=[];
+    let k=rint(1,2); subs=[];
     while(k--) subs.push({pos:rint(1,n), type:choice(["fluoro","cloro","bromo","iodo"])});
-    subs = subs.concat(genSustituyentes(n, null));
-  } else if(fam==="nitro"){
-    n = genCadena(2,9);
-    fg=null; ({db,tb}=genUnsat(n));
+    subs=subs.concat(genSustituyentes(n,null));
+  }else if(fam==="nitro"){
+    n=genCadena(2,9); ({db,tb}=genUnsat(n));
     let k=rint(1,2); subs=[];
     while(k--) subs.push({pos:rint(1,n), type:"nitro"});
-    subs = subs.concat(genSustituyentes(n, null));
-  } else { // alcano
-    n = genCadena(1,10);
-    fg=null; ({db,tb}={db:[],tb:[]}); subs = genSustituyentes(n, null);
+    subs=subs.concat(genSustituyentes(n,null));
+  }else{
+    n=genCadena(1,10); db=[]; tb=[]; subs=genSustituyentes(n,null);
   }
 
-  // Fórmula molecular calculada de forma coherente:
-  // Base CnH(2n+2), -2H por doble, -4H por triple; FG/sustituyentes agregan heteroátomos básicos.
-  function computeFormula(n, db, tb, fg, posFG, subs){
-    let C = n, H = 2*n + 2;
-    if(db.length) H -= 2*db.length;
-    if(tb.length) H -= 4*tb.length;
+  // Fórmula (Hill): C, H, luego alfabético
+  function computeFormula(n, db, tb, fg, subs){
+    let C=n, H=2*n+2; // base lineal
+    H -= 2*db.length;
+    H -= 4*tb.length;
 
-    let O=0, N=0, F=0, Cl=0, Br=0, I=0;
+    let O=0,N=0,F=0,Cl=0,Br=0,I=0;
 
-    if(fg==="acido"){ O+=2; H -= 2; }                 // -COOH
-    else if(fg==="nitrilo"){ N+=1; H -= 1; }          // -C≡N (terminal)
-    else if(fg==="aldehido"){ O+=1; H -= 2; }         // -CHO
-    else if(fg==="cetona"){ O+=1; H -= 2; }           // -CO-
-    else if(fg==="alcohol"){ O+=1; H += 0; }          // -OH (reemplaza H)
-    else if(fg==="amina"){ N+=1; H += 1; }            // -NH2 (añade N y un H neto)
+    if(fg==="acido"){ O+=2; H-=2; }
+    else if(fg==="nitrilo"){ N+=1; H-=3; }          // CH3 → C≡N (–3 H)
+    else if(fg==="aldehido"){ O+=1; H-=2; }
+    else if(fg==="cetona"){ O+=1; H-=2; }
+    else if(fg==="alcohol"){ O+=1; }
+    else if(fg==="amina"){ N+=1; H+=1; } // primaria
 
     subs.forEach(s=>{
-      if(s.type==="metil"){ C+=1; H+=2; }             // colgando sustituye H por CH3: +C1H2 neto
-      else if(s.type==="etil"){ C+=2; H+=4; }         // +C2H4 neto
-      else if(s.type==="metoxi"){ C+=1; H+=2; O+=1; } // -OCH3: +C1H2O1 neto
+      if(s.type==="metil"){ C+=1; H+=2; }
+      else if(s.type==="etil"){ C+=2; H+=4; }
+      else if(s.type==="metoxi"){ C+=1; H+=2; O+=1; }
       else if(s.type==="etoxi"){ C+=2; H+=4; O+=1; }
-      else if(s.type==="hidroxi"){ O+=1; }            // -OH substituye H
+      else if(s.type==="hidroxi"){ O+=1; }
       else if(s.type==="amino"){ N+=1; H+=1; }
       else if(s.type==="fluoro"){ F+=1; H-=1; }
       else if(s.type==="cloro"){ Cl+=1; H-=1; }
       else if(s.type==="bromo"){ Br+=1; H-=1; }
       else if(s.type==="iodo"){ I+=1; H-=1; }
-      else if(s.type==="nitro"){ N+=1; O+=2; H-=1; }  // -NO2
+      else if(s.type==="nitro"){ N+=1; O+=2; H-=1; }
     });
 
-    // Evita negativos raros por combinaciones límite
-    H = Math.max(H, 0);
-
-    // Construcción orden Hill: C, H, luego alfabético
+    H=Math.max(H,0);
     const parts=[];
     if(C>0) parts.push(`C${C===1?"":C}`);
     if(H>0) parts.push(`H${H===1?"":H}`);
-    const rest = {Br,Cl,F,I,N,O};
-    Object.keys(rest).sort().forEach(k=>{
-      if(rest[k]>0) parts.push(`${k}${rest[k]===1?"":rest[k]}`);
-    });
+    const rest={Br,Cl,F,I,N,O};
+    Object.keys(rest).sort().forEach(k=>{ if(rest[k]>0) parts.push(`${k}${rest[k]===1?"":rest[k]}`); });
     return parts.join("");
   }
+  formula = computeFormula(n,db,tb,fg,subs);
 
-  formula = computeFormula(n, db, tb, fg, posFG, subs);
-
-  return {n, fg, posFG, db, tb, subs, formula};
+  return {n,fg,posFG,db,tb,subs,formula};
 }
 
-/* =====================================
-   Orientación (menor conjunto de locantes)
-   ===================================== */
+/* ========== Orientación (LCML) ========== */
 function mirrorPos(n,p){ return n+1-p; }
-function mirrorList(n,arr){ return arr.map(p=>mirrorPos(n,p)).sort((a,b)=>a-b); }
 function mirrorBonds(n,arr){ return arr.map(p=>(n-p)).sort((a,b)=>a-b); }
-
-function orientationKey(mol, flip){
-  const n = mol.n;
-  const fg = mol.fg;
-  let fgLoc = [];
-  if(fg==="acido"||fg==="nitrilo"||fg==="aldehido"){ fgLoc=[1]; }
-  else if(fg==="cetona"||fg==="alcohol"||fg==="amina"){ fgLoc = flip? mirrorList(n, mol.posFG): [...mol.posFG].sort((a,b)=>a-b); }
-  else fgLoc=[];
-
-  const dLoc = flip? mirrorBonds(n, mol.db): [...mol.db].sort((a,b)=>a-b);
-  const tLoc = flip? mirrorBonds(n, mol.tb): [...mol.tb].sort((a,b)=>a-b);
-  const sLoc = (flip? mol.subs.map(s=>mirrorPos(n,s.pos)) : mol.subs.map(s=>s.pos)).sort((a,b)=>a-b);
-
-  return [fgLoc, dLoc, tLoc, sLoc];
+function orientationKey(m,flip){
+  const n=m.n;
+  const anchorFG=(m.fg==="acido"||m.fg==="nitrilo"||m.fg==="aldehido");
+  const fgLoc=anchorFG?[1]:(flip? m.posFG.map(p=>mirrorPos(n,p)).sort((a,b)=>a-b):[...m.posFG].sort((a,b)=>a-b));
+  const d=flip? mirrorBonds(n,m.db):[...m.db].sort((a,b)=>a-b);
+  const t=flip? mirrorBonds(n,m.tb):[...m.tb].sort((a,b)=>a-b);
+  const s=(flip? m.subs.map(x=>mirrorPos(n,x.pos)):m.subs.map(x=>x.pos)).sort((a,b)=>a-b);
+  return [fgLoc,d,t,s];
 }
 function lexLess(a,b){
-  const L = Math.min(a.length,b.length);
-  for(let i=0;i<L;i++){
-    const x=a[i], y=b[i];
-    for(let j=0;j<Math.min(x.length,y.length);j++){
-      if(x[j]!==y[j]) return x[j]<y[j];
-    }
+  for(let i=0;i<Math.min(a.length,b.length);i++){
+    const x=a[i],y=b[i];
+    for(let j=0;j<Math.min(x.length,y.length);j++){ if(x[j]!==y[j]) return x[j]<y[j]; }
     if(x.length!==y.length) return x.length<y.length;
   }
   return false;
 }
-
-function orient(mol){
-  const n = mol.n;
-  const anchorFG = (mol.fg === "acido" || mol.fg === "nitrilo" || mol.fg === "aldehido");
-
-  if(anchorFG){
-    if(mol.posFG[0] !== 1){
-      const subs = mol.subs.map(s=>({pos:n+1-s.pos, type:s.type}));
-      const posFG = mol.posFG.map(p=>n+1-p);
-      const db = mol.db.map(p=>(n-p)).sort((a,b)=>a-b);
-      const tb = mol.tb.map(p=>(n-p)).sort((a,b)=>a-b);
-      return {...mol, subs, posFG, db, tb, flipped:true};
+function orient(m){
+  const n=m.n, anchor=(m.fg==="acido"||m.fg==="nitrilo"||m.fg==="aldehido");
+  if(anchor){
+    if(m.posFG[0]!==1){
+      const subs=m.subs.map(s=>({pos:n+1-s.pos,type:s.type}));
+      const posFG=m.posFG.map(p=>n+1-p);
+      const db=m.db.map(p=>(n-p)).sort((a,b)=>a-b);
+      const tb=m.tb.map(p=>(n-p)).sort((a,b)=>a-b);
+      return {...m,subs,posFG,db,tb,flipped:true};
     }
-    return {...mol, flipped:false};
+    return {...m,flipped:false};
   }
-
-  const keyL = orientationKey(mol,false);
-  const keyR = orientationKey(mol,true);
-  const useR = lexLess(keyR, keyL);
-  if(!useR) return {...mol, flipped:false};
-  const subs = mol.subs.map(s=>({pos:n+1-s.pos, type:s.type}));
-  const posFG = mol.posFG.map(p=>n+1-p);
-  const db = mol.db.map(p=>(n-p)).sort((a,b)=>a-b);
-  const tb = mol.tb.map(p=>(n-p)).sort((a,b)=>a-b);
-  return {...mol, subs, posFG, db, tb, flipped:true};
+  const useR=lexLess(orientationKey(m,true),orientationKey(m,false));
+  if(!useR) return {...m,flipped:false};
+  const subs=m.subs.map(s=>({pos:n+1-s.pos,type:s.type}));
+  const posFG=m.posFG.map(p=>n+1-p);
+  const db=m.db.map(p=>(n-p)).sort((a,b)=>a-b);
+  const tb=m.tb.map(p=>(n-p)).sort((a,b)=>a-b);
+  return {...m,subs,posFG,db,tb,flipped:true};
 }
 
-/* =============================
-   Semidesarrolladas (C1 a izq.)
-   ============================= */
-function semiBase(n){
-  if(n===1) return ["CH3"];
-  if(n===2) return ["CH3","CH3"];
-  return ["CH3", ...Array(n-2).fill("CH2"), "CH3"];
-}
+/* ========== Semidesarrollada coherente (= y ≡ y FG) ========== */
+function semiBase(n){ if(n===1) return ["CH3"]; if(n===2) return ["CH3","CH3"]; return ["CH3",...Array(n-2).fill("CH2"),"CH3"]; }
 function addBranch(frag, idx, tag){
-  let f = frag[idx];
+  let f=frag[idx];
   if(f==="CH3"||f==="CH2"||f==="CHOH"||f==="CH2OH") f="CH";
-  frag[idx] = f + tag;
+  frag[idx]=f+tag;
 }
+function demoteOnce(tok){
+  if(!tok) return tok;
+  if(tok==="CH3") return "CH2";
+  if(tok==="CH2") return "CH";
+  if(tok==="CH")  return "C";
+  if(tok==="CH2OH") return "CHOH";
+  if(tok==="CHOH")  return "C(OH)";
+  if(/^CH\(/.test(tok)) return tok.replace(/^CH\(/,"C(");
+  return tok;
+}
+function demoteTwice(tok){ return demoteOnce(demoteOnce(tok)); }
 
 function semiString(m){
   const {n, fg, posFG, db, tb, subs} = m;
-  let fr = semiBase(n); // ["CH3", "CH2", ..., "CH3"]
+  let fr = semiBase(n);
 
-  // ===== Grupos principales =====
-  if(fg==="acido"){
-    // mantenemos retorno temprano (no generas insaturación para ácidos)
-    if(n===1) return "H-COOH";
-    return "CH3-"+(n===2?"":"CH2-".repeat(n-2)).replace(/-$/,"")+"-COOH";
-  }
-  if(fg==="nitrilo"){
-    // mantenemos retorno temprano (no generas insaturación para nitrilos)
-    const cola = (n>=2? ("-CH3"+(n>=3? "-"+Array(n-2).fill("CH2").join("-"):"")) : "");
-    return "NC"+(cola? "-"+cola : "");
-  }
-  if(fg==="aldehido"){
-    // NO devolvemos temprano: dejamos C1 = CHO y permitimos insaturación aguas abajo (min pos = 2)
-    if(n===1) return "H-CHO";
-    fr[0] = "CHO";
-  }
-  if(fg==="cetona"){
-    // cetona la seguimos ensamblando como string directo
-    const p = posFG[0]; // enlace C=O entre p y p+1
-    const left = p, right = n-p;
-    const parts = [];
-    if(left===1){ parts.push("CO"); }
-    else if(left===2){ parts.push("CH3","-","CO"); }
-    else { parts.push("CH3"); for(let i=0;i<left-2;i++) parts.push("-","CH2"); parts.push("-","CO"); }
-    if(right>=1){
-      if(right===1) parts.push("-","CH3");
-      else { parts.push("-","CH2"); for(let i=0;i<right-2;i++) parts.push("-","CH2"); parts.push("-","CH3"); }
-    }
-    return parts.join("");
-  }
-  if(fg==="alcohol"){
-    const p = posFG[0]-1;
-    if(n===1) return "CH3-OH";
-    fr[p] = (p===0||p===n-1) ? "CH2OH" : "CHOH";
-  }
-  if(fg==="amina"){
-    const p = posFG[0]-1;
-    fr[p] = (fr[p]==="CH3"||fr[p]==="CH2") ? "CH(NH2)" : (fr[p]+"(NH2)");
-  }
+  // FG
+  if(fg==="acido"){ fr[n-1]="C(=O)OH"; }
+  if(fg==="nitrilo"){ fr[0]="C≡N"; }
+  if(fg==="aldehido"){ fr[n-1]="CHO"; }
+  if(fg==="cetona"){ const p=(posFG[0]||2)-1; fr[p]="C(=O)"; }
+  if(fg==="alcohol"){ const p=(posFG[0]||1)-1; fr[p]=(p===0||p===n-1)?"CH2OH":"CHOH"; }
+  if(fg==="amina"){ const p=(posFG[0]||1)-1; fr[p]=(fr[p]==="CH3"||fr[p]==="CH2")?"CH(NH2)":(fr[p]+"(NH2)"); }
 
-  // ===== Helpers para ajustar H al poner = o ≡ =====
-  const joinWithBond = (arr, i, bond) => {
-    const parts = [];
-    for(let k=0;k<n;k++){
-      parts.push(arr[k]);
-      if(k===i-1) parts.push(bond);
-      else if(k<n-1) parts.push("-");
-    }
-    return parts.join("");
-  };
-
-  const adjustForDouble = (i) => {
-    const L = i-1, R = i;
-    const fix = (v, isTerminal) => {
-      // Si era CH3 pasa a CH2 en terminal; CH2 -> CH en interior; otros (CHO, CHOH, CH2OH, CH(NH2)...) se dejan
-      if(v==="CH3") return isTerminal ? "CH2" : "CH";
-      if(v==="CH2") return "CH";
-      return v;
-    };
-    fr[L] = fix(fr[L], L===0);
-    fr[R] = fix(fr[R], R===n-1);
-  };
-
-  const adjustForTriple = (i) => {
-    const L = i-1, R = i;
-    const fix = (v, isTerminal) => {
-      // Triple reduce aún más: terminal -> CH ; interior -> C
-      if(v==="CH3") return isTerminal ? "CH" : "C";
-      if(v==="CH2" || v==="CH") return isTerminal ? "CH" : "C";
-      // No tocamos CHO/CHOH/CH2OH/NH2, etc. (simplificación)
-      return v;
-    };
-    fr[L] = fix(fr[L], L===0);
-    fr[R] = fix(fr[R], R===n-1);
-  };
-
-  // ===== Aplicar insaturaciones (una) con ajuste previo =====
-  if(db.length && fr.length>1){
-    const i = db[0];           // enlace entre i e i+1 (1-indexed)
-    adjustForDouble(i);
-    // Tras ajustar, devolvemos cadena con "=" (no añadimos ramas visualmente para evitar ambigüedad)
-    return joinWithBond(fr, i, "=");
-  }
-  if(tb.length && fr.length>1){
-    const i = tb[0];
-    adjustForTriple(i);
-    return joinWithBond(fr, i, "≡");
-  }
-
-  // ===== Sustituyentes (visual) cuando no hay enlace múltiple ensamblado como string =====
+  // Ramas
   subs.forEach(({pos,type})=>{
-    const idx = pos-1;
-    const tag = (type==="metil")?"(CH3)":
-                (type==="etil")?"(CH2CH3)":
-                (type==="metoxi")?"(OCH3)":
-                (type==="etoxi")?"(OCH2CH3)":
-                (type==="hidroxi")?"(OH)":
-                (type==="amino")?"(NH2)":
-                (type==="fluoro")?"(F)":
-                (type==="cloro")?"(Cl)":
-                (type==="bromo")?"(Br)":
-                (type==="iodo")?"(I)":
-                (type==="nitro")?"(NO2)":"";
-    if(tag){ addBranch(fr, idx, tag); }
+    const idx=pos-1;
+    const tag= type==="metil"?"(CH3)"
+      :type==="etil"?"(CH2CH3)"
+      :type==="metoxi"?"(OCH3)"
+      :type==="etoxi"?"(OCH2CH3)"
+      :type==="hidroxi"?"(OH)"
+      :type==="amino"?"(NH2)"
+      :type==="fluoro"?"(F)"
+      :type==="cloro"?"(Cl)"
+      :type==="bromo"?"(Br)"
+      :type==="iodo"?"(I)"
+      :type==="nitro"?"(NO2)":"";
+    if(tag) addBranch(fr,idx,tag);
   });
 
+  // Insaturaciones (máx. 1)
+  if(db.length && fr.length>1){
+    const i=db[0];
+    if(i>=1 && i<=n-1){ fr[i-1]=demoteOnce(fr[i-1]); fr[i]=demoteOnce(fr[i]); }
+    const out=[];
+    for(let k=0;k<n;k++){ out.push(fr[k]); if(k===i-1) out.push("="); else if(k<n-1) out.push("-"); }
+    return out.join("");
+  }
+  if(tb.length && fr.length>1){
+    const i=tb[0];
+    if(i>=1 && i<=n-1){ fr[i-1]=demoteTwice(fr[i-1]); fr[i]=demoteTwice(fr[i]); }
+    const out=[];
+    for(let k=0;k<n;k++){ out.push(fr[k]); if(k===i-1) out.push("≡"); else if(k<n-1) out.push("-"); }
+    return out.join("");
+  }
   return fr.join("-");
 }
 
+/* ========== SMILES (lineal + ramas) ========== */
+function smilesFromMolecule(m){
+  const {n, fg, posFG, db, tb, subs} = m;
+  const dbl = new Set(db.map(x=>x-0));
+  const tpl = new Set(tb.map(x=>x-0));
 
-/* =========================
-   Construcción del nombre
-   ========================= */
-function locantsToString(locs){ return locs.sort((a,b)=>a-b).join(","); }
+  const bonds = [];
+  for(let i=1;i<=n-1;i++){
+    if(tpl.has(i)) bonds.push("#");
+    else if(dbl.has(i)) bonds.push("=");
+    else bonds.push("");
+  }
 
-function groupSubstituents(subs){
-  const map = {};
-  subs.forEach(s=>{
-    if(!map[s.type]) map[s.type]=[];
-    map[s.type].push(s.pos);
+  let base = Array(n).fill("C");
+
+  if(fg==="acido"){ base[n-1] = "C(=O)O"; }
+  else if(fg==="nitrilo"){ base[0] = "C#N"; }   // terminal en C1
+  else if(fg==="aldehido"){ base[n-1] = "C=O"; }
+  else if(fg==="cetona"){ const p=(posFG[0]||2)-1; base[p] = "C(=O)"; }
+  else if(fg==="alcohol"){ const p=(posFG[0]||1)-1; base[p] = base[p] + "O"; }
+  else if(fg==="amina"){ const p=(posFG[0]||1)-1; base[p] = base[p] + "N"; }
+
+  // Construcción lineal
+  let chainParts = [base[0]];
+  for(let i=1;i<n;i++){
+    chainParts.push((bonds[i-1]||"") + base[i]);
+  }
+
+  // Ramas
+  function branchSMI(type){
+    if(type==="metil") return "C";
+    if(type==="etil") return "CC";
+    if(type==="metoxi") return "OC";
+    if(type==="etoxi") return "OCC";
+    if(type==="hidroxi") return "O";
+    if(type==="amino") return "N";
+    if(type==="fluoro") return "F";
+    if(type==="cloro") return "Cl";
+    if(type==="bromo") return "Br";
+    if(type==="iodo") return "I";
+    if(type==="nitro") return "[N+](=O)[O-]";
+    return "";
+  }
+
+  subs.forEach(({pos,type})=>{
+    const i = pos-1;
+    const sm = branchSMI(type);
+    if(!sm) return;
+    chainParts[i] += `(${sm})`;
   });
-  const entries = Object.entries(map).map(([type, locs])=>{
-    locs.sort((a,b)=>a-b);
-    const k = locs.length;
-    const pref = (k>1? MULTI_PREFIX(k):"");
-    const name = SUBS_TYPES[type].name;
-    const head = locs.join(",");
-    return {
-      type,
-      alpha: alphaKeyOf(type),
-      text: `${head}-${pref?pref:""}${name}`
-    };
-  });
-  entries.sort((a,b)=> a.alpha.localeCompare(b.alpha));
-  return entries.map(e=>e.text).join("-");
+
+  return chainParts.join("");
 }
 
-function nombreBaseConInsat(n, db, tb){
-  if(db.length===0 && tb.length===0) return ROOT(n)+"ano";
-  if(db.length===1 && tb.length===0) return `${ROOT(n)}-${db[0]}-eno`;
-  if(tb.length===1 && db.length===0) return `${ROOT(n)}-${tb[0]}-ino`;
-  const en = db.length? `${db.join(",")}-en` : "";
-  const yn = tb.length? `${tb.join(",")}-in` : "";
-  const sep = en&&yn ? "-" : "";
-  return `${ROOT(n)}-${en}${sep}${yn}o`;
+/* ========== PubChem helpers ========== */
+async function fetchJSON(url){
+  const r=await fetch(url);
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  return await r.json();
+}
+async function fetchCIDBySmiles(smiles){
+  try{
+    const j=await fetchJSON(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${encodeURIComponent(smiles)}/cids/JSON`);
+    return j?.IdentifierList?.CID?.[0] || null;
+  }catch(_e){ return null; }
 }
 
-function nombrePrincipal(m){
-  const {n, fg, posFG, db, tb} = m;
+/* ========== Estado y render ========== */
+let MOL=null;
 
-  if(fg==="acido")   return `acido ${ROOT(n)}anoico`;
-  if(fg==="nitrilo") return `${ROOT(n)}onitrilo`;
-
-  if(fg==="aldehido"){
-    if(db.length===1 && tb.length===0) return `${ROOT(n)}-${db[0]}-enal`;
-    if(tb.length===1 && db.length===0) return `${ROOT(n)}-${tb[0]}-inal`;
-    return `${ROOT(n)}anal`;
-  }
-
-  if(fg==="cetona"){
-    const p = posFG[0];
-    const unico = (n===3)||(n===4);
-    return unico? `${ROOT(n)}anona` : `${ROOT(n)}an-${p}-ona`;
-  }
-
-  if(fg==="alcohol"){
-    if(n<=2) return `${ROOT(n)}anol`;
-    return `${ROOT(n)}an-${posFG[0]}-ol`;
-  }
-
-  if(fg==="amina"){
-    if(n<=2) return `${ROOT(n)}anamina`;
-    return `${ROOT(n)}an-${posFG[0]}-amina`;
-  }
-
-  if(db.length || tb.length) return nombreBaseConInsat(n, db, tb);
-  return `${ROOT(n)}ano`;
+function familiaTexto(m){
+  if(m.fg) return m.fg;
+  return m.db.length?"alqueno":(m.tb.length?"alquino":"alcano");
 }
-
-function nombreCompleto(m){
-  m = orient(m);
-  const base = nombrePrincipal(m);
-  const pref = m.subs.length? groupSubstituents(m.subs) : "";
-  return pref ? `${pref}-${base}` : base;
-}
-
-// Formas alternativas aceptadas (2-butanona, 2-butanol…)
-function altForm(nombre){
-  let s = nombre;
-  s = s.replace(/^(.+?)-(\d+)-(eno|ino)$/, (_,$1,$2,$3)=> `${$2}-${$1}${$3}`);
-  s = s.replace(/^(.*?)([a-z]+)an-(\d+)-ol$/, (_,$1,$2,$3)=> `${$3}-${$1}${$2}anol`);
-  s = s.replace(/^([a-z]+)an-(\d+)-ona$/, (_,$1,$2)=> `${$2}-${$1}anona`);
-  s = s.replace(/^(.+?)-(\d+)-enal$/, (_,$1,$2)=> `${$2}-${$1}enal`);
-  s = s.replace(/^(.+?)-(\d+)-inal$/, (_,$1,$2)=> `${$2}-${$1}inal`);
-  return s;
-}
-
-/* =========================
-   Fórmula molecular (ya calculada en gen)
-   ========================= */
-function formulaMol(m){ return m.formula; }
-
-/* =========================
-   Quiz (lógica de teclado)
-   ========================= */
-let esperandoSiguiente = false;
-let aciertos = 0;
-let preguntas = 0;
-
-let MOL = null;
-
-function actualizarMarcador(){
-  $("#score").textContent = `Aciertos: ${aciertos}/${preguntas}`;
-}
-
-function renderMolecula_Base(){
-  const semi = semiString(MOL);
-  $("#semi").textContent = semi;
-  $("#familia").textContent = MOL.fg ? MOL.fg : (MOL.db.length?"alqueno": MOL.tb.length?"alquino":"alcano");
-  $("#formula").textContent = formulaMol(MOL);
-  $("#status").className = "status hint";
-  $("#status").textContent = "Escribe el nombre IUPAC y pulsa Enter.";
-  $("#reveal").style.display = "none";
-  $("#answer").value = "";
-  $("#answer").focus();
+function updateBadges(){
   $("#badgeFam").style.display = $("#showFam").checked ? "inline-block":"none";
   $("#badgeFor").style.display = $("#showFor").checked ? "inline-block":"none";
-  // limpia imagen hasta que llegue la nueva
-  $("#molImg").src = "";
+}
+function renderMolecula(){
+  $("#semi").textContent = semiString(MOL);
+  $("#familia").textContent = familiaTexto(MOL);
+  $("#formula").textContent = MOL.formula;
+  $("#molImg").src = IMG_BLANK; // en blanco hasta pulsar “Generar imagen”
+  $("#status").className="status ok";
+  $("#status").textContent="Molécula nueva y validada";
+  updateBadges();
 }
 
-function nuevaPregunta(){
-  esperandoSiguiente = false;
-  MOL = genMolecula();
-  MOL = orient(MOL);
-  renderMolecula(); // (se redefine abajo para añadir imagen)
-  $("#checkBtn").textContent = "Comprobar";
-}
+/* ========== Nueva cadena con VALIDACIÓN + NO REPETIR (SMILES → CID) ========== */
+async function nuevaCadena(){
+  $("#molImg").src = IMG_BLANK;
+  $("#newBtn").disabled = true;
+  $("#imgBtn").disabled = true;
+  $("#status").className="status hint";
+  $("#status").textContent="Generando y validando...";
 
-function nombresAceptados(m){
-  const canonical = nombreCompleto(m);
-  const alt = altForm(canonical);
-  const set = new Set();
-  set.add(normalizeName(canonical));
-  set.add(normalizeName(alt));
-  return set;
-}
+  const MAX_TRIES = 60; // más intentos para evitar repetir
+  for(let tries=0; tries<MAX_TRIES; tries++){
+    const cand = orient(genMolecula());
 
-function comprobar(){
-  if(esperandoSiguiente){
-    nuevaPregunta();
+    // Coherencias rápidas
+    const needsO = ["acido","aldehido","cetona","alcohol"].includes(cand.fg) || cand.subs.some(s=>["metoxi","etoxi","hidroxi","nitro"].includes(s.type));
+    if(needsO && !/O/.test(cand.formula)) continue;
+    if(cand.fg==="aldehido" && cand.db.includes(cand.n-1)) continue;
+    if(cand.fg==="acido" && cand.db.includes(cand.n-1)) continue;
+
+    // SMILES → CID
+    const smiles = smilesFromMolecule(cand);
+    const cid = await fetchCIDBySmiles(smiles);
+    if(!cid) continue;
+
+    const cidStr = String(cid);
+    if(SEEN_CIDS.has(cidStr)) continue; // ya visto → descarta
+
+    // Acepta: guarda en historial y muestra
+    SEEN_CIDS.add(cidStr);
+    saveSeenCIDs(SEEN_CIDS);
+
+    MOL = {...cand, smiles, cid};
+    renderMolecula();
+    $("#newBtn").disabled = false;
+    $("#imgBtn").disabled = false; // activado SOLO tras validación
     return;
   }
-  const entradaRaw = $("#answer").value.trim();
-  if(!entradaRaw){
-    $("#status").className = "status hint";
-    $("#status").textContent = "Escribe un nombre.";
-    return;
-  }
-  const entrada = normalizeName(entradaRaw);
-  const aceptados = nombresAceptados(MOL);
 
-  preguntas += 1;
-  if(aceptados.has(entrada)){
-    aciertos += 1;
-    $("#status").className = "status ok";
-    $("#status").textContent = `✅ ¡Correcto! ${Array.from(aceptados)[0]}. Pulsa Enter para continuar.`;
-    $("#reveal").style.display = "block";
-    $("#reveal").textContent = `Solución canónica: ${nombreCompleto(MOL)}`;
-    esperandoSiguiente = true;
-    $("#checkBtn").textContent = "Siguiente";
-  } else {
-    $("#status").className = "status bad";
-    $("#status").textContent = `❌ Incorrecto. Pulsa Enter para continuar.`;
-    $("#reveal").style.display = "block";
-    $("#reveal").textContent = `Solución: ${nombreCompleto(MOL)}`;
-    esperandoSiguiente = true;
-    $("#checkBtn").textContent = "Siguiente";
-  }
-  actualizarMarcador();
+  $("#status").className="status bad";
+  $("#status").textContent = "No se encontraron moléculas nuevas sin repetir. Puedes limpiar el historial del navegador para empezar de cero (localStorage['"+HISTORY_KEY+"']).";
+  $("#newBtn").disabled = false;
+  $("#imgBtn").disabled = true;
 }
 
-/* ====== Eventos ====== */
-$("#checkBtn").addEventListener("click", comprobar);
-$("#skipBtn").addEventListener("click", nuevaPregunta);
-$("#answer").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    comprobar();
-  }
-});
-$("#showFam").addEventListener("change", ()=>{ $("#badgeFam").style.display = $("#showFam").checked ? "inline-block":"none"; });
-$("#showFor").addEventListener("change", ()=>{ $("#badgeFor").style.display = $("#showFor").checked ? "inline-block":"none"; });
-
-/* =========================
-   === PubChem PUG REST ===
-   (Uso interno, solo imagen)
-   ========================= */
-
-/* Estrategia para evitar imágenes incorrectas:
-   1) Buscar por NOMBRE canónico que generamos (más preciso que MF).
-   2) Si hay varias coincidencias, pedir propiedades y elegir el CID cuya IUPACName
-      normalizado coincida exactamente con nuestro nombre (o su alternativa).
-   3) Solo si falla, usar la fórmula como ÚLTIMO recurso.
-   4) Siempre mostrar SOLO la IMAGEN, sin datos/atributos del origen. */
-
-function sameName(a,b){
-  if(!a||!b) return false;
-  const norm = s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim();
-  return norm(a)===norm(b);
-}
-
-async function fetchCIDsByName(name){
-  const res = await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(name)}/cids/JSON`);
-  if(!res.ok) return [];
-  const j = await res.json();
-  return j?.IdentifierList?.CID || [];
-}
-async function fetchPropsForCIDs(cids){
-  if(!cids.length) return [];
-  const res = await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cids.join(",")}/property/IUPACName,Title,MolecularFormula/JSON`);
-  if(!res.ok) return [];
-  const j = await res.json();
-  return j?.PropertyTable?.Properties || [];
-}
-async function fetchCIDsByFormula(formula){
-  const res = await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/${encodeURIComponent(formula)}/cids/JSON`);
-  if(!res.ok) return [];
-  const j = await res.json();
-  return j?.IdentifierList?.CID || [];
-}
-
-async function pickBestCIDByName(targetCanonical, targetAlt){
+/* ========== Imagen desde SMILES (bloqueo del botón tras usarlo) ========== */
+async function generarImagen(){
   try{
-    const cids = await fetchCIDsByName(targetCanonical);
-    if(cids.length===0 && targetAlt){
-      const cidsAlt = await fetchCIDsByName(targetAlt);
-      if(!cidsAlt.length) return null;
-      const propsAlt = await fetchPropsForCIDs(cidsAlt);
-      // exact match con alt
-      let exactAlt = propsAlt.find(p=> sameName(p.IUPACName, targetAlt) || sameName(p.Title, targetAlt));
-      if(exactAlt) return exactAlt.CID;
-      return propsAlt[0]?.CID ?? null;
+    $("#imgBtn").disabled = true; // se desactiva al pulsar y queda así hasta “Nueva cadena”
+    $("#molImg").src = IMG_LOADING;
+    $("#status").className="status hint";
+    $("#status").textContent="Generando imagen…";
+
+    if(!MOL?.smiles){
+      $("#status").className="status bad";
+      $("#status").textContent="No hay SMILES válido.";
+      $("#molImg").src = IMG_BLANK;
+      return;
     }
-    const props = await fetchPropsForCIDs(cids);
-    // exact match
-    let exact = props.find(p=> sameName(p.IUPACName, targetCanonical) || sameName(p.Title, targetCanonical));
-    if(exact) return exact.CID;
-    // fallback: misma fórmula calculada
-    const sameF = props.find(p=> sameName(p.MolecularFormula, MOL.formula));
-    if(sameF) return sameF.CID;
-    return props[0]?.CID ?? null;
-  }catch(_e){ return null; }
-}
 
-async function pickCIDFallbackByFormula(formula){
-  try{
-    const cids = await fetchCIDsByFormula(formula);
-    if(!cids.length) return null;
-    // Pedimos props y elegimos el de menor “desviación” del nombre esperado (heurístico)
-    const props = await fetchPropsForCIDs(cids);
-    const target = nombreCompleto(MOL);
-    const score = (p)=>{
-      let s = 0;
-      if(p.MolecularFormula===formula) s+=5;
-      if(p.IUPACName && target && p.IUPACName.toLowerCase().includes(ROOT(MOL.n))) s+=2;
-      return -s;
+    const url = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/${encodeURIComponent(MOL.smiles)}/PNG?image_size=large`;
+
+    const probe = new Image();
+    probe.onload = ()=>{
+      $("#molImg").src = url;
+      $("#status").className="status ok";
+      $("#status").textContent="Imagen generada";
+      // botón permanece deshabilitado hasta “Nueva cadena”
     };
-    props.sort((a,b)=> score(a)-score(b));
-    return props[0]?.CID ?? null;
-  }catch(_e){ return null; }
-}
+    probe.onerror = ()=>{
+      $("#status").className="status bad";
+      $("#status").textContent="No se pudo generar la imagen.";
+      $("#molImg").src = IMG_BLANK;
+      // Si quieres permitir reintento sin «Nueva cadena», descomenta:
+      // $("#imgBtn").disabled = false;
+    };
+    probe.src = url;
 
-async function renderDepictionForCurrent(){
-  const canonical = nombreCompleto(MOL);
-  const alt = altForm(canonical);
-
-  let cid = await pickBestCIDByName(canonical, alt);
-  if(!cid){
-    // último recurso: fórmula (puede representar otro isómero; mejor ocultar imagen si dudoso)
-    cid = await pickCIDFallbackByFormula(MOL.formula);
-  }
-
-  if(cid){
-    // imagen 2D grande
-    const imgURL = `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${cid}/PNG?image_size=large`;
-    $("#molImg").src = imgURL;
-  } else {
-    // si no encontramos una coincidencia fiable, no mostramos nada
-    $("#molImg").src = "";
+  }catch(e){
+    $("#status").className="status bad";
+    $("#status").textContent="Error generando la imagen.";
+    $("#molImg").src = IMG_BLANK;
   }
 }
 
-/* Extiende el render para siempre sincronizar la imagen con el nombre generado */
-const renderMolecula = function(){
-  renderMolecula_Base();
-  // Importante: usar el NOMBRE primero para pedir la imagen y así evitar correspondencias por fórmula erróneas
-  renderDepictionForCurrent();
-};
+/* ========== Eventos y arranque ========== */
+$("#newBtn").addEventListener("click", nuevaCadena);
+$("#imgBtn").addEventListener("click", generarImagen);
+$("#showFam").addEventListener("change", updateBadges);
+$("#showFor").addEventListener("change", updateBadges);
 
-/* Arranque */
-nuevaPregunta();
+nuevaCadena();
 </script>
   </div>
-  <script async src="../scripts/fade.js"></script>
+<script async src="../scripts/fade.js"></script>
 </body>
 </html>
