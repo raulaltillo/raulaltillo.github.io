@@ -34,7 +34,6 @@
   .status{ margin-top:8px; font-weight:700 }
   .ok{ color:#22c55e } .bad{ color:#ef4444 } .hint{ color:#e0e0e0 }
 
-  /* LAYOUT: izquierda (fórmula + datos) apilados, derecha imagen */
   .grid2{ display:grid; grid-template-columns: 2fr 1fr; gap:16px; }
   .leftStack{ display:grid; grid-template-rows:auto auto; gap:16px; }
 
@@ -42,8 +41,10 @@
   #molImg{ width:100%; max-width:300px; height:auto; aspect-ratio:1/1; object-fit:contain;
            background:#1a1a1a; border:1px solid #000; border-radius:8px }
 
-  .actions{ margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; }
-
+  .actions{ margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+  /* [AUTO] Estilo simple para el toggle */
+  .toggle{ display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border-radius:10px; background:#1f1f1f; border:1px solid #000 }
+  .toggle input{ accent-color:#22d3ee; }
   @media (max-width: 900px){
     .grid2{ grid-template-columns: 1fr; }
   }
@@ -93,10 +94,15 @@
       <div class="actions">
         <button id="newBtn" class="btn secondary">Nueva cadena</button>
         <button id="imgBtn" class="btn">Generar imagen</button>
-        <label class="row hint" style="margin-left:auto">
-          <input id="showFam" type="checkbox" style="accent-color:#22d3ee; margin-right:6px;"> Mostrar familia
+
+        <!-- [AUTO] Toggle Auto junto al botón -->
+        <label class="toggle" title="Generar imagen automáticamente al crear una nueva cadena">
+          <input id="autoImg" type="checkbox">
+          <span class="hint">Auto</span>
         </label>
+        <br>
         <label class="row hint">
+          <input id="showFam" type="checkbox" style="accent-color:#22d3ee; margin-right:6px;"> Mostrar familia
           <input id="showFor" type="checkbox" style="accent-color:#22d3ee; margin-right:6px;"> Mostrar fórmula
         </label>
       </div>
@@ -104,7 +110,6 @@
 
 <script>
 /* ========== Utilidades y datos ========== */
-// --- Placeholders de imagen ---
 function svgDataUri(svg){ return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); }
 
 const IMG_BLANK = svgDataUri(`
@@ -129,9 +134,9 @@ const IMG_LOADING = svgDataUri(`
 
 const $ = (sel)=>document.querySelector(sel);
 
-// --- Historial para no repetir compuestos (persistente en localStorage) ---
+// Historial CIDs
 const HISTORY_KEY = 'organica_seen_cids_v1';
-const SEEN_LIMIT = 2000; // límite de CIDs guardados
+const SEEN_LIMIT = 2000;
 function loadSeenCIDs(){
   try { return new Set(JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')); }
   catch { return new Set(); }
@@ -143,7 +148,17 @@ function saveSeenCIDs(set){
 }
 let SEEN_CIDS = loadSeenCIDs();
 
-// --- Slider de longitud (3–9) ---
+// [AUTO] Persistencia del toggle Auto
+const AUTO_KEY = 'organica_auto_image_v1';
+function loadAuto(){ try{ return localStorage.getItem(AUTO_KEY)==='1'; }catch{ return false; } }
+function saveAuto(v){ try{
+  localStorage.setItem(AUTO_KEY, v?'1':'0'); 
+  if (v==1){
+    generarImagen();
+  }
+}catch{} }
+
+// Slider longitud
 function mountLengthSlider(){
   const actions = document.querySelector('.actions');
   if(!actions || $('#lenSlider')) return;
@@ -158,14 +173,10 @@ function mountLengthSlider(){
     <input id="lenSlider" type="range" min="3" max="9" step="1" value="5" style="width:180px; accent-color:#22d3ee;">
   `;
 
-  // Coloca el slider al inicio del área de acciones
   actions.insertBefore(sliderWrap, actions.firstChild);
 
-  // Eventos del slider
   const slider = $('#lenSlider');
-  slider.addEventListener('input', ()=>{
-    $('#lenVal').textContent = slider.value;
-  });
+  slider.addEventListener('input', ()=>{ $('#lenVal').textContent = slider.value; });
 }
 function getUserLen(){
   const el = $('#lenSlider');
@@ -198,7 +209,7 @@ function genUnsat(n, minPos = 1){
 function genSustituyentes(n, fg){
   const count = rint(0,2);
   const pool = Object.keys(SUBS_TYPES).filter(t=>{
-    if(fg==="alcohol" && t==="hidroxi") return false; // evita duplicar FG
+    if(fg==="alcohol" && t==="hidroxi") return false;
     if(fg==="amina" && t==="amino") return false;
     return true;
   });
@@ -207,68 +218,43 @@ function genSustituyentes(n, fg){
   for(let i=0;i<count;i++){
     const type = choice(pool);
     let p = rint(1,n);
-    if((fg==="acido"||fg==="nitrilo"||fg==="aldehido") && p===1) p = Math.min(2,n); // evita C1
+    if((fg==="acido"||fg==="nitrilo"||fg==="aldehido") && p===1) p = Math.min(2,n);
     const k = `${p}`;
     used.set(k, (used.get(k)||0)+1);
-    if(used.get(k) > 2){ i--; continue; }  // evita >2 ramas en el mismo C
+    if(used.get(k) > 2){ i--; continue; }
     out.push({pos:p,type});
   }
   return out;
 }
 
 function genMolecula(nOverride){
-  // Longitud fija elegida por el usuario
   const nFixed = Math.min(9, Math.max(3, nOverride ?? getUserLen()));
   const fam = choice(FAMILIAS);
   let n = nFixed;
   let fg=null,posFG=[],db=[],tb=[],subs=[],formula="";
 
-  if(fam==="acido"){
-    fg="acido"; posFG=[1]; db=[]; tb=[]; subs=[];
-  }else if(fam==="nitrilo"){
-    fg="nitrilo"; posFG=[1]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
-  }else if(fam==="aldehido"){
-    fg="aldehido"; posFG=[1]; ({db,tb}=genUnsat(n,2)); subs=genSustituyentes(n,fg);
-  }else if(fam==="cetona"){
-    fg="cetona"; posFG=[rint(2,n-1)]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
-  }else if(fam==="alcohol"){
-    fg="alcohol"; posFG=[ n===1?1:rint(1,n) ]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
-  }else if(fam==="amina"){
-    fg="amina"; posFG=[ n===1?1:rint(1,n) ]; db=[]; tb=[]; subs=genSustituyentes(n,fg);
-  }else if(fam==="alqueno"){
-    ({db,tb}=genUnsat(n)); if(!db.length){ db=[rint(1,n-1)]; tb=[]; }
-    subs=genSustituyentes(n,null);
-  }else if(fam==="alquino"){
-    ({db,tb}=genUnsat(n)); if(!tb.length){ tb=[rint(1,n-1)]; db=[]; }
-    subs=genSustituyentes(n,null);
-  }else if(fam==="halogenuro"){
-    db=[]; tb=[];
-    let k=rint(1,2); subs=[];
-    while(k--) subs.push({pos:rint(1,n), type:choice(["fluoro","cloro","bromo","iodo"])});
-    subs=subs.concat(genSustituyentes(n,null));
-  }else if(fam==="nitro"){
-    ({db,tb}=genUnsat(n));
-    let k=rint(1,2); subs=[];
-    while(k--) subs.push({pos:rint(1,n), type:"nitro"});
-    subs=subs.concat(genSustituyentes(n,null));
-  }else{
-    db=[]; tb=[]; subs=genSustituyentes(n,null);
-  }
+  if(fam==="acido"){ fg="acido"; posFG=[1]; }
+  else if(fam==="nitrilo"){ fg="nitrilo"; posFG=[1]; subs=genSustituyentes(n,fg); }
+  else if(fam==="aldehido"){ fg="aldehido"; posFG=[1]; ({db,tb}=genUnsat(n,2)); subs=genSustituyentes(n,fg); }
+  else if(fam==="cetona"){ fg="cetona"; posFG=[rint(2,n-1)]; subs=genSustituyentes(n,fg); }
+  else if(fam==="alcohol"){ fg="alcohol"; posFG=[ n===1?1:rint(1,n) ]; subs=genSustituyentes(n,fg); }
+  else if(fam==="amina"){ fg="amina"; posFG=[ n===1?1:rint(1,n) ]; subs=genSustituyentes(n,fg); }
+  else if(fam==="alqueno"){ ({db,tb}=genUnsat(n)); if(!db.length){ db=[rint(1,n-1)]; tb=[]; } subs=genSustituyentes(n,null); }
+  else if(fam==="alquino"){ ({db,tb}=genUnsat(n)); if(!tb.length){ tb=[rint(1,n-1)]; db=[]; } subs=genSustituyentes(n,null); }
+  else if(fam==="halogenuro"){ db=[]; tb=[]; let k=rint(1,2); subs=[]; while(k--) subs.push({pos:rint(1,n), type:choice(["fluoro","cloro","bromo","iodo"])}); subs=subs.concat(genSustituyentes(n,null)); }
+  else if(fam==="nitro"){ ({db,tb}=genUnsat(n)); let k=rint(1,2); subs=[]; while(k--) subs.push({pos:rint(1,n), type:"nitro"}); subs=subs.concat(genSustituyentes(n,null)); }
+  else { subs=genSustituyentes(n,null); }
 
-  // Fórmula (Hill): C, H, luego alfabético
   function computeFormula(n, db, tb, fg, subs){
-    let C=n, H=2*n+2; // base lineal
-    H -= 2*db.length;
-    H -= 4*tb.length;
-
+    let C=n, H=2*n+2; H -= 2*db.length; H -= 4*tb.length;
     let O=0,N=0,F=0,Cl=0,Br=0,I=0;
 
     if(fg==="acido"){ O+=2; H-=2; }
-    else if(fg==="nitrilo"){ N+=1; H-=3; }          // CH3 → C≡N (–3 H)
+    else if(fg==="nitrilo"){ N+=1; H-=3; }
     else if(fg==="aldehido"){ O+=1; H-=2; }
     else if(fg==="cetona"){ O+=1; H-=2; }
     else if(fg==="alcohol"){ O+=1; }
-    else if(fg==="amina"){ N+=1; H+=1; } // primaria
+    else if(fg==="amina"){ N+=1; H+=1; }
 
     subs.forEach(s=>{
       if(s.type==="metil"){ C+=1; H+=2; }
@@ -294,7 +280,7 @@ function genMolecula(nOverride){
   }
   formula = computeFormula(n,db,tb,fg,subs);
 
-  return {n,fg,posFG,db,tb,subs,formula};
+  return {n,fg:fg,posFG,db,tb,subs,formula};
 }
 
 /* ========== Orientación (LCML) ========== */
@@ -338,7 +324,7 @@ function orient(m){
   return {...m,subs,posFG,db,tb,flipped:true};
 }
 
-/* ========== Semidesarrollada coherente (= y ≡ y FG) ========== */
+/* ========== Semidesarrollada ========== */
 function semiBase(n){ if(n===1) return ["CH3"]; if(n===2) return ["CH3","CH3"]; return ["CH3",...Array(n-2).fill("CH2"),"CH3"]; }
 function addBranch(frag, idx, tag){
   let f=frag[idx];
@@ -361,7 +347,6 @@ function semiString(m){
   const {n, fg, posFG, db, tb, subs} = m;
   let fr = semiBase(n);
 
-  // FG
   if(fg==="acido"){ fr[n-1]="C(=O)OH"; }
   if(fg==="nitrilo"){ fr[0]="C≡N"; }
   if(fg==="aldehido"){ fr[n-1]="CHO"; }
@@ -369,7 +354,6 @@ function semiString(m){
   if(fg==="alcohol"){ const p=(posFG[0]||1)-1; fr[p]=(p===0||p===n-1)?"CH2OH":"CHOH"; }
   if(fg==="amina"){ const p=(posFG[0]||1)-1; fr[p]=(fr[p]==="CH3"||fr[p]==="CH2")?"CH(NH2)":(fr[p]+"(NH2)"); }
 
-  // Ramas
   subs.forEach(({pos,type})=>{
     const idx=pos-1;
     const tag= type==="metil"?"(CH3)"
@@ -386,7 +370,6 @@ function semiString(m){
     if(tag) addBranch(fr,idx,tag);
   });
 
-  // Insaturaciones (máx. 1)
   if(db.length && fr.length>1){
     const i=db[0];
     if(i>=1 && i<=n-1){ fr[i-1]=demoteOnce(fr[i-1]); fr[i]=demoteOnce(fr[i]); }
@@ -404,7 +387,7 @@ function semiString(m){
   return fr.join("-");
 }
 
-/* ========== SMILES (lineal + ramas) ========== */
+/* ========== SMILES ========== */
 function smilesFromMolecule(m){
   const {n, fg, posFG, db, tb, subs} = m;
   const dbl = new Set(db.map(x=>x-0));
@@ -420,19 +403,15 @@ function smilesFromMolecule(m){
   let base = Array(n).fill("C");
 
   if(fg==="acido"){ base[n-1] = "C(=O)O"; }
-  else if(fg==="nitrilo"){ base[0] = "C#N"; }   // terminal en C1
+  else if(fg==="nitrilo"){ base[0] = "C#N"; }
   else if(fg==="aldehido"){ base[n-1] = "C=O"; }
   else if(fg==="cetona"){ const p=(posFG[0]||2)-1; base[p] = "C(=O)"; }
   else if(fg==="alcohol"){ const p=(posFG[0]||1)-1; base[p] = base[p] + "O"; }
   else if(fg==="amina"){ const p=(posFG[0]||1)-1; base[p] = base[p] + "N"; }
 
-  // Construcción lineal
   let chainParts = [base[0]];
-  for(let i=1;i<n;i++){
-    chainParts.push((bonds[i-1]||"") + base[i]);
-  }
+  for(let i=1;i<n;i++){ chainParts.push((bonds[i-1]||"") + base[i]); }
 
-  // Ramas
   function branchSMI(type){
     if(type==="metil") return "C";
     if(type==="etil") return "CC";
@@ -447,7 +426,6 @@ function smilesFromMolecule(m){
     if(type==="nitro") return "[N+](=O)[O-]";
     return "";
   }
-
   subs.forEach(({pos,type})=>{
     const i = pos-1;
     const sm = branchSMI(type);
@@ -486,13 +464,13 @@ function renderMolecula(){
   $("#semi").textContent = semiString(MOL);
   $("#familia").textContent = familiaTexto(MOL);
   $("#formula").textContent = MOL.formula;
-  $("#molImg").src = IMG_BLANK; // en blanco hasta pulsar “Generar imagen”
+  $("#molImg").src = IMG_BLANK;
   $("#status").className="status ok";
   $("#status").textContent="Molécula nueva y validada";
   updateBadges();
 }
 
-/* ========== Nueva cadena con VALIDACIÓN + NO REPETIR (SMILES → CID) ========== */
+/* ========== Nueva cadena con validación ========== */
 async function nuevaCadena(){
   $("#molImg").src = IMG_BLANK;
   $("#newBtn").disabled = true;
@@ -500,34 +478,36 @@ async function nuevaCadena(){
   $("#status").className="status hint";
   $("#status").textContent="Generando y validando...";
 
-  const MAX_TRIES = 60; // más intentos para evitar repetir
+  const MAX_TRIES = 60;
   const targetLen = getUserLen();
 
   for(let tries=0; tries<MAX_TRIES; tries++){
     const cand = orient(genMolecula(targetLen));
 
-    // Coherencias rápidas
     const needsO = ["acido","aldehido","cetona","alcohol"].includes(cand.fg) || cand.subs.some(s=>["metoxi","etoxi","hidroxi","nitro"].includes(s.type));
     if(needsO && !/O/.test(cand.formula)) continue;
     if(cand.fg==="aldehido" && cand.db.includes(cand.n-1)) continue;
     if(cand.fg==="acido" && cand.db.includes(cand.n-1)) continue;
 
-    // SMILES → CID
     const smiles = smilesFromMolecule(cand);
     const cid = await fetchCIDBySmiles(smiles);
     if(!cid) continue;
 
     const cidStr = String(cid);
-    if(SEEN_CIDS.has(cidStr)) continue; // ya visto → descarta
+    if(SEEN_CIDS.has(cidStr)) continue;
 
-    // Acepta: guarda en historial y muestra
     SEEN_CIDS.add(cidStr);
     saveSeenCIDs(SEEN_CIDS);
 
     MOL = {...cand, smiles, cid};
     renderMolecula();
     $("#newBtn").disabled = false;
-    $("#imgBtn").disabled = false; // activado SOLO tras validación
+    $("#imgBtn").disabled = false;
+
+    // [AUTO] Si está activado, genera la imagen automáticamente
+    if ($('#autoImg') && $('#autoImg').checked){
+      await generarImagen();
+    }
     return;
   }
 
@@ -537,10 +517,10 @@ async function nuevaCadena(){
   $("#imgBtn").disabled = true;
 }
 
-/* ========== Imagen desde SMILES (bloqueo del botón tras usarlo) ========== */
+/* ========== Imagen desde SMILES ========== */
 async function generarImagen(){
   try{
-    $("#imgBtn").disabled = true; // se desactiva al pulsar y queda así hasta “Nueva cadena”
+    $("#imgBtn").disabled = true;
     $("#molImg").src = IMG_LOADING;
     $("#status").className="status hint";
     $("#status").textContent="Generando imagen…";
@@ -559,13 +539,12 @@ async function generarImagen(){
       $("#molImg").src = url;
       $("#status").className="status ok";
       $("#status").textContent="Imagen generada";
-      // botón permanece deshabilitado hasta “Nueva cadena”
     };
     probe.onerror = ()=>{
       $("#status").className="status bad";
       $("#status").textContent="No se pudo generar la imagen.";
       $("#molImg").src = IMG_BLANK;
-      // Si quieres permitir reintento sin «Nueva cadena», descomenta:
+      // Si quisieras permitir reintento manual:
       // $("#imgBtn").disabled = false;
     };
     probe.src = url;
@@ -583,6 +562,11 @@ $("#newBtn").addEventListener("click", nuevaCadena);
 $("#imgBtn").addEventListener("click", generarImagen);
 $("#showFam").addEventListener("change", updateBadges);
 $("#showFor").addEventListener("change", updateBadges);
+
+// [AUTO] Cargar estado del toggle y escuchar cambios
+const autoInitial = loadAuto();
+if ($('#autoImg')) { $('#autoImg').checked = autoInitial; }
+$('#autoImg').addEventListener('change', e=> saveAuto(e.target.checked));
 
 nuevaCadena();
 </script>
