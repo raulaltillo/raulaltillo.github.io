@@ -42,7 +42,6 @@
            background:#1a1a1a; border:1px solid #000; border-radius:8px }
 
   .actions{ margin-top:16px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
-  /* [AUTO] Estilo simple para el toggle */
   .toggle{ display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border-radius:10px; background:#1f1f1f; border:1px solid #000 }
   .toggle input{ accent-color:#22d3ee; }
   @media (max-width: 900px){
@@ -95,7 +94,6 @@
         <button id="newBtn" class="btn secondary">Nueva cadena</button>
         <button id="imgBtn" class="btn">Generar imagen</button>
 
-        <!-- [AUTO] Toggle Auto junto al botón -->
         <label class="toggle" title="Generar imagen automáticamente al crear una nueva cadena">
           <input id="autoImg" type="checkbox">
           <span class="hint">Auto</span>
@@ -196,8 +194,14 @@ const SUBS_TYPES = {
 const rint = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 const choice = (arr)=>arr[Math.floor(Math.random()*arr.length)];
 
-/* ========== Generación (más estricta) ========== */
-const FAMILIAS = ["acido","nitrilo","aldehido","cetona","alcohol","amina","alqueno","alquino","alcano","halogenuro","nitro"];
+/* ========== Generación (ahora con éteres y amidas) ========== */
+const FAMILIAS = [
+  "acido","nitrilo","aldehido","cetona","alcohol","amina",
+  "amida",
+  "eter",
+  "ester",
+  "alqueno","alquino","alcano","halogenuro","nitro"
+];
 
 function genUnsat(n, minPos = 1){
   if(n < 2) return { db: [], tb: [] };
@@ -221,7 +225,7 @@ function genSustituyentes(n, fg){
   for(let i=0;i<count;i++){
     const type = choice(pool);
     let p = rint(1,n);
-    if((fg==="acido"||fg==="nitrilo"||fg==="aldehido") && p===1) p = Math.min(2,n);
+    if((fg==="acido"||fg==="nitrilo"||fg==="aldehido"||fg==="amida" || fg==="ester") && p===1) p = Math.min(2,n);
     const k = `${p}`;
     used.set(k, (used.get(k)||0)+1);
     if(used.get(k) > 2){ i--; continue; }
@@ -235,6 +239,7 @@ function genMolecula(nOverride){
   const fam = choice(FAMILIAS);
   let n = nFixed;
   let fg=null,posFG=[],db=[],tb=[],subs=[],formula="";
+  let esterR = 0;
 
   if(fam==="acido"){ fg="acido"; posFG=[1]; }
   else if(fam==="nitrilo"){ fg="nitrilo"; posFG=[1]; subs=genSustituyentes(n,fg); }
@@ -242,6 +247,24 @@ function genMolecula(nOverride){
   else if(fam==="cetona"){ fg="cetona"; posFG=[rint(2,n-1)]; subs=genSustituyentes(n,fg); }
   else if(fam==="alcohol"){ fg="alcohol"; posFG=[ n===1?1:rint(1,n) ]; subs=genSustituyentes(n,fg); }
   else if(fam==="amina"){ fg="amina"; posFG=[ n===1?1:rint(1,n) ]; subs=genSustituyentes(n,fg); }
+    else if(fam==="ester"){            /* NUEVO: ESTER */
+    fg="ester"; posFG=[1]; ({db,tb}={db:[],tb:[]});
+    esterR = choice([1,2]);          // 1 = –OCH3 ; 2 = –OCH2CH3
+    subs = genSustituyentes(n, fg);
+  }
+  /* NUEVO: amida como FG terminal (–CONH2) */
+  else if(fam==="amida"){ fg="amida"; posFG=[1]; ({db,tb}={db:[],tb:[]}); subs=genSustituyentes(n,fg); }
+
+  /* NUEVO: “éter” — lo representamos como un alcano con un sustituyente alcoxi (–O–R).
+     Garantizamos al menos un metoxi/etoxi para que sea un éter. */
+  else if(fam==="eter"){
+    fg="eter"; ({db,tb}=genUnsat(n));
+    // al menos un alcoxi
+    const p = rint(1,n);
+    const t = choice(["metoxi","etoxi"]);
+    subs = [{pos:p, type:t}].concat(genSustituyentes(n, null));
+  }
+
   else if(fam==="alqueno"){ ({db,tb}=genUnsat(n)); if(!db.length){ db=[rint(1,n-1)]; tb=[]; } subs=genSustituyentes(n,null); }
   else if(fam==="alquino"){ ({db,tb}=genUnsat(n)); if(!tb.length){ tb=[rint(1,n-1)]; db=[]; } subs=genSustituyentes(n,null); }
   else if(fam==="halogenuro"){ db=[]; tb=[]; let k=rint(1,2); subs=[]; while(k--) subs.push({pos:rint(1,n), type:choice(["fluoro","cloro","bromo","iodo"])}); subs=subs.concat(genSustituyentes(n,null)); }
@@ -258,6 +281,14 @@ function genMolecula(nOverride){
     else if(fg==="cetona"){ O+=1; H-=2; }
     else if(fg==="alcohol"){ O+=1; }
     else if(fg==="amina"){ N+=1; H+=1; }
+    else if(fg==="amida"){ O+=1; N+=1; H-=1; }
+        else if(fg==="ester"){           /* NUEVO: ESTER */
+      O += 2;                        // C(=O)O–
+      H -= 2;                        // efecto carbonilo vs alcano terminal
+      if(esterR===1){ C += 1; H += 3; }   // –OCH3
+      else if(esterR===2){ C += 2; H += 5; } // –OCH2CH3
+    }
+    // Nota: fg==="eter" no suma O aquí porque garantizamos un sustituyente alcoxi que lo añade.
 
     subs.forEach(s=>{
       if(s.type==="metil"){ C+=1; H+=2; }
@@ -283,7 +314,7 @@ function genMolecula(nOverride){
   }
   formula = computeFormula(n,db,tb,fg,subs);
 
-  return {n,fg:fg,posFG,db,tb,subs,formula};
+  return {n,fg:fg,posFG,db,tb,subs,formula, esterR};
 }
 
 /* ========== Orientación (LCML) ========== */
@@ -291,8 +322,8 @@ function mirrorPos(n,p){ return n+1-p; }
 function mirrorBonds(n,arr){ return arr.map(p=>(n-p)).sort((a,b)=>a-b); }
 function orientationKey(m,flip){
   const n=m.n;
-  const anchorFG=(m.fg==="acido"||m.fg==="nitrilo"||m.fg==="aldehido");
-  const fgLoc=anchorFG?[1]:(flip? m.posFG.map(p=>mirrorPos(n,p)).sort((a,b)=>a-b):[...m.posFG].sort((a,b)=>a-b));
+  const anchor=(m.fg==="acido"||m.fg==="nitrilo"||m.fg==="aldehido"||m.fg==="amida"); /* amida ancla */
+  const fgLoc=anchor?[1]:(flip? m.posFG.map(p=>mirrorPos(n,p)).sort((a,b)=>a-b):[...m.posFG].sort((a,b)=>a-b));
   const d=flip? mirrorBonds(n,m.db):[...m.db].sort((a,b)=>a-b);
   const t=flip? mirrorBonds(n,m.tb):[...m.tb].sort((a,b)=>a-b);
   const s=(flip? m.subs.map(x=>mirrorPos(n,x.pos)):m.subs.map(x=>x.pos)).sort((a,b)=>a-b);
@@ -307,7 +338,7 @@ function lexLess(a,b){
   return false;
 }
 function orient(m){
-  const n=m.n, anchor=(m.fg==="acido"||m.fg==="nitrilo"||m.fg==="aldehido");
+  const n=m.n, anchor=(m.fg==="acido"||m.fg==="nitrilo"||m.fg==="aldehido"||m.fg==="amida"||m.fg==="ester");
   if(anchor){
     if(m.posFG[0]!==1){
       const subs=m.subs.map(s=>({pos:n+1-s.pos,type:s.type}));
@@ -347,7 +378,7 @@ function demoteOnce(tok){
 function demoteTwice(tok){ return demoteOnce(demoteOnce(tok)); }
 
 function semiString(m){
-  const {n, fg, posFG, db, tb, subs} = m;
+  const {n, fg, posFG, db, tb, subs, esterR} = m;
   let fr = semiBase(n);
 
   if(fg==="acido"){ fr[n-1]="C(=O)OH"; }
@@ -356,6 +387,14 @@ function semiString(m){
   if(fg==="cetona"){ const p=(posFG[0]||2)-1; fr[p]="C(=O)"; }
   if(fg==="alcohol"){ const p=(posFG[0]||1)-1; fr[p]=(p===0||p===n-1)?"CH2OH":"CHOH"; }
   if(fg==="amina"){ const p=(posFG[0]||1)-1; fr[p]=(fr[p]==="CH3"||fr[p]==="CH2")?"CH(NH2)":(fr[p]+"(NH2)"); }
+  if(fg==="amida"){ fr[n-1]="C(=O)NH2"; } /* NUEVO: amida terminal */
+    if(fg==="ester"){ /* NUEVO: ESTER */
+    // colocamos el carbonilo en el extremo derecho de la cadena principal
+    // y colgamos R' del oxígeno como –OCH3 / –OCH2CH3
+    const tail = (esterR===1) ? "OCH3" : "OCH2CH3";
+    fr[n-1] = "C(=O)"+tail;
+  }
+  // fg==="eter": no se toca aquí; lo expresamos como sustituyente alcoxi en 'subs'
 
   subs.forEach(({pos,type})=>{
     const idx=pos-1;
@@ -390,9 +429,9 @@ function semiString(m){
   return fr.join("-");
 }
 
-/* ========== SMILES ========== */
+/* ========== SMILES (para imagen PubChem) ========== */
 function smilesFromMolecule(m){
-  const {n, fg, posFG, db, tb, subs} = m;
+  const {n, fg, posFG, db, tb, subs, esterR} = m;
   const dbl = new Set(db.map(x=>x-0));
   const tpl = new Set(tb.map(x=>x-0));
 
@@ -411,6 +450,12 @@ function smilesFromMolecule(m){
   else if(fg==="cetona"){ const p=(posFG[0]||2)-1; base[p] = "C(=O)"; }
   else if(fg==="alcohol"){ const p=(posFG[0]||1)-1; base[p] = base[p] + "O"; }
   else if(fg==="amina"){ const p=(posFG[0]||1)-1; base[p] = base[p] + "N"; }
+  else if(fg==="amida"){ base[n-1] = "C(=O)N"; } /* NUEVO */
+  else if(fg==="ester"){ /* NUEVO: ESTER */
+    // –C(=O)O + R' lineal sencillo
+    const r = (esterR===1) ? "C" : "CC";
+    base[n-1] = "C(=O)O"+r;
+  }
 
   let chainParts = [base[0]];
   for(let i=1;i<n;i++){ chainParts.push((bonds[i-1]||"") + base[i]); }
@@ -487,10 +532,12 @@ async function nuevaCadena(){
   for(let tries=0; tries<MAX_TRIES; tries++){
     const cand = orient(genMolecula(targetLen));
 
-    const needsO = ["acido","aldehido","cetona","alcohol"].includes(cand.fg) || cand.subs.some(s=>["metoxi","etoxi","hidroxi","nitro"].includes(s.type));
+  const needsO = (
+    ["acido","aldehido","cetona","alcohol","amida","eter","ester"].includes(cand.fg) || /* NUEVO: ester */
+    cand.subs.some(s=>["metoxi","etoxi","hidroxi","nitro"].includes(s.type))
+  );
     if(needsO && !/O/.test(cand.formula)) continue;
-    if(cand.fg==="aldehido" && cand.db.includes(cand.n-1)) continue;
-    if(cand.fg==="acido" && cand.db.includes(cand.n-1)) continue;
+  if(["acido","aldehido","amida","ester"].includes(cand.fg) && (cand.db.includes(cand.n-1) || cand.tb.includes(cand.n-1))) continue;
 
     const smiles = smilesFromMolecule(cand);
     const cid = await fetchCIDBySmiles(smiles);
@@ -507,7 +554,6 @@ async function nuevaCadena(){
     $("#newBtn").disabled = false;
     $("#imgBtn").disabled = false;
 
-    // [AUTO] Si está activado, genera la imagen automáticamente
     if ($('#autoImg') && $('#autoImg').checked){
       await generarImagen();
     }
@@ -542,13 +588,13 @@ async function generarImagen(){
       $("#molImg").src = url;
       $("#status").className="status ok";
       $("#status").textContent="Imagen generada";
+      $("#imgBtn").disabled = false;
     };
     probe.onerror = ()=>{
       $("#status").className="status bad";
       $("#status").textContent="No se pudo generar la imagen.";
       $("#molImg").src = IMG_BLANK;
-      // Si quisieras permitir reintento manual:
-      // $("#imgBtn").disabled = false;
+      $("#imgBtn").disabled = false;
     };
     probe.src = url;
 
@@ -556,17 +602,37 @@ async function generarImagen(){
     $("#status").className="status bad";
     $("#status").textContent="Error generando la imagen.";
     $("#molImg").src = IMG_BLANK;
+    $("#imgBtn").disabled = false;
   }
 }
 
 /* ========== Eventos y arranque ========== */
+function mountLengthSlider(){
+  const actions = document.querySelector('.actions');
+  if(!actions || $('#lenSlider')) return;
+
+  const sliderWrap = document.createElement('div');
+  sliderWrap.className = 'row';
+  sliderWrap.style.gap = '8px';
+  sliderWrap.style.alignItems = 'center';
+
+  sliderWrap.innerHTML = `
+    <label class="hint" style="white-space:nowrap;">Longitud: <strong id="lenVal">5</strong> C</label>
+    <input id="lenSlider" type="range" min="3" max="9" step="1" value="5" style="width:180px; accent-color:#22d3ee;">
+  `;
+
+  actions.insertBefore(sliderWrap, actions.firstChild);
+
+  const slider = $('#lenSlider');
+  slider.addEventListener('input', ()=>{ $('#lenVal').textContent = slider.value; });
+}
 mountLengthSlider();
+
 $("#newBtn").addEventListener("click", nuevaCadena);
 $("#imgBtn").addEventListener("click", generarImagen);
 $("#showFam").addEventListener("change", updateBadges);
 $("#showFor").addEventListener("change", updateBadges);
 
-// [AUTO] Cargar estado del toggle y escuchar cambios
 const autoInitial = loadAuto();
 if ($('#autoImg')) { $('#autoImg').checked = autoInitial; }
 $('#autoImg').addEventListener('change', e=> saveAuto(e.target.checked));
