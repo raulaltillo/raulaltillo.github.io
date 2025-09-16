@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Reacciones organicas (quiz) | Raulaltillo</title>
+<link rel="icon" href="../favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="../main.css">
+<style>
+  :root{ --ink:#e5e7eb; --muted:#9ca3af; --card:#2d2d2d; --border:#0b0b0b; --ok:#22c55e; --bad:#ef4444; --accent:#22d3ee; }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{ color:var(--ink); background:#1a1a1a; font-family: Arial, Helvetica, sans-serif; }
+  .app{ max-width:1100px; background:var(--card); border:solid 15px var(--border);
+        border-radius:12px; padding:24px; margin: 24px auto }
+  h1{ margin:0 0 4px; font-family: Hacked; font-weight:400; letter-spacing:.2px }
+  .sub{ color:var(--muted); margin:0 0 16px }
+  .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:16px }
+  .card{ background:var(--card); border:solid 15px var(--border); border-radius:12px; padding:16px }
+  .label{ color:#e0e0e0; font-size:12px; text-transform:uppercase; letter-spacing:.08em; font-family:Hacked }
+  .big{ font-size:22px; font-weight:700; margin:6px 0 0 }
+  .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace }
+  .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+  .btn{ appearance:none; border:none; background:#2D7A5E; color:#e0e0e0; font-weight:800;
+        padding:12px 16px; border-radius:12px; cursor:pointer; transition:background-color .2s }
+  .btn.secondary{ background:#3d3d3d }
+  .btn:hover{ filter:brightness(1.05) }
+  .status{ margin-top:8px; font-weight:700; color:var(--muted) }
+  .ok{ color:var(--ok) } .bad{ color:var(--bad) }
+  .pill{ display:inline-block; padding:4px 8px; border-radius:999px; border:1px solid #1f2937; background:#1a1a1a; color:#e0e0e0; font-size:12px }
+  .kbd{ font-size:12px; border:1px solid #374151; background:#1a1a1a; padding:.2em .45em; border-radius:6px }
+  input[type=text]{ width:100%; padding:12px 14px; border-radius:12px; border:1px solid #000; background:#1a1a1a; color:#e0e0e0 }
+  input[type=text]::placeholder{ color:#6b7280 }
+  @media (max-width: 980px){ .grid{ grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <div class="topnav">
+    <img class="title" id="weather-icon" src="../images/weather-icon-illustration03-Graphics-10205167-1.png" alt="Clima actual" width="50px">
+    <a href="../pages/horario.html">Horario</a>
+    <a href="../pages/menu.html">Menu</a>
+    <a href="../pages/selectividad.html">Selectividad</a>
+    <a href="../pages/herramientas.html" class="active">Herramientas</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
+  </div>
+
+  <div id="content">
+    <br><br><br><br>
+    <div class="app" style="margin-top:0px;">
+      <h1>Reacciones organicas — Quiz</h1>
+      <p class="sub">Aparece un sustrato aleatorio y se le propone una reaccion posible. ¡Adivina lo que te pida el enunciado!</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="label">Sustrato (formula semidesarrollada)</div>
+          <div id="substrate" class="big mono">—</div>
+          <div class="row" style="margin-top:8px">
+            <span class="pill">Familia: <span id="fam">—</span></span>
+            <span class="pill">Formula: <span id="mf">—</span></span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="label">Reaccion prevista</div>
+          <div id="rxnHead" class="big">—</div>
+          <div id="rxnCond" class="status">—</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div class="label" id="qLabel">Tu respuesta</div>
+        <div class="row" style="margin-top:6px">
+          <input id="answer" type="text" placeholder="Escribe aqui y pulsa Enter" />
+          <button id="checkBtn" class="btn">Comprobar <span class="kbd">Enter</span></button>
+          <button id="skipBtn" class="btn secondary" title="Nueva pregunta (no puntua)">Saltar</button>
+        </div>
+        <div id="status" class="status">—</div>
+        <div id="reveal" class="status" style="display:none; margin-top:10px"></div>
+      </div>
+
+      <div class="row" style="margin-top:8px">
+        <span id="score" class="pill">Aciertos: 0/0</span>
+        <span class="pill" id="modeTag">Modo: —</span>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ===== Utils ===== */
+const $ = (sel)=>document.querySelector(sel);
+const rint = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const choice = (arr)=>arr[Math.floor(Math.random()*arr.length)];
+const norm = s => s.toLowerCase()
+  .normalize('NFD').replace(/[\u0300-\u036f]/g,'') // sin acentos
+  .replace(/\s+/g,' ').trim();
+
+const normSemi = s => s.toUpperCase().replace(/\s+/g,'')
+  .replace(/[-–—]/g,'').replace(/=/g,'=').replace(/≡/g,'#');
+
+/* ===== Simple molecule generator (lineal) ===== */
+const PREF = {1:"met",2:"et",3:"prop",4:"but",5:"pent",6:"hex",7:"hept",8:"oct",9:"non",10:"dec"};
+
+function semiAlkane(n){
+  if(n===1) return "CH4";
+  if(n===2) return "CH3-CH3";
+  return "CH3-" + Array(n-2).fill("CH2").join("-") + "-CH3";
+}
+function semiAlkene(n, pos){ // pos = enlace entre Cpos y Cpos+1 (1..n-1)
+  const fr = (n===2? ["CH3","CH3"] : ["CH3", ...Array(n-2).fill("CH2"), "CH3"]);
+  const L=pos-1, R=pos;
+  fr[L] = (L===0? "CH2" : "CH");
+  fr[R] = (R===n-1? "CH2" : "CH");
+  const parts=[];
+  for(let i=0;i<n;i++){ parts.push(fr[i]); if(i===pos-1) parts.push("="); else if(i<n-1) parts.push("-"); }
+  return parts.join("");
+}
+function semiAlkyne(n, pos){
+  const fr = (n===2? ["CH3","CH3"] : ["CH3", ...Array(n-2).fill("CH2"), "CH3"]);
+  const L=pos-1, R=pos;
+  fr[L] = (L===0? "CH" : "C");
+  fr[R] = (R===n-1? "CH" : "C");
+  const parts=[];
+  for(let i=0;i<n;i++){ parts.push(fr[i]); if(i===pos-1) parts.push("≡"); else if(i<n-1) parts.push("-"); }
+  return parts.join("");
+}
+function semiAlcohol(n, pos){
+  const fr = (n===2? ["CH3","CH3"] : ["CH3", ...Array(n-2).fill("CH2"), "CH3"]);
+  const i=pos-1;
+  fr[i] = (i===0||i===n-1) ? "CH2OH" : "CHOH";
+  return fr.join("-");
+}
+function semiHalide(n, pos, X){
+  const fr = (n===2? ["CH3","CH3"] : ["CH3", ...Array(n-2).fill("CH2"), "CH3"]);
+  const i=pos-1;
+  fr[i] = (fr[i]==="CH3"||fr[i]==="CH2") ? `CH2${X}` : `CH(${X})`;
+  return fr.join("-");
+}
+function semiAcid(n){
+  if(n===1) return "H-COOH";
+  return "CH3-" + (n===2 ? "" : Array(n-2).fill("CH2").join("-")+"-") + "COOH";
+}
+function semiKetone(n, pos){
+  const left = pos, right = n-pos;
+  const leftStr = (left===1) ? "CO" : (left===2 ? "CH3-CO" : "CH3-" + Array(left-2).fill("CH2").join("-") + "-CO");
+  const rightStr = (right===0) ? "" : (right===1? "-CH3" : "-CH2-" + Array(right-2).fill("CH2").join("-") + "-CH3");
+  return leftStr + rightStr;
+}
+function semiAldehyde(n){
+  if(n===1) return "H-CHO";
+  return "CHO-" + (n===2? "CH3" : "CH3-" + Array(n-2).fill("CH2").join("-"));
+}
+function semiAmine(n, pos){
+  const fr = (n===2? ["CH3","CH3"] : ["CH3", ...Array(n-2).fill("CH2"), "CH3"]);
+  const i=pos-1;
+  fr[i] = (fr[i]==="CH3"||fr[i]==="CH2") ? "CH(NH2)" : (fr[i]+"(NH2)");
+  return fr.join("-");
+}
+function semiNitro(n, pos){
+  const fr = (n===2? ["CH3","CH3"] : ["CH3", ...Array(n-2).fill("CH2"), "CH3"]);
+  const i=pos-1;
+  fr[i] = (fr[i]==="CH3"||fr[i]==="CH2") ? "CH2NO2" : "CH(NO2)";
+  return fr.join("-");
+}
+function semiNitrile(n){
+  if(n===1) return "HC≡N";
+  return "NC-" + (n===2? "CH3" : "CH3-" + Array(n-2).fill("CH2").join("-"));
+}
+function semiEster(n, rPrime=1){
+  const tail = (rPrime===1) ? "OCH3" : "OCH2CH3";
+  if(n===1) return "H-COO-"+(rPrime===1?"CH3":"CH2-CH3");
+  return "CH3-" + (n===2 ? "" : Array(n-2).fill("CH2").join("-")+"-") + "C(=O)"+tail;
+}
+
+/* ===== Random substrate ===== */
+const FAMS = ["alcano","alqueno","alquino","alcohol","halogenuro","acido","cetona","aldehido","amina","nitro","nitrilo","aromatico"];
+function genSubstrate(){
+  const fam = choice(FAMS);
+  const n = rint(3,7);
+  let s="—", mf="—", meta={};
+
+  if(fam==="alcano"){
+    s = semiAlkane(n); mf = `C${n}H${2*n+2}`;
+  }else if(fam==="alqueno"){
+    const pos = rint(1,n-1);
+    s = semiAlkene(n,pos); mf = `C${n}H${2*n}`; meta.pos=pos;
+  }else if(fam==="alquino"){
+    const pos = rint(1,n-1);
+    s = semiAlkyne(n,pos); mf = `C${n}H${2*n-2}`; meta.pos=pos;
+  }else if(fam==="alcohol"){
+    const pos = rint(1,n);
+    s = semiAlcohol(n,pos); mf = `C${n}H${2*n+2}O`; meta.pos=pos;
+  }else if(fam==="halogenuro"){
+    const pos = rint(1,n); const X = choice(["Cl","Br"]);
+    s = semiHalide(n,pos,X); mf = `C${n}H${2*n+2}${X}`; meta.pos=pos; meta.X=X;
+  }else if(fam==="acido"){
+    s = semiAcid(n); mf = `C${n}H${2*n}O2`;
+  }else if(fam==="cetona"){
+    const pos = rint(2,n-1);
+    s = semiKetone(n,pos); mf = `C${n}H${2*n}O`; meta.pos=pos;
+  }else if(fam==="aldehido"){
+    s = semiAldehyde(n); mf = `C${n}H${2*n}O`;
+  }else if(fam==="amina"){
+    const pos = rint(1,n);
+    s = semiAmine(n,pos); mf = `C${n}H${2*n+3}N`; meta.pos=pos;
+  }else if(fam==="nitro"){
+    const pos = rint(1,n); s = semiNitro(n,pos); mf = `C${n}H${2*n+1}NO2`; meta.pos=pos;
+  }else if(fam==="nitrilo"){
+    s = semiNitrile(n); mf = `C${n}H${2*n-1}N`;
+  }else if(fam==="aromatico"){
+    s = "C6H6 (benceno)"; mf = "C6H6"; meta.aromatico=true;
+  }
+
+  return {fam, n, semi:s, mf, meta};
+}
+
+/* ===== Reaction templates with quiz modes =====
+   mode ∈ { "tipo", "reactivo", "producto" } */
+const REACTIONS = [
+  // Radical halogenation (alcano)
+  { id:"halogenacion_alcano", modes:["tipo","reactivo","producto"], type:"sustitucion radicalaria",
+    applies:(m)=>m.fam==="alcano",
+    build:(m)=>{
+      const X2 = choice(["Cl2","Br2"]); const HX = X2==="Cl2"?"HCl":"HBr";
+      const prod = m.n>=2 ? m.semi.replace("CH3-","CH2" + (X2==="Cl2"?"Cl":"Br") + "-") : "CH3" + (X2==="Cl2"?"Cl":"Br");
+      return {
+        cond:"luz/Δ",
+        reag:[X2,"hv","luz"],
+        prod,
+        eq:`${m.semi} + ${X2} —hv→ ${prod} + ${HX}`,
+        why:"Un H del alcano es sustituido por X·."
+      };
+    }
+  },
+  // SEAr halogenation
+  { id:"sear_cloracion", modes:["tipo","reactivo","producto"], type:"sustitucion electrofila aromatica",
+    applies:(m)=>m.fam==="aromatico",
+    build:(m)=>({
+      cond:"AlCl3/FeCl3",
+      reag:["cl2","alcl3","fecl3"],
+      prod:"C6H5Cl (clorobenceno)",
+      eq:`C6H6 + Cl2 —AlCl3→ C6H5Cl + HCl`,
+      why:"Cloracion del benceno catalizada."
+    })
+  },
+  // SEAr nitration (corrige a HNO3/H2SO4)
+  { id:"sear_nitracion", modes:["tipo","reactivo","producto"], type:"sustitucion electrofila aromatica",
+    applies:(m)=>m.fam==="aromatico",
+    build:(m)=>({
+      cond:"HNO3/H2SO4",
+      reag:["hno3","h2so4","mezcla nitrante"],
+      prod:"C6H5NO2 (nitrobenceno)",
+      eq:`C6H6 + HNO3 —H2SO4→ C6H5NO2 + H2O`,
+      why:"Entrada de –NO2 por SEAr."
+    })
+  },
+  // SN (halogenuro → alcohol)
+  { id:"sn_haluro_a_oh", modes:["tipo","reactivo","producto"], type:"sustitucion nucleofila",
+    applies:(m)=>m.fam==="halogenuro",
+    build:(m)=>{
+      const X = m.meta?.X || "Cl";
+      const prod = m.semi.replace(X,"OH");
+      return {
+        cond:"aq/Δ",
+        reag:["naoh","oh-","koh"],
+        prod,
+        eq:`${m.semi} + NaOH —H2O→ ${prod} + Na${X}`,
+        why:"OH⁻ desplaza al haluro."
+      };
+    }
+  },
+  // Alcohol + HX → Halogenuro (SN)
+  { id:"oh_a_haluro", modes:["tipo","reactivo","producto"], type:"sustitucion nucleofila",
+    applies:(m)=>m.fam==="alcohol",
+    build:(m)=>{
+      const HX = choice(["HCl","HBr"]);
+      const X = HX.slice(1);
+      const prod = m.semi.replace(/CH2OH\b/,"CH2"+X).replace(/CHOH\b/,"CH("+X+")");
+      return {
+        cond:"HX",
+        reag:[HX.toLowerCase()],
+        prod,
+        eq:`${m.semi} + ${HX} → ${prod} + H2O`,
+        why:"–OH se protona y es sustituido por X⁻."
+      };
+    }
+  },
+  // Adiciones
+  { id:"hidrogenacion", modes:["tipo","reactivo","producto"], type:"adicion",
+    applies:(m)=>["alqueno","alquino"].includes(m.fam),
+    build:(m)=>{
+      if(m.fam==="alqueno"){
+        return { cond:"Ni/Pt", reag:["h2","hidrogeno"], prod:semiAlkane(m.n),
+          eq:`${m.semi} + H2 —Ni→ ${semiAlkane(m.n)}`, why:"Se satura el doble enlace." };
+      }else{
+        const pos = m.meta?.pos || 1;
+        return { cond:"Ni/Pt", reag:["h2","hidrogeno"], prod:semiAlkene(m.n,pos),
+          eq:`${m.semi} + H2 —Ni→ ${semiAlkene(m.n,pos)}`, why:"Reduccion parcial del triple a doble." };
+      }
+    }
+  },
+  { id:"halogenacion_doble", modes:["tipo","reactivo","producto"], type:"adicion",
+    applies:(m)=>["alqueno","alquino"].includes(m.fam),
+    build:(m)=>{
+      const X2 = choice(["Cl2","Br2"]);
+      if(m.fam==="alqueno"){
+        const pos = m.meta?.pos || 1;
+        let prod = m.semi.replace("=","-");
+        // anadir X en ambos C del doble (aprox visual)
+        if(pos===1){ prod = prod.replace("CH2-CH","CH2"+X2[0]+"-CH"+X2[0]); }
+        return { cond:"", reag:[X2.toLowerCase()], prod,
+          eq:`${m.semi} + ${X2} → ${prod}`, why:"Adicion vicinal de X₂." };
+      }else{
+        return { cond:"2 eq.", reag:[X2.toLowerCase()], prod:"dihalogenado (generico)",
+          eq:`${m.semi} + 2${X2} → (dihalogenado)`, why:"Adicion secuencial sobre el triple." };
+      }
+    }
+  },
+  { id:"hidrohalogenacion", modes:["tipo","reactivo","producto"], type:"adicion",
+    applies:(m)=>m.fam==="alqueno",
+    build:(m)=>{
+      const HX = choice(["HCl","HBr"]);
+      const X = HX.slice(1);
+      const pos = m.meta?.pos || 1;
+      let prod = m.semi.replace("=","-");
+      if(pos===1){ prod = prod.replace("CH2-CH","CH3-CH("+X+")"); }
+      return { cond:"Markovnikov", reag:[HX.toLowerCase()], prod,
+        eq:`${m.semi} + ${HX} → ${prod}`, why:"H al C con mas H previos; X al mas sustituido." };
+    }
+  },
+  { id:"hidratacion", modes:["tipo","reactivo","producto"], type:"adicion",
+    applies:(m)=>m.fam==="alqueno",
+    build:(m)=>{
+      const pos = m.meta?.pos || 1;
+      let prod = m.semi.replace("=","-");
+      if(pos===1){ prod = prod.replace("CH2-CH","CH3-CH(OH)"); }
+      return { cond:"H2SO4 (cat.)", reag:["h2so4","agua","h2o"], prod,
+        eq:`${m.semi} + H2O —H2SO4→ ${prod}`, why:"Hidratacion (Markovnikov)." };
+    }
+  },
+  // Eliminaciones
+  { id:"deshidrohalogenacion", modes:["tipo","reactivo","producto"], type:"eliminacion",
+    applies:(m)=>m.fam==="halogenuro",
+    build:(m)=>{
+      const pos = m.meta?.pos || 2;
+      const X = m.meta?.X || "Cl";
+      const prod = (pos>1) ? semiAlkene(m.n, pos-1) : semiAlkene(m.n, pos);
+      return {
+        cond:"KOH/EtOH, Δ", reag:["koh","base"],
+        prod, eq:`${m.semi} —KOH/EtOH→ ${prod} + H${X}`,
+        why:"Eliminacion de HX (Saytzeff)."
+      };
+    }
+  },
+  { id:"deshidratacion", modes:["tipo","reactivo","producto"], type:"eliminacion",
+    applies:(m)=>m.fam==="alcohol",
+    build:(m)=>{
+      const pos = m.meta?.pos || 2;
+      const prod = (pos>1) ? semiAlkene(m.n, pos-1) : semiAlkene(m.n, pos);
+      return {
+        cond:"H2SO4, Δ", reag:["h2so4"],
+        prod, eq:`${m.semi} —H2SO4, Δ→ ${prod} + H2O`,
+        why:"Perdida de H y –OH adyacentes."
+      };
+    }
+  },
+  // Esterificacion (solo tipo/reactivo; producto aproximado)
+  { id:"esterificacion", modes:["tipo","reactivo","producto"], type:"esterificacion",
+    applies:(m)=>m.fam==="alcohol"||m.fam==="acido",
+    build:(m)=>{
+      if(m.fam==="alcohol"){
+        const nAc = rint(2,4);
+        const acid = semiAcid(nAc);
+        const est = semiEster(nAc, 1);
+        return { cond:"H2SO4 (cat.)", reag:["h2so4","acido"], prod:est,
+          eq:`${m.semi} + ${acid} ⇌ ${est} + H2O`, why:"Fischer: acido + alcohol." };
+      }else{
+        const nAl = rint(2,4);
+        const alc = semiAlcohol(nAl, choice([1,nAl]));
+        const est = semiEster(m.n, 1);
+        return { cond:"H2SO4 (cat.)", reag:["h2so4","alcohol"], prod:est,
+          eq:`${m.semi} + ${alc} ⇌ ${est} + H2O`, why:"Fischer: acido + alcohol." };
+      }
+    }
+  },
+  // Combustion (solo tipo/reactivo; evitamos producto exacto)
+  { id:"combustion", modes:["tipo","reactivo"], type:"oxidacion",
+    applies:(m)=>["alcano","alqueno","alquino","aromatico"].includes(m.fam),
+    build:(m)=>({ cond:"O2", reag:["o2","oxigeno"], prod:"CO2 + H2O",
+      eq:`${m.semi} + O2 → CO2 + H2O`, why:"Oxidacion completa." })
+  },
+];
+
+/* ===== Quiz engine ===== */
+const MODES_LABEL = {
+  tipo:"¿Que tipo de reaccion es?",
+  reactivo:"¿Cual es el reactivo/condicion clave?",
+  producto:"Escribe el producto organico principal (semidesarrollada)"
+};
+
+let esperandoSiguiente=false, aciertos=0, preguntas=0;
+let S=null, R=null, DATA=null, MODE=null;
+let RESPUESTAS = new Set();
+
+function actualizarMarcador(){ $("#score").textContent = `Aciertos: ${aciertos}/${preguntas}`; }
+
+function pickReaction(mol){
+  const pool = REACTIONS.filter(r=>r.applies(mol));
+  return pool.length? choice(pool) : null;
+}
+
+function buildAcceptedAnswers(){
+  RESPUESTAS.clear();
+  if(!R || !DATA) return;
+  if(MODE==="tipo"){
+    const t = R.type;
+    const alts = [t, t.replace(/\s+/g,' ')];
+    alts.forEach(x=>RESPUESTAS.add(norm(x)));
+  }else if(MODE==="reactivo"){
+    DATA.reag.forEach(k=>RESPUESTAS.add(norm(k)));
+  }else if(MODE==="producto"){
+    RESPUESTAS.add(normSemi(DATA.prod));
+  }
+}
+
+function renderQuestion(){
+  $("#substrate").textContent = S.semi;
+  $("#fam").textContent = S.fam;
+  $("#mf").textContent = S.mf;
+  $("#rxnHead").textContent = `Reaccion: ${R.type}`;
+  $("#rxnCond").textContent = `Condiciones/reactivos previstos: ${DATA.cond || "—"}`;
+  $("#qLabel").textContent = MODES_LABEL[MODE];
+  $("#modeTag").textContent = `Modo: ${MODE}`;
+  $("#answer").value = "";
+  $("#answer").focus();
+  $("#status").className="status";
+  $("#status").textContent="Escribe tu respuesta y pulsa Enter.";
+  $("#reveal").style.display="none";
+  $("#checkBtn").textContent = "Comprobar";
+}
+
+function nuevaPregunta(){
+  esperandoSiguiente = false;
+  // genera hasta que haya al menos un modo posible
+  for(let i=0;i<50;i++){
+    S = genSubstrate();
+    R = pickReaction(S);
+    if(!R) continue;
+    DATA = R.build(S);
+    const allowedModes = R.modes.slice();
+    MODE = choice(allowedModes);
+    buildAcceptedAnswers();
+    if(RESPUESTAS.size>0) break;
+  }
+  renderQuestion();
+}
+
+function comprobar(){
+  if(esperandoSiguiente){
+    nuevaPregunta();
+    return;
+  }
+  const entradaRaw = $("#answer").value.trim();
+  if(!entradaRaw){
+    $("#status").className="status";
+    $("#status").textContent="Escribe una respuesta.";
+    return;
+  }
+
+  preguntas += 1;
+  let ok=false;
+
+  if(MODE==="producto"){
+    ok = RESPUESTAS.has(normSemi(entradaRaw));
+  }else{
+    ok = RESPUESTAS.has(norm(entradaRaw));
+  }
+
+  if(ok){
+    aciertos += 1;
+    $("#status").className="status ok";
+    $("#status").textContent = "✅ ¡Correcto! Pulsa Enter para continuar.";
+  }else{
+    $("#status").className="status bad";
+    $("#status").textContent = "❌ Incorrecto. Pulsa Enter para continuar.";
+  }
+  const sol = (MODE==="producto") ? DATA.prod
+            : (MODE==="reactivo") ? (DATA.reag[0].toUpperCase())
+            : R.type;
+  $("#reveal").style.display="block";
+  $("#reveal").textContent = `Solucion: ${sol} • Ecuacion: ${DATA.eq} • Por que: ${DATA.why}`;
+
+  esperandoSiguiente = true;
+  $("#checkBtn").textContent = "Siguiente";
+  actualizarMarcador();
+}
+
+/* ===== Eventos ===== */
+$("#checkBtn").addEventListener("click", comprobar);
+$("#skipBtn").addEventListener("click", nuevaPregunta);
+$("#answer").addEventListener("keydown",(e)=>{
+  if(e.key==="Enter"){
+    e.preventDefault();
+    comprobar();
+  }
+});
+
+/* Init */
+nuevaPregunta();
+</script>
+<script async src="../scripts/fade.js"></script>
+</body>
+</html>

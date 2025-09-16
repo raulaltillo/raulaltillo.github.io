@@ -509,7 +509,7 @@ function updateBadges(){
   $("#badgeFor").style.display = $("#showFor").checked ? "inline-block":"none";
 }
 function renderMolecula(){
-  $("#semi").textContent = semiString(MOL);
+  $("#semi").innerHTML = semiString(MOL).replace(/(\d+)/g, '<sub>$1</sub>');
   $("#familia").textContent = familiaTexto(MOL);
   $("#formula").textContent = MOL.formula;
   $("#molImg").src = IMG_BLANK;
