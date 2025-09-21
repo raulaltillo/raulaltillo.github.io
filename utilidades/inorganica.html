@@ -335,33 +335,38 @@ function stockNameMetal(metal, ox){ return `${metalName(metal)}(${toRoman(ox)})`
 function chargeNameMetal(metal, ox){ return `${metalName(metal)}(${ox}+)`; }
 
 // Nombres de sales binarias
+// Sales binarias
 function namesBinarySalt(obj){
-  const {formula, Me, meName, X, coefL, coefR, oxMe} = obj;
+  const {Me, meName, X, coefL, coefR, oxMe} = obj;
   const raiz = raizUro(X);
-  const comp = []; // composición con prefijos
-  comp.push(`${prefNum(coefR,true)}${raiz} de ${prefNum(coefL,true)}${meName}`.replace(/\s+/g," ").trim());
-  // Stock
-  const stock = `${raiz} de ${stockNameMetal(Me, oxMe)}`;
-  const carga = `${raiz} de ${chargeNameMetal(Me, oxMe)}`;
-  // Aceptar formas sin "mono-" excepto monóxido caso oxígeno
-  return new Set([comp[0], stock, carga]);
+  const comp = `${prefNum(coefR,true)}${raiz} de ${prefNum(coefL,true)}${meName}`.replace(/\s+/g," ").trim();
+  const set = new Set([comp]);
+
+  if(!metalHasSingleValence(Me)){
+    set.add(`${raiz} de ${stockNameMetal(Me, oxMe)}`);
+    set.add(`${raiz} de ${chargeNameMetal(Me, oxMe)}`);
+  }
+  return set;
 }
 
-// Óxidos básicos/ácidos
+// Óxidos básicos
 function namesOxide(obj){
   if(obj.type==="oxido_basico"){
     const {Me, oxMe, a, b} = obj;
     const comp = `${prefNum(b,true)}óxido de ${prefNum(a,true)}${metalName(Me)}`.trim();
-    const stock = `óxido de ${stockNameMetal(Me, oxMe)}`;
-    const carga = `óxido de ${chargeNameMetal(Me, oxMe)}`;
     const alsoMono = comp.replace(/\bmono óxido\b/,"monóxido").replace(/\bmono oxido\b/,"monóxido");
-    return new Set([comp, stock, carga, alsoMono]);
+    const set = new Set([comp, alsoMono]);
+    if(!metalHasSingleValence(Me)){
+      set.add(`óxido de ${stockNameMetal(Me, oxMe)}`);
+      set.add(`óxido de ${chargeNameMetal(Me, oxMe)}`);
+    }
+    return set;
   }else{
     const {X, oxX, a, b} = obj;
     const comp = `${prefNum(b,true)}óxido de ${prefNum(a,true)}${ELEMENTOS[X].name}`.trim();
-    const stock = `óxido de ${ELEMENTOS[X].name}(${toRoman(oxX)})`;
     const alsoMono = comp.replace(/\bmono óxido\b/,"monóxido").replace(/\bmono oxido\b/,"monóxido");
-    return new Set([comp, stock, alsoMono]);
+    const set = new Set([comp, alsoMono, `óxido de ${ELEMENTOS[X].name}(${toRoman(oxX)})`]);
+    return set;
   }
 }
 
@@ -369,10 +374,13 @@ function namesOxide(obj){
 function namesMetalHydride({Me, zMe}){
   const raiz = "hidruro";
   const comp = `${prefNum(zMe,true)}${raiz} de ${metalName(Me)}`.trim();
-  const stock = `${raiz} de ${stockNameMetal(Me, zMe)}`;
-  const carga = `${raiz} de ${chargeNameMetal(Me, zMe)}`;
   const mono = comp.replace(/\bmono hidruro\b/,"monohidruro");
-  return new Set([comp, stock, carga, mono]);
+  const set = new Set([comp, mono]);
+  if(!metalHasSingleValence(Me)){
+    set.add(`${raiz} de ${stockNameMetal(Me, zMe)}`);
+    set.add(`${raiz} de ${chargeNameMetal(Me, zMe)}`);
+  }
+  return set;
 }
 
 // Hidrácidos HX/H2X
