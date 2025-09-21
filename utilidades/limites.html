@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Práctica de Límites | Raulaltillo</title>
+<link rel="icon" href="../favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="../main.css">
+<style>
+  /* === Mismo look & feel que tus páginas === */
+  body { 
+    font-family:Arial, Helvetica, sans-serif;
+    margin: 0; 
+    min-height: 100dvh; 
+    background:#1a1a1a; 
+    color:#ffffff;
+  }
+
+  .card {
+    background: #2d2d2d;
+    color: #ffffff;
+    padding: 24px 28px;
+    border-radius: 16px;
+    border: solid 15px #0b0b0b;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    width: min(820px, 92vw);
+    text-align: center;
+    margin: 28px auto;
+  }
+  .row { display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap: wrap; margin-bottom:10px; }
+  .pill { background:#1f1f1f; border:1px solid #3d3d3d; padding:6px 10px; border-radius:999px; font-size:12px; color:#cfcfcf; }
+  select, input[type="text"]{
+    background:#1b1b1b; color:#fff; border:2px solid #383838; border-radius:10px; padding:10px 12px; font-size:16px;
+  }
+  input[type="text"]{ width:min(520px,80vw); text-align:center; }
+  button {
+    font-size:16px; padding:10px 14px; border:0; border-radius:10px; cursor:pointer;
+    background:#22d3ee; color:#04252e; font-weight:700;
+  }
+  button:hover{ filter:brightness(.95); }
+  .formula{ font-size: clamp(22px, 3.6vw, 30px); text-align:center; margin:18px 0; line-height:1.3; }
+  .status{ margin-top:10px; min-height:24px; }
+  .ok{ color:#22c55e; }
+  .bad{ color:#ef4444; }
+  .hint{ color:#e0e0e0; }
+  .explain{ margin-top:12px; color:#cbd5e1; font-size:14px; }
+  .small{ margin-top:8px; font-size:13px; color:#a8b3c7; }
+</style>
+
+<!-- MathJax -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['\\(','\\)'], ['$', '$']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+  <div class="topnav">
+    <img class="title" id="weather-icon" src="../images/weather-icon-illustration03-Graphics-10205167-1.png" alt="Clima actual" width="50">
+    <a href="../pages/horario.html">Horario</a>
+    <a href="../pages/menu.html">Menu</a>
+    <a href="../pages/selectividad.html">Selectividad</a>
+    <a href="../pages/herramientas.html" class="active">Herramientas</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
+  </div>
+  <br><br><br>
+  <main class="card">
+    <div class="row">
+      <span class="pill">Categoría</span>
+      <select id="cat">
+        <option value="all">Mezcla (todas)</option>
+        <option value="rat_inf_eq">Racionales ∞/∞ (grados iguales)</option>
+        <option value="rat_inf_div">Racionales → ±∞ (grado num. > den.)</option>
+        <option value="rat_00">Racionales 0/0 (x→a)</option>
+        <option value="resta_inf">Sustracción ∞−∞</option>
+        <option value="raiz_inf">Cociente con raíz (x→±∞)</option>
+        <option value="raiz_00">Radical 0/0 (x→a)</option>
+      </select>
+      <button id="new">Nueva</button>
+    </div>
+
+    <div id="formula" class="formula">—</div>
+
+    <div class="row">
+      <input id="answer" type="text" placeholder="Ej.: 3/2, 0, +inf, -inf" autocomplete="off" />
+      <button id="check">Comprobar</button>
+    </div>
+
+    <div id="status" class="status hint">Escribe tu resultado y pulsa Comprobar.</div>
+    <div id="explain" class="explain"></div>
+    <div class="small">Acepta enteros, fracciones <code>a/b</code> y <code>+inf</code>/<code>-inf</code>/<code>inf</code>. El botón siempre es “Comprobar”.</div>
+  </main>
+
+<script>
+/* ===== Utilidades ===== */
+const $ = s => document.querySelector(s);
+let listoParaOtro = false;
+function prepararSiguiente(){
+    $("#check").textContent = "Siguiente";
+  listoParaOtro = true;
+}
+
+function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(A){ return A[Math.floor(Math.random()*A.length)]; }
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; }
+function simpFrac(n,d){ if(d===0) return [n,d]; const g=gcd(n,d); d<0&&(n=-n,d=-d); return [n/g,d/g]; }
+function fmtFrac(n,d){ if(d===0) return n>0?"+inf":n<0?"-inf":"ind"; if(d===1) return String(n); return `${n}/${d}`; }
+function buildPoly(deg, lead){
+  // coeffs[0] es el líder (x^deg), coeffs[deg] el término independiente
+  const coeffs = new Array(deg + 1).fill(0);
+  coeffs[0] = lead;
+  for (let i = 1; i <= deg; i++) {
+    coeffs[i] = randInt(-9, 9);
+  }
+  // evitar que TODOS los inferiores sean 0
+  if (coeffs.slice(1).every(c => c === 0)) {
+    coeffs[deg] = randInt(1, 9);   // fija un término independiente no nulo
+  }
+  return polyString(coeffs).replaceAll('x^0','');
+}
+
+function parseAns(s){
+  s=(s||"").toLowerCase().replace(/\s+/g,"").replace(",",".");
+  if(["inf","+inf","infty","+infty"].includes(s)) return {type:"inf",sign:+1};
+  if(["-inf","-infty"].includes(s)) return {type:"inf",sign:-1};
+  if(s.includes("/")){
+    const [a,b]=s.split("/"); const n=Number(a), d=Number(b);
+    if(Number.isFinite(n)&&Number.isFinite(d)&&d!==0){
+      const [nn,dd]=simpFrac(n,d); return {type:"frac",n:nn,d:dd};
+    }
+  }
+  const x=Number(s); if(Number.isFinite(x)) return {type:"frac",n:x,d:1};
+  return null;
+}
+function sameResult(A,B){
+  if(!A||!B) return false;
+  if(A.type==="inf"&&B.type==="inf") return A.sign===B.sign;
+  if(A.type==="frac"&&B.type==="frac"){
+    const [a1,b1]=simpFrac(A.n,A.d), [a2,b2]=simpFrac(B.n,B.d);
+    return a1===a2 && b1===b2;
+  }
+  return false;
+}
+function typesetNow(){
+  if(window.MathJax && MathJax.typesetPromise){
+    MathJax.typesetClear();
+    MathJax.typesetPromise([$("#formula"), $("#explain")]);
+  }
+}
+
+/* ===== Formateadores que evitan ‘+ -1’, ‘x^1’, ‘x + 0’, ‘x - -1’ ===== */
+function signNum(n){
+  return n<0?`- ${Math.abs(n)}`:`+ ${n}`;
+}
+function fmtCoeff(c, power){
+  // evita "1x^k" cuando |c|=1 y power>=1
+  if(power>=1 && Math.abs(c)===1) return (c===-1?"- ":"");
+  return (c<0? "- " : "") + Math.abs(c);
+}
+function term(ax, power){
+  if(ax===0) return "";                           // elimina 0
+  if(power===0) return (ax<0? "- ":"") + Math.abs(ax);
+  const coeff = fmtCoeff(ax, power);
+  const xpart = power===1 ? "x" : `x^{${power}}`;
+  return `${coeff}${coeff? "":""}${xpart}`;
+}
+function polyString(coeffs){ // coeffs desde grado mayor a 0
+  const parts = [];
+  coeffs.forEach((c,i)=>{
+    const power = coeffs.length - 1 - i;
+    const t = term(c, power);
+    if(!t) return;
+    parts.push(t);
+  });
+  if(parts.length===0) return "0";
+  // añadir signos intermedios correctos
+  let out = parts[0];
+  for(let i=1;i<parts.length;i++){
+    const raw = parts[i];
+    if(raw.startsWith("- ")) out += " - " + raw.slice(2);
+    else out += " + " + raw;
+  }
+  return out.replace(/\s+/g," ").trim();
+}
+function linParen(x0){ // (x - a) con signos correctos
+  if(x0===0) return "(x)";
+  if(x0<0) return `(x + ${Math.abs(x0)})`;
+  return `(x - ${x0})`;
+}
+
+/* ===== Generadores ===== */
+const Generators = {
+  // Racional ∞/∞ (grados iguales) → cociente de líderes (fracción exacta)
+  rat_inf_eq(){
+    const n = randInt(1,4);
+    const a = pick([-9,-7,-5,-3,-2,1,2,3,4,5,6,7,8,9]);
+    const b = pick([-9,-7,-5,-3,-2,1,2,3,4,5,6,7,8,9]);
+    // polinomios con términos inferiores no nulos (limpio formato)
+    const numCoeffs = [a, randInt(-9,9), randInt(-9,9)];
+    while(numCoeffs[1]===0 && numCoeffs[2]===0){ numCoeffs[1]=randInt(-9,9); }
+    const denCoeffs = [b, randInt(-9,9), randInt(-9,9)];
+    while(denCoeffs[1]===0 && denCoeffs[2]===0){ denCoeffs[1]=randInt(-9,9); }
+
+    const top = polyString([ a, numCoeffs[1], numCoeffs[2] ]);
+    const bot = polyString([ b, denCoeffs[1], denCoeffs[2] ]);
+    const [N,D] = simpFrac(a,b);
+    return {
+      latex: `\\( \\displaystyle \\lim_{x\\to \\pm\\infty} \\frac{ ${top.replaceAll('x^0','')} }{ ${bot.replaceAll('x^0','')} } \\)`,
+      explain: `Grados iguales. Se usa el **cociente de coeficientes líderes**: \\(\\dfrac{${a}}{${b}}=\\dfrac{${N}}{${D}}\\).`,
+      result: {type:"frac", n:N, d:D}
+    };
+  },
+
+  // Racional con grado del numerador mayor → ±∞
+  rat_inf_div(){
+    // elegimos grados m>n con líderes a,b≠0
+    const m = randInt(2,4);
+    const n = randInt(0,m-1);
+    const a = pick([-6,-5,-4,-3,-2,1,2,3,4,5,6]);
+    const b = pick([-6,-5,-4,-3,-2,1,2,3,4,5,6]);
+    // construir polinomios
+    const numCoeffs = [a, randInt(-9,9), randInt(-9,9)];
+    const denCoeffs = [b, randInt(-9,9), randInt(-9,9)];
+    const top = polyString([ a, numCoeffs[1], numCoeffs[2] ]).replaceAll('x^0','');
+    const bot = polyString([ b, denCoeffs[1], denCoeffs[2] ]).replaceAll('x^0','');
+
+    // decidimos dirección: +∞ o -∞, la mostramos con signDir
+    const dir = pick(["+\\infty","-\\infty"]);
+    const odd = ((m - n) % 2) !== 0;
+    let sign = Math.sign(a*b); // signo de (a/b)
+    // para x→-∞ y exponente impar, cambia el signo
+    if(dir==="-\\infty" && odd) sign *= -1;
+    const res = {type:"inf", sign: sign>0?+1:-1};
+
+    const texto = res.sign>0? "+inf" : "-inf";
+    return {
+      latex: `\\( \\displaystyle \\lim_{x\\to ${dir}} \\frac{ ${top} }{ ${bot} } \\)`,
+      explain: `Grado del numerador **mayor** que el del denominador. Predomina \\(\\dfrac{${a}x^{${m}}}{${b}x^{${n}}}=\\dfrac{${a}}{${b}}x^{${m-n}}\\).  
+      Como \\(${m-n}\\) es ${((m-n)%2===0)?"par":"impar"}, el signo para \\(x\\to ${dir.replace('\\\\','')}\\) da **${texto}**.`,
+      result: res
+    };
+  },
+
+  // Racional 0/0 con factor común (x-a)
+  rat_00(){
+    const a = randInt(-5,5);
+    const p = randInt(1,6), q = randInt(1,6);
+    const c = randInt(0,8), d = randInt(0,8);
+    const f = `${linParen(a)}(${p}x+${c})`, g = `${linParen(a)}(${q}x+${d})`;
+    const P = p*a + c, Q = q*a + d;
+    const [N,D] = simpFrac(P,Q);
+    const aa = a>=0 ? a : `(${a})`;
+    return {
+      latex: `\\( \\displaystyle \\lim_{x\\to ${aa}} \\frac{ ${f} }{ ${g} } \\)`,
+      explain: `Forma **0/0**. Se cancela \\((x-${a})\\) y se evalúa en \\(x=${a}\\): \\(\\dfrac{${P}}{${Q}}=\\dfrac{${N}}{${D}}\\).`,
+      result: {type:"frac", n:N, d:D}
+    };
+  },
+
+  // Resta ∞−∞ → usar división de polinomios
+  resta_inf(){
+    const m = randInt(1,3);
+    const c = randInt(-6,6);
+    const k = randInt(-9,9);
+    return {
+      latex: `\\( \\displaystyle \\lim_{x\\to +\\infty} \\left( \\frac{x^{${m+1}}+${k}}{x^{${m}}+${c}} - x \\right) \\)`,
+      explain: `División: \\(\\frac{x^{${m+1}}+${k}}{x^{${m}}+${c}} = x - ${c} + \\frac{\\text{térm. inferiores}}{x^{${m}}+${c}}\\).  
+      Al restar \\(x\\), queda \\(-${c}\\).`,
+      result: {type:"frac", n:-c, d:1}
+    };
+  },
+
+  // Cociente con raíz en ±∞ → a/k
+  raiz_inf(){
+    const a = pick([-6,-5,-4,-3,-2,1,2,3,4,5,6]);
+    const k = randInt(1,6);
+    const b = randInt(-9,9), d = randInt(-9,9), e = randInt(0,20);
+    const top = `${term(a,1)} ${b===0?"":(b<0?" - "+Math.abs(b):" + "+b)}`.trim();
+    const bot = `\\sqrt{ ${k*k}\\,x^{2}${d===0?"":(d<0?" - ":" + ")}${d===0?"":Math.abs(d)+"x"}${e===0?"":" + "+e} }`;
+    const [N,D] = simpFrac(a,k);
+    return {
+      latex: `\\( \\displaystyle \\lim_{x\\to \\pm\\infty} \\frac{ ${top} }{ ${bot} } \\)`,
+      explain: `\\(\\sqrt{${k*k}x^{2}+\\cdots}=|x|\\,${k}\\,\\sqrt{1+o(1)}\\). Para \\(x\\to\\pm\\infty\\): \\(\\dfrac{a x}{k|x|}\\to \\dfrac{a}{k}=\\dfrac{${N}}{${D}}\\).`,
+      result: {type:"frac", n:N, d:D}
+    };
+  },
+
+  // Radical 0/0 (conjugado)
+  raiz_00(){
+    const sq = [1,4,9,16,25,36,49,64,81,100];
+    const A = pick(sq);
+    const denom = 2*Math.sqrt(A); // exacto entero
+    return {
+      latex: `\\( \\displaystyle \\lim_{x\\to ${A}} \\frac{ \\sqrt{x}-\\sqrt{${A}} }{ x-${A} } \\)`,
+      explain: `Forma **0/0**. Conjugado → \\(\\dfrac{1}{\\sqrt{x}+\\sqrt{${A}}}\\xrightarrow[x\\to ${A}]{}\\dfrac{1}{2\\sqrt{${A}}}=\\dfrac{1}{${denom}}\\).`,
+      result: {type:"frac", n:1, d:denom}
+    };
+  }
+};
+
+const poolAll = ["rat_inf_eq","rat_inf_div","rat_00","resta_inf","raiz_inf","raiz_00"];
+let current=null;
+
+/* ===== Flujo ===== */
+function newProblem(){
+  const cat = $("#cat").value;
+  const key = (cat==="all") ? pick(poolAll) : cat;
+  current = Generators[key]();
+  $("#formula").innerHTML = current.latex;
+  $("#status").className="status hint";
+  $("#status").textContent="Escribe tu resultado y pulsa Comprobar.";
+  $("#explain").innerHTML="";
+  $("#answer").value="";
+  typesetNow();
+}
+function check(){
+  if(!current) return;
+  const ans = parseAns($("#answer").value);
+  if(!ans){
+    $("#status").className="status bad";
+    $("#status").textContent="Respuesta no válida. Usa enteros, fracciones a/b o ±inf.";
+    return;
+  }
+  const ok = sameResult(ans, current.result);
+  if(ok){
+    $("#status").className="status ok";
+    $("#status").textContent="✅ ¡Correcto!";
+    $("#explain").innerHTML="";
+  }else{
+    $("#status").className="status bad";
+    const r = current.result.type==="inf" ? (current.result.sign>0?"+inf":"-inf")
+                                         : fmtFrac(current.result.n,current.result.d);
+    $("#status").textContent="❌ No coincide.";
+    $("#explain").innerHTML = `<strong>Explicación:</strong> ${current.explain}<br><br><strong>Solución:</strong> \\( ${r} \\)`;
+    typesetNow();
+  }
+  prepararSiguiente();
+}
+
+/* ===== Eventos ===== */
+$("#new").addEventListener("click", newProblem);
+document.getElementById("check").addEventListener("click", ()=>{
+  if (listoParaOtro){
+    listoParaOtro = false;
+        $("#check").textContent = "Comprobar";
+    newProblem();              // ← genera un nuevo límite
+  }else{
+    check();                   // ← corrige y deja listo el siguiente
+  }
+});
+document.getElementById("answer").addEventListener("keydown", (e)=>{
+  if(e.key === "Enter"){
+    e.preventDefault();
+    if (listoParaOtro){
+      listoParaOtro = false;
+      newProblem();
+    }else{
+      check();
+    }
+  }
+});
+
+/* init */
+newProblem();
+</script>
+<script async src="../scripts/fade.js"></script>
+</body>
+</html>
