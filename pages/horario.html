@@ -55,23 +55,18 @@
     <label for="classSelect" style="font-size: 2em;color: #ffffff;font-family: Cal Sans;">Clase:</label>
     <select id="classSelect" onchange="selectClass()" style="font-size: 2em;font-family: Cal Sans;cursor: pointer;">
       <option value="">--Seleccionar Clase--</option>
-      <option value="Salud Lomloe">Salud Lomloe</option>
-      <option value="Salud IB">Salud IB</option>
-      <option value="Tecnologico Lomloe">Tecnologico Lomloe</option>
-      <option value="Tecnologico IB">Tecnologico IB</option>
-      <option value="Sociales Lomloe">Sociales Lomloe</option>
-      <option value="Sociales IB">Sociales IB</option>
-      
     </select>
     
   <br>
   <br>
   <label for="colorSelect" style="font-size:2em;color: #ffffff;font-family: Cal Sans;" >Color:</label>
   <input type="color" id="colorSelect" oninput="changeColor()" style="font-size:2em;cursor:pointer">
-  <p style="color: #ffffff;font-family: Cal Sans;">Esta seleccion se guarda entre sesiones</p>
 </div>
 </div>
-  <script defer type="text/javascript">
+<script defer type="text/javascript">
+const SHEET_URL = "https://sheetjson.com/spreadsheets/d/1OPkrvh0ccT4O2pbTp5NmIfcqXmHgOQyZWwhEAtrUfCY/edit?gid=1188799114"; 
+// ⬆️ Replace with your actual SheetJSON URL
+
 function LightenDarkenColor(col, amt) {
     let usePound = false;
 
@@ -98,65 +93,146 @@ function LightenDarkenColor(col, amt) {
     return (usePound ? "#" : "") + newColor.toString(16).padStart(6, "0");
 }
 
-const classes={ 
-     "Salud Lomloe":[["TOK", "Biologia", "Filosofia", "", "Historia", "Mates", "", "Lengua", "Quimica"],
-                    ["Lengua", "Exam Practice", "Mates", "", "Quimica", "Biologia", "", "Ingles", "Frances"],
-                    ["Quimica", "Filosofia", "Mates", "", "TIC", "Historia", "", "Frances", "Exam Practice"],
-                    ["Ingles", "Quimica", "Lengua", "", "Historia", "PS", "", "TIC", "Biologia"],
-                    ["Ingles", "Biologia", "Mates", "", "Lengua", "Historia", "", "Filosofia", "TIC"]], 
-     "Salud IB":[["Historia", "Biologia", "SAS", "", "Mates", "TOK", "", "Lengua", "Quimica"],
-                    ["Frances IB", "Exam Practice", "SAS", "", "Quimica", "Biologia", "", "Ingles", "Frances"],
-                    ["Quimica", "SAS", "Lengua", "", "Historia", "Mates", "", "Frances", "Exam Practice"],
-                    ["Ingles", "Quimica", "Mates", "", "Lengua", "Historia", "", "Frances IB", "Biologia"],
-                    ["Ingles", "Biologia", "Frances IB", "", "Mates", "Lengua", "", "SAS", "Biologia IB"]], 
-      "Tecnologico Lomloe":[["PSP", "Historia", "Lengua", "", "Fisica", "Mates", "", "Filosofia", "TIC"],
-                    ["Dibujo Tecnico", "Exam Practice", "Fisica", "", "Historia", "Filosofia", "", "English", "Frances"],
-                    ["Historia", "Dibujo Tecnico", "Mates", "", "Lengua", "Fisica", "", "Frances", "Exam Practice"],
-                    ["English", "TIC", "Lengua", "", "Mates", "TOK", "", "Dibujo Tecnico", "Historia"],
-                    ["English", "Lengua", "Filosofia", "", "Fisica", "Mates", "", "TIC", "Dibujo Tecnico"]],
-      "Tecnologico IB":[["Historia", "Fisica", "SAS", "", "Mates", "TOK", "", "Lengua", "SD"],
- ["SD", "Ingles", "SAS", "", "Dibujo Tecnico", "Fisica", "", "Ingles", "Frances"],
- ["Dibujo Tecnico", "Lengua", "Geografia", "", "Historia", "Mates", "", "Frances", "Ingles"],
- ["Ingles", "Dibujo Tecnico", "Mates", "", "Historia", "Lengua", "", "SD", "Fisica"],
- ["Ingles", "Dibujo Tecnico", "Historia", "", "Mates", "Lengua", "", "SAS", "Fisica"]],
-      "Sociales Lomloe":[["Economia", "TIC", "Lengua", "", "Geografia", "Filosofia", "", "PS", "Historia"],
-                    ["Geografia", "Ingles", "Historia", "", "TIC", "Mates", "", "Ingles", "Frances"],
-                    ["TIC", "Mates", "Lengua", "", "TOK", "Economia", "", "Frances", "Ingles"],
-                    ["Ingles", "Filosofia", "Historia", "", "Geografia", "Economia", "", "Mates", "Lengua"],
-                    ["Ingles", "Historia", "Mates", "", "Filosofia", "Economia", "", "Geografia", "Lengua"]],
-      "Sociales IB":[["Historia", "TOK", "Gestion", "", "Mates Aplicadas", "Lengua", "", "Geografia", "SAS"],
-                    ["Frances IB", "Ingles", "Geografia", "",  "Mates", "Gestion", "",  "Ingles", "Frances"],
-                    ["Gestion", "Lengua", "Geografia", "",  "Historia", "SAS", "", "Frances", "Ingles NS"],
-                    ["Ingles", "Lengua", "SAS", "",  "Mates", "Historia", "",  "Frances IB", "Gestion"],
-                    ["Ingles", "Geografia", "Frances IB", "",  "Mates", "SAS", "",  "Lengua", "Gestion"]],
-};
-    const days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"];
-    var defaultColor = "#2d9e00"; // Default color if no color is saved
-    var selectedColor = localStorage.getItem("selectedColor") || defaultColor;
+const days = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes"];
+const PERIOD_KEYS = ["p1","p2","p3","p4","p5","p6","p7","p8","p9"];
 
-    const colors = (baseColor) => [
-        baseColor,
-        LightenDarkenColor(baseColor, 15),
-        LightenDarkenColor(baseColor, 30),
-        LightenDarkenColor(baseColor, 45),
-        LightenDarkenColor(baseColor, 60),
-    ];
+const defaultColor = "#2d9e00";
+let timetable = {};              // { [className]: { [dayName]: [subjects...] } }
+let isTimetableLoaded = false;
 
-    function changeColor() {
+// Generate shades for the background colors
+const colors = (baseColor) => [
+    baseColor,
+    LightenDarkenColor(baseColor, 15),
+    LightenDarkenColor(baseColor, 30),
+    LightenDarkenColor(baseColor, 45),
+    LightenDarkenColor(baseColor, 60),
+];
+
+function extractSubjects(row) {
+    return PERIOD_KEYS.map((key) => row[key] || "");
+}
+
+// Show error message in the UI if fetch fails
+function showTimetableError() {
+    const scheduleDiv = document.getElementById("schedule");
+    const container = document.getElementById("scheduleContainer");
+    const select = document.getElementById("classSelect");
+
+    if (scheduleDiv) {
+        scheduleDiv.innerHTML = `
+            <h1 style="color:#ffffff;font-family:Cal Sans;text-align:center;margin:20px;">
+                No se puede cargar los horarios, contáctame lo antes posible.
+            </h1>
+        `;
+    }
+    if (container) {
+        container.style.display = "block";
+    }
+    if (select) {
+        select.disabled = true;
+    }
+}
+
+// Fill the <select> with class names detected in the sheet
+function populateClassSelect() {
+    const select = document.getElementById("classSelect");
+    if (!select) return;
+
+    // Keep only the first option (placeholder)
+    while (select.options.length > 1) {
+        select.remove(1);
+    }
+
+    Object.keys(timetable).forEach((name) => {
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        select.appendChild(opt);
+    });
+}
+
+async function loadTimetable() {
+    try {
+        const res = await fetch(SHEET_URL);
+        if (!res.ok) {
+            console.error("Error fetching timetable", res.status, res.statusText);
+            showTimetableError();
+            return;
+        }
+
+        const rows = await res.json();
+
+        if (!Array.isArray(rows) || rows.length === 0) {
+            console.error("No timetable rows in sheet");
+            showTimetableError();
+            return;
+        }
+
+        timetable = {};
+
+        rows.forEach((row) => {
+            const className = row.class_name;
+            const dayName = row.day;
+            if (!className || !dayName) return;
+
+            if (!timetable[className]) timetable[className] = {};
+            timetable[className][dayName] = extractSubjects(row);
+        });
+
+        isTimetableLoaded = true;
+
+        populateClassSelect();
+
+        const savedClass = localStorage.getItem("selectedClass");
+        const savedColor = localStorage.getItem("selectedColor") || defaultColor;
+
+        if (savedColor) {
+            document.getElementById("colorSelect").value = savedColor;
+        }
+
+        if (savedClass && timetable[savedClass]) {
+            document.getElementById("classSelect").value = savedClass;
+            displayClassSchedule(savedClass);
+        }
+
+        updateScheduleColors(savedColor);
+
+        document.getElementById("classSelect").disabled = false;
+        document.getElementById("scheduleContainer").style.display = "block";
+    } catch (err) {
+        console.error("Error loading timetable", err);
+        showTimetableError();
+    }
+}
+
+function changeColor() {
     const newColor = document.getElementById("colorSelect").value;
     localStorage.setItem("selectedColor", newColor);
     updateScheduleColors(newColor);
 }
-    function updateScheduleColors(baseColor) {
-        const updatedColors = colors(baseColor);
-        const selectedClass = document.getElementById("classSelect").value;
-        if (selectedClass) {
-            const classSchedule = classes[selectedClass];
-            document.getElementById("schedule").innerHTML = generateScheduleHTML(classSchedule, updatedColors);
-        }
-    }
 
-    function generateDayColumn(day, subjects, color) {
+function getClassScheduleForClass(className) {
+    const perDay = timetable[className] || {};
+    return days.map((day) => {
+        const subjects = perDay[day];
+        if (Array.isArray(subjects)) return subjects;
+        return ["","","","","","","","",""];
+    });
+}
+
+function updateScheduleColors(baseColor) {
+    const updatedColors = colors(baseColor);
+    const selectedClass = document.getElementById("classSelect").value;
+
+    if (selectedClass && timetable[selectedClass]) {
+        const classSchedule = getClassScheduleForClass(selectedClass);
+        document.getElementById("schedule").innerHTML =
+            generateScheduleHTML(classSchedule, updatedColors);
+    }
+}
+
+function generateDayColumn(day, subjects, color) {
     return `
         <div class="column" style="background-color:${color};">
             <h3 style="font-family:Hacked">${day}</h3>
@@ -164,37 +240,47 @@ const classes={
         </div>`;
 }
 
-    function generateScheduleHTML(classSchedule, colorPalette = colors(document.getElementById("colorSelect").value)) {
-        return `<div class="row">
-            ${classSchedule.map((subjects, index) => generateDayColumn(days[index], subjects, colorPalette[index])).join("")}
-        </div>`;
+function generateScheduleHTML(
+    classSchedule,
+    colorPalette = colors(document.getElementById("colorSelect").value)
+) {
+    return `<div class="row">
+        ${classSchedule
+            .map((subjects, index) =>
+                generateDayColumn(days[index], subjects, colorPalette[index])
+            )
+            .join("")}
+    </div>`;
+}
+
+function selectClass() {
+    if (!isTimetableLoaded) return;
+    const selectedClass = document.getElementById("classSelect").value;
+    if (selectedClass) {
+        localStorage.setItem("selectedClass", selectedClass);
+        displayClassSchedule(selectedClass);
     }
+}
 
-    function selectClass() {
-        const selectedClass = document.getElementById("classSelect").value;
-        if (selectedClass) {
-            localStorage.setItem("selectedClass", selectedClass);
-            displayClassSchedule(selectedClass);
-        }
-    }
+function displayClassSchedule(className) {
+    const classSchedule = getClassScheduleForClass(className);
+    document.getElementById("schedule").innerHTML =
+        generateScheduleHTML(classSchedule);
+    document.getElementById("scheduleContainer").style.display = "block";
+}
 
-    function displayClassSchedule(className) {
-        const classSchedule = classes[className];
-        document.getElementById("schedule").innerHTML = generateScheduleHTML(classSchedule);
-        document.getElementById("scheduleContainer").style.display = "block";
-    }
+window.onload = function() {
+    const savedColor = localStorage.getItem("selectedColor") || defaultColor;
+    document.getElementById("colorSelect").value = savedColor;
 
-    window.onload = function() {
-        const savedClass = localStorage.getItem("selectedClass");
-        const savedColor = localStorage.getItem("selectedColor") || defaultColor;
-        document.getElementById("colorSelect").value = savedColor;
+    // Disable class select until data is loaded
+    document.getElementById("classSelect").disabled = true;
+    document.getElementById("scheduleContainer").style.display = "none";
 
-        if (savedClass) {
-            document.getElementById("classSelect").value = savedClass;
-            displayClassSchedule(savedClass);
-        }
-        updateScheduleColors(savedColor);
-    };
-    </script></div>
+    loadTimetable();
+};
+</script>
+
+</div>
   <script async src="../scripts/fade.js"></script>
 </body>
