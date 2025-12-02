@@ -2,6 +2,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-T470HXGPQZ"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta charset="utf-8" />
     <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -54,6 +55,62 @@
         a {
           color: #2516ff;
       }
+      .link-card {
+        background: #232323;
+        border: 3px solid #2D7A5E;
+        border-radius: 8px;
+        margin: 12px auto;
+        padding: 18px 24px;
+        max-width: 500px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        font-family: 'Cal Sans', Verdana, sans-serif;
+        font-size: 1.25em;
+        color: #e0e0e0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: box-shadow 0.2s;
+      }
+      .link-card:hover {
+        box-shadow: 0 4px 16px rgba(45,122,94,0.25);
+        border-color: #2516ff;
+      }
+      .link-card a {
+        background: #2D7A5E;
+        color: #fff;
+        padding: 8px 18px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1em;
+        font-family: Hacked, Verdana, sans-serif;
+        transition: background 0.2s;
+      }
+      .link-card a:hover {
+        background: #2516ff;
+        color: #fff;
+      }
+      .links-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        justify-content: center;
+      }
+      .link-card {
+        flex: 1 1 45%;
+        min-width: 260px;
+        max-width: 48%;
+        box-sizing: border-box;
+      }
+      .link-card.important {
+        border-width: 5px;
+        border-color: #ff7a44;
+        /* Keep background and color unchanged for subtle effect */
+      }
+    .link-card.important:hover {
+        border-width: 5px;
+        border-color: #1c0da3;
+        /* Keep background and color unchanged for subtle effect */
+      }
     </style>
 </head>
 <body>
@@ -74,69 +131,62 @@
   <br>
   <br>
 <br>
-<div class="container">
-  <div class="section">
-      <h2>Lenguas y Humanidades</h2>
-      <div class="row">
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Lengua-Andalucia-Academia-M25.pdf" >Lengua y Literatura</a>
-          </div>
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Historia-de-Espana-Andalucia-Academia-M25.pdf" >Historia de España</a>
-          </div>
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Filosofia-Andalucia-Academia-M25.pdf" >Historia de la Filosofía</a>
-          </div>
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Ingles-Andalucia-Academia-M25.pdf" >Inglés</a>
-          </div>
-      </div>
-  </div>
-  <div class="section">
-      <h2>Ciencias</h2>
-      <div class="row">
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Matematicas-II-Andalucia-Academia-M25.pdf" >Matemáticas II</a>
-          </div>
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Fisica-Andalucia-Academia-M25.pdf" >Física</a>
-          </div>
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Biologia-Andalucia-Academia-M25.pdf" >Biología</a>
-          </div>
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Quimica-Andalucia-Academia-M25.pdf" >Química</a>
-          </div>
-      </div>
-  </div>
-
-  <div class="section">
-      <h2>Ciencias Sociales</h2>
-      <div class="row"> 
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Geografia-Andalucia-Academia-M25.pdf" >Geografía de España</a>
-          </div>
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Mates-CCSS-Andalucia-Academia-M25.pdf" >Matemáticas CCSS</a>
-          </div>
-      </div>
-  </div>
-
-  <div class="section">
-      <h2>Artes y Negocios</h2>
-      <div class="row">
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Dibujo-Tecnico-Andalucia-Academia-M25.pdf" >Dibujo Técnico</a>
-          </div>
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Historia-del-Arte-Andalucia-Academia-M25.pdf" >Historia del Arte</a>
-          </div>
-          <div class="column">
-              <a href="https://www.academiam25.com/wp-content/uploads/2024/10/Modelo-Empresa-Andalucia-Academia-M25.pdf" >Empresa y Modelos de Negocio</a>
-          </div>
-      </div>
-  </div>
+<div class="container" id="linksContainer">
+  <div class="links-grid" id="linksGrid"></div>
 </div>
+    <script>
+  // Example list of names and links
+  const linksList = {
+    "Análisis Musical II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_analisis_musical.pdf",
+    "Artes Escénicas II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_artes_escenicas.pdf",
+    "Biología [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_biologia.pdf",
+    "Ciencias Generales": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_ciencias_generales.pdf",
+    "Coro y Técnica Vocal II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_coro_tecnica.pdf",
+    "Dibujo Artístico II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_dibujo_artistico.pdf",
+    "Dibujo Técnico (Artes/diseño)": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_dibujo_tecnico_aplicado.pdf",
+    "Dibujo Técnico II [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_dibujo_tecnico.pdf",
+    "Diseño": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_diseno.pdf",
+    "Empresa y Diseño de Modelos de Negocio": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_empresa_diseno.pdf",
+    "Física [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_fisica.pdf",
+    "Fundamentos Artísticos": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_fundamentos_artisticos.pdf",
+    "Geografía [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_geografia.pdf",
+    "Geología y Ciencias Ambientales [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_geologia_ciencias_ambientales.pdf",
+    "Griego II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_griego.pdf",
+    "Historia del Arte": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_historia_arte.pdf",
+    "Historia de España [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_historia_espana.pdf",
+    "Historia de la Filosofía [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_historia_filosofia.pdf",
+    "Historia de la Musica y la Danza": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_historia_musica.pdf",
+    "Latín II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_latin.pdf",
+    "Lengua Castellana y Literatura II [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_lengua_castellana.pdf",
+    "Lengua Extranjera: Alemán II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_aleman.pdf",
+    "Lengua Extranjera: Inglés II [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_ingles.pdf",
+    "Lengua Extranjera: Francés II [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_frances.pdf",
+    "Lengua Extranjera: Portugués II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_portugues.pdf",
+    "Literatura Dramática": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_literatura_dramatica.pdf",
+    "Matemáticas II [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_matematicas.pdf",
+    "Matemáticas Aplicadas a las Ciencias Sociales II [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_matematicas_aplicadas.pdf",
+    "Movimientos Culturales y Artísticos": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_movimientos_culturales.pdf",
+    "Química [IMP]": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_quimica.pdf",
+    "Tcas. Expresión Gráfico-Plástica": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_tecnicas_expresion_grafica.pdf",
+    "Tecnología e Ingeniería II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_tecnnologia_ingenieria.pdf"
+
+
+};
+
+  const grid = document.getElementById('linksGrid');
+  for (const [name, url] of Object.entries(linksList)) {
+    const div = document.createElement('div');
+    if (name.includes(" [IMP]")){
+      div.className = 'link-card important';
+      div.innerHTML = `<span>${name.replace(" [IMP]", "")}</span> <a href="${url}" target="_blank">Orientaciones</a>`;
+    }
+    else{
+      div.className = 'link-card';
+      div.innerHTML = `<span>${name}</span> <a href="${url}" target="_blank">Orientaciones</a>`;
+    }
+    grid.appendChild(div);
+  }
+</script>
 </div>
 <script async src="../scripts/fade.js"></script>
 </body>
