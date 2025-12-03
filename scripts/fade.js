@@ -98,23 +98,23 @@ window.addEventListener('load', function() {
 
     ];
 
-    function loadImage(url) {
-      return new Promise((resolve, reject) => {
-        const img = document.createElement("img");
-        img.src = url;
-        img.onload = () => resolve(img);
-        img.onerror = reject;
-      });
-    }
-
     async function showBalloonsThreaded() {
       const balloonCount = Math.floor(Math.random() * 11) + 10; // 10-20 balloons
       const body = document.body;
       const balloons = [];
+      const interval = 180; // ms between each balloon
+
+      function loadImage(url) {
+        return new Promise((resolve, reject) => {
+          const img = document.createElement("img");
+          img.src = url;
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+        });
+      }
 
       for (let i = 0; i < balloonCount; i++) {
-        // Each balloon is handled independently
-        (async () => {
+        setTimeout(async () => {
           const url = balloonUrls[Math.floor(Math.random() * balloonUrls.length)];
           try {
             const img = await loadImage(url);
@@ -129,14 +129,14 @@ window.addEventListener('load', function() {
             body.appendChild(img);
             balloons.push(img);
 
-            // Random delay before animating
+            // Random delay before animating (optional, can be removed for strict interval)
             const delay = Math.floor(Math.random() * 251) + 100; // 100-350ms
             await new Promise(res => setTimeout(res, delay));
             img.style.bottom = `${window.innerHeight + 120}px`;
           } catch (e) {
             // If image fails to load, skip this balloon
           }
-        })();
+        }, i * interval);
       }
 
       // Remove balloons after animation
@@ -145,10 +145,10 @@ window.addEventListener('load', function() {
           b.style.opacity = "0";
           setTimeout(() => b.remove(), 500);
         });
-      }, 3200);
+      }, 5000);
     }
 
-    window.addEventListener("DOMContentLoaded", showBalloonsThreaded);
+    window.addEventListener("load", showBalloonsThreaded);
   // Adjust when page loads and when window resizes
   window.addEventListener('load', adjustWeatherIframePosition);
 
