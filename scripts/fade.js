@@ -76,16 +76,12 @@ window.addEventListener('load', function() {
       iframeContainer.style.top = navbarHeight + 'px';
     }
   }
-
-  // Adjust when page loads and when window resizes
-  window.addEventListener('load', adjustWeatherIframePosition);
   window.addEventListener('resize', adjustWeatherIframePosition);
 
 
 
     // Balloon animation on page load (threaded, waits for image load)
     const balloonUrls = [
-      "https://pics.clipartpng.com/Dark_Blue_Balloon_PNG_Clip_Art-1548.png",
       "https://images.vexels.com/media/users/3/235359/isolated/lists/a7b2e87a806cdb01aacb17ecc22188d4-party-balloons-floating.png",
       "https://cdn-icons-png.flaticon.com/256/6225/6225382.png",
       "https://icons.iconarchive.com/icons/google/noto-emoji-activities/256/52706-balloon-icon.png",
@@ -102,42 +98,45 @@ window.addEventListener('load', function() {
 
     ];
 
+    function loadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+      });
+    }
+
     async function showBalloonsThreaded() {
       const balloonCount = Math.floor(Math.random() * 11) + 10; // 10-20 balloons
       const body = document.body;
       const balloons = [];
 
-      function loadImage(url) {
-        return new Promise((resolve, reject) => {
-          const img = document.createElement("img");
-          img.src = url;
-          img.onload = () => resolve(img);
-          img.onerror = reject;
-        });
-      }
-
       for (let i = 0; i < balloonCount; i++) {
-        try {
+        // Each balloon is handled independently
+        (async () => {
           const url = balloonUrls[Math.floor(Math.random() * balloonUrls.length)];
-          const img = await loadImage(url);
-          img.style.position = "fixed";
-          img.style.left = `${Math.random() * 80 + 10}vw`;
-          img.style.bottom = "-120px";
-          img.style.width = `${Math.random() * 40 + 60}px`;
-          img.style.zIndex = 9999;
-          img.style.transition = "bottom 2.5s cubic-bezier(.42,.01,.58,1), opacity 0.5s";
-          img.style.opacity = "1";
-          img.className = "balloon-anim";
-          body.appendChild(img);
-          balloons.push(img);
+          try {
+            const img = await loadImage(url);
+            img.style.position = "fixed";
+            img.style.left = `${Math.random() * 80 + 10}vw`;
+            img.style.bottom = "-120px";
+            img.style.width = `${Math.random() * 40 + 60}px`;
+            img.style.zIndex = 9999;
+            img.style.transition = "bottom 2.5s cubic-bezier(.42,.01,.58,1), opacity 0.5s";
+            img.style.opacity = "1";
+            img.className = "balloon-anim";
+            body.appendChild(img);
+            balloons.push(img);
 
-          // Animate balloon after a random short delay
-          const delay = Math.floor(Math.random() * 251) + 100; // 100-350ms
-          await new Promise(res => setTimeout(res, delay));
-          img.style.bottom = `${window.innerHeight + 120}px`;
-        } catch (e) {
-          // If image fails to load, skip this balloon
-        }
+            // Random delay before animating
+            const delay = Math.floor(Math.random() * 251) + 100; // 100-350ms
+            await new Promise(res => setTimeout(res, delay));
+            img.style.bottom = `${window.innerHeight + 120}px`;
+          } catch (e) {
+            // If image fails to load, skip this balloon
+          }
+        })();
       }
 
       // Remove balloons after animation
@@ -150,4 +149,7 @@ window.addEventListener('load', function() {
     }
 
     window.addEventListener("DOMContentLoaded", showBalloonsThreaded);
+  // Adjust when page loads and when window resizes
+  window.addEventListener('load', adjustWeatherIframePosition);
+
 
