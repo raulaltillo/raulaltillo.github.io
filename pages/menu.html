@@ -37,31 +37,8 @@
   <img src="../images/menu.png" width="90%" style="border: solid 15px #aeaeae; border-radius: 10px;">
 </center>
 <script>
-const menu = {
-  "Lunes 1 Dic": ["Espaguetis con gambas (sopa de fideos)", "Merluza frita con verduras al horno", "Fruta del tiempo"],
-  "Martes 2 Dic": ["Berza jerezana", "Huevos rellenos (con tomate). Ensalada de lechuga y maíz", "Fruta del tiempo"],
-  "Miércoles 3 Dic": ["Crema de zanahorias", "Flamenquines con patatas fritas", "Fruta del tiempo"],
-  "Jueves 4 Dic": ["Estofado de cerdo con patatas", "Fogonero a la plancha. Tomate aliñado", "Natillas"],
-  "Viernes 5 Dic": ["Ensalada completa (crema de calabacín)", "Pollo al curry con arroz salteado", "Fruta del tiempo"],
+  const SHEET_JSON_URL = "https://sheetjson.com/spreadsheets/d/1OPkrvh0ccT4O2pbTp5NmIfcqXmHgOQyZWwhEAtrUfCY?gid=945627682";
 
-  "Lunes 8 Dic": ["DÍA DE LA INMACULADA", "", ""],
-  "Martes 9 Dic": ["Espaguetis boloñesa", "Pescadito de la Bahía con verduras a la plancha", "Yogur"],
-  "Miércoles 10 Dic": ["Arroz campero", "Pollo empanado con ensalada", "Fruta del tiempo"],
-  "Jueves 11 Dic": ["Brócoli con bechamel y queso rallado (crema de brócoli)", "Albóndigas en salsa con zanahorias", "Fruta del tiempo"],
-  "Viernes 12 Dic": ["Lentejas con arroz", "Carne mechada. Coliflores salteadas", "Fruta del tiempo"],
-
-  "Lunes 15 Dic": ["Macarrones con tomate y queso rallado", "Fogonero a la plancha. Pimientos asados", "Fruta del tiempo"],
-  "Martes 16 Dic": ["Ensalada mixta con atún (crema de puerros)", "Pizza (pinchos de pollo con patatas panaderas)", "Fruta del tiempo"],
-  "Miércoles 17 Dic": ["Arroz con pollo", "Hamburguesa de ternera. Pisto", "Fruta del tiempo"],
-  "Jueves 18 Dic": ["Cocido madrileño", "Pavo guisado con champiñones", "Natillas"],
-  "Viernes 19 Dic": ["VACACIONES DE NAVIDAD", "", ""],
-
-  "Lunes 22 Dic": ["ALTILLO", "", ""],
-  "Martes 23 Dic": ["ALTILLO", "", ""],
-  "Miércoles 24 Dic": ["ALTILLO", "", ""],
-  "Jueves 25 Dic": ["ALTILLO", "", ""],
-  "Viernes 26 Dic": ["ALTILLO", "", ""]
-};
   function getFormattedDate() {
     const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sept", "Oct", "Nov", "Dic"];
@@ -73,50 +50,93 @@ const menu = {
 
     return `${dayOfWeek} ${day} ${month}`;
   }
+
   function parseSpanishDate(dateString) {
     const months = {
-        'Ene': 0,  // January
-        'Feb': 1,  // February
-        'Mar': 2,  // March
-        'Abr': 3,  // April
-        'May': 4,  // May
-        'Jun': 5,  // June
-        'Jul': 6,  // July
-        'Ago': 7,  // August
-        'Sept': 8,  // September
-        'Oct': 9,  // October
-        'Nov': 10, // November
-        'Dic': 11  // December
+      'Ene': 0,
+      'Feb': 1,
+      'Mar': 2,
+      'Abr': 3,
+      'May': 4,
+      'Jun': 5,
+      'Jul': 6,
+      'Ago': 7,
+      'Sept': 8,
+      'Oct': 9,
+      'Nov': 10,
+      'Dic': 11
     };
 
-    const [weekday, day, month] = dateString.split(" ");
+    const parts = dateString.split(" ");
+    if (parts.length < 3) return null;
 
+    const [weekday, day, month] = parts;
     const currentYear = new Date().getFullYear();
+    return new Date(currentYear, months[month], parseInt(day, 10), 23, 59);
+  }
 
-    // Create a Date object
-    const date = new Date(currentYear, months[month], parseInt(day), 23, 59);
+  function buildMenuFromSheet(rows) {
+    const menu = {};
+    rows.forEach(row => {
+      // SheetJSON devuelve las propiedades con el nombre de los encabezados
+      const key = row.date_key;
+      if (!key) return;
+      const first = row.first || "";
+      const second = row.second || "";
+      const dessert = row.dessert || "";
+      menu[key] = [first, second, dessert];
+    });
+    return menu;
+  }
 
-    return date;
-}
+  function getLastMenuDateKey(menu) {
+    const keys = Object.keys(menu);
+    if (!keys.length) return null;
+    return keys.sort((a, b) => {
+      const da = parseSpanishDate(a);
+      const db = parseSpanishDate(b);
+      if (!da || !db) return 0;
+      return da - db;
+    })[keys.length - 1];
+  }
 
-  function getTodaysMenu() {
+  function getTodaysMenu(menu) {
     const today = getFormattedDate();
     const todayDate = new Date();
     const isWeekend = (todayDate.getDay() === 0 || todayDate.getDay() === 6);
 
-    if (new Date() > parseSpanishDate(Object.keys(menu).pop())) {
-      return `Menú de hoy (${today}):\n\nDatos no disponibles (desactualizado)`;
-    } else if (isWeekend) {
+    const lastKey = getLastMenuDateKey(menu);
+    if (lastKey) {
+      const lastDate = parseSpanishDate(lastKey);
+      if (lastDate && new Date() > lastDate) {
+        return `Menú de hoy (${today}):\n\nDatos no disponibles (desactualizado)`;
+      }
+    }
+
+    if (isWeekend) {
       return `Menú de hoy (${today}):\n\nNo hay menú disponible hoy`;
-    } else if (menu[today]) {
-      return `Menú de hoy (${today}):\n\n${menu[today].join('\n')}`;
+    } else if (menu[today.toLowerCase()]) {
+      return `Menú de hoy (${today}):\n\n${menu[today.toLowerCase()].join('\n')}`;
     } else {
       return `Menú de hoy (${today}):\n\nNo hay datos disponibles`;
     }
   }
 
+  document.addEventListener("DOMContentLoaded", () => {
+    const todayElem = document.getElementById("todaydata");
+    todayElem.textContent = "Cargando menú...";
 
-    document.getElementById("todaydata").innerHTML = getTodaysMenu();
+    fetch(SHEET_JSON_URL)
+      .then(response => response.json())
+      .then(data => {
+        const menu = buildMenuFromSheet(data);
+        todayElem.textContent = getTodaysMenu(menu);
+      })
+      .catch(err => {
+        console.error(err);
+        todayElem.textContent = "Menú de hoy:\n\nNo se ha podido cargar el menú";
+      });
+  });
 </script>
 </div>
 <script async src="../scripts/fade.js"></script>
