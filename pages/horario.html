@@ -31,7 +31,6 @@
 </head>
 <body>
   <div class="topnav">
-    <img class="title" id="weather-icon"  src="../images/weather-icon-illustration03-Graphics-10205167-1.png" alt="Clima actual" width="50px">
     <a href="./horario.html" class="active" >Horario</a>
     <a href="./menu.html">Menu</a>
     <!--<a href="./book_answers.html">Respuestas Libros</a>--->
@@ -39,7 +38,10 @@
         <a href="./herramientas.html">Herramientas</a>
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnBjqzIB08Ad6J5D6hyBe0z33kqKwkunFWNIXyWWmJCmnFjw/viewform?usp=sf_link" class="feedback-btn">Feedback</a>
     <!--<a href="pages/coding_answers.html">Coding/CS</a>-->
+    <img class="title" id="weather-icon"  src="../images/weather-icon-illustration03-Graphics-10205167-1.png" alt="Clima actual" width="50px">
+    <p class="anunciosdisplay"></p>
   </div>
+  
   <div id="weatherIframeContainer" class="weather-iframe-container">
     <iframe name="iframe_aemet_id33044" src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/jerez-de-la-frontera-id11020?w=g4p011100000ohmffffffx000000t999999r1s8n2" scrolling="no"></iframe>
   </div>
@@ -268,7 +270,6 @@ function displayClassSchedule(className) {
         generateScheduleHTML(classSchedule);
     document.getElementById("scheduleContainer").style.display = "block";
 }
-
 window.onload = function() {
     const savedColor = localStorage.getItem("selectedColor") || defaultColor;
     document.getElementById("colorSelect").value = savedColor;
