@@ -88,8 +88,6 @@ function mostrarAnuncios() {
     const CACHE_KEY = "anunciosCache";
     const CACHE_TIME_KEY = "anunciosCacheTime";
     const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-    sessionStorage.setItem("anuncioText", "test");
-
     function useAnuncios(anunciosList) {
         const display = document.querySelector('.anunciosdisplay');
         if (!display) return;
@@ -221,7 +219,7 @@ function mostrarAnuncios() {
             modal.style.transform = 'translate(-50%, -50%)';
             modal.style.background = '#222';
             modal.style.color = '#fff';
-            modal.style.padding = '32px 24px';
+            modal.style.padding = '64px 24px 0px 24px';
             modal.style.borderRadius = '14px';
             modal.style.boxShadow = '0 4px 32px rgba(0,0,0,0.35)';
             modal.style.zIndex = '99999';
@@ -251,6 +249,8 @@ function mostrarAnuncios() {
 
             const contentDiv = document.createElement('div');
             contentDiv.id = 'anuncios-modal-content';
+            contentDiv.style.paddingTop = '24px';
+            contentDiv.style.borderTop = '5px solid rgb(68, 68, 68)';
             modal.appendChild(contentDiv);
 
             document.body.appendChild(modal);
@@ -274,7 +274,7 @@ function mostrarAnuncios() {
                 const anuncioDiv = document.createElement('div');
                 anuncioDiv.style.marginBottom = '24px';
                 anuncioDiv.style.paddingBottom = '12px';
-                anuncioDiv.style.borderBottom = '1px solid #444';
+                anuncioDiv.style.borderBottom = '5px solid #444';
 
                 const title = document.createElement('div');
                 title.textContent = a["Anuncio"];
