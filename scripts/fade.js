@@ -88,6 +88,7 @@ function mostrarAnuncios() {
     const CACHE_KEY = "anunciosCache";
     const CACHE_TIME_KEY = "anunciosCacheTime";
     const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
     function useAnuncios(anunciosList) {
         const display = document.querySelector('.anunciosdisplay');
         if (!display) return;
@@ -334,30 +335,45 @@ function mostrarAnuncios() {
     }
 
     // Check cache
-    const cached = sessionStorage.getItem(CACHE_KEY);
-    const cachedTime = Number(sessionStorage.getItem(CACHE_TIME_KEY) || 0);
+    let cached = null;
+    let cachedTime = 0;
+    try {
+        cached = JSON.parse(sessionStorage.getItem(CACHE_KEY));
+        cachedTime = Number(sessionStorage.getItem(CACHE_TIME_KEY) || 0);
+    } catch (e) {
+        cached = null;
+        cachedTime = 0;
+    }
     const now = Date.now();
 
-    if (cached && (now - cachedTime < CACHE_DURATION)) {
-        try {
-            const anunciosParsed = JSON.parse(cached);
-            useAnuncios(anunciosParsed);
-            return;
-        } catch (e) {
-            // Ignore cache parse errors
-        }
+    if (cached && Array.isArray(cached) && (now - cachedTime < CACHE_DURATION)) {
+        useAnuncios(cached);
+        return;
     }
 
     // Fetch from API and cache
     fetch(API_URL)
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error("Network response was not ok");
+            return res.json();
+        })
         .then(anunciosFetched => {
-            sessionStorage.setItem(CACHE_KEY, JSON.stringify(anunciosFetched));
-            sessionStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
-            useAnuncios(anunciosFetched);
+            if (Array.isArray(anunciosFetched)) {
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify(anunciosFetched));
+                sessionStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
+                useAnuncios(anunciosFetched);
+            } else {
+                // If response is not an array, treat as error
+                useAnuncios([]);
+            }
         })
         .catch(() => {
-            useAnuncios([]);
+            // On error, do not update cache, but try to use stale cache if available
+            if (cached && Array.isArray(cached)) {
+                useAnuncios(cached);
+            } else {
+                useAnuncios([]);
+            }
         });
 }
 
