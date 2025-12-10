@@ -86,8 +86,6 @@ function mostrarAnuncios() {
     const hoy = new Date();
     const API_URL = "https://sheetjson.com/spreadsheets/d/1OPkrvh0ccT4O2pbTp5NmIfcqXmHgOQyZWwhEAtrUfCY/edit?gid=0";
     const CACHE_KEY = "anunciosCache";
-    const CACHE_TIME_KEY = "anunciosCacheTime";
-    const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
     function useAnuncios(anunciosList) {
         const display = document.querySelector('.anunciosdisplay');
@@ -334,24 +332,20 @@ function mostrarAnuncios() {
         }
     }
 
-    // Check cache
+    // Check cache for this session only (no time expiration)
     let cached = null;
-    let cachedTime = 0;
     try {
         cached = JSON.parse(sessionStorage.getItem(CACHE_KEY));
-        cachedTime = Number(sessionStorage.getItem(CACHE_TIME_KEY) || 0);
     } catch (e) {
         cached = null;
-        cachedTime = 0;
     }
-    const now = Date.now();
 
-    if (cached && Array.isArray(cached) && (now - cachedTime < CACHE_DURATION)) {
+    if (cached && Array.isArray(cached)) {
         useAnuncios(cached);
         return;
     }
 
-    // Fetch from API and cache
+    // Fetch from API and cache for this session
     fetch(API_URL)
         .then(res => {
             if (!res.ok) throw new Error("Network response was not ok");
@@ -360,20 +354,13 @@ function mostrarAnuncios() {
         .then(anunciosFetched => {
             if (Array.isArray(anunciosFetched)) {
                 sessionStorage.setItem(CACHE_KEY, JSON.stringify(anunciosFetched));
-                sessionStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
                 useAnuncios(anunciosFetched);
             } else {
-                // If response is not an array, treat as error
                 useAnuncios([]);
             }
         })
         .catch(() => {
-            // On error, do not update cache, but try to use stale cache if available
-            if (cached && Array.isArray(cached)) {
-                useAnuncios(cached);
-            } else {
-                useAnuncios([]);
-            }
+            useAnuncios([]);
         });
 }
 
