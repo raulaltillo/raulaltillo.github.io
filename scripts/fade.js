@@ -1,6 +1,6 @@
 // Prioritize anuncios display before other DOM logic
 window.addEventListener('DOMContentLoaded', mostrarAnuncios, { once: true });
-
+let anunciosInFlight = null;
 window.addEventListener('load', function() {
   document.getElementById('content').classList.add('visible');
   });
@@ -84,8 +84,12 @@ window.addEventListener('load', adjustWeatherIframePosition);
 
 function mostrarAnuncios() {
     const hoy = new Date();
-    const API_URL = "https://sheetjson.com/spreadsheets/d/1OPkrvh0ccT4O2pbTp5NmIfcqXmHgOQyZWwhEAtrUfCY/edit?gid=0";
-    const CACHE_KEY = "anunciosCache";
+  const API_URL = "https://sheetjson.com/spreadsheets/d/1OPkrvh0ccT4O2pbTp5NmIfcqXmHgOQyZWwhEAtrUfCY/edit?gid=0";
+  const CACHE_KEY = "anunciosCache";
+  const CACHE_TS_KEY = "anunciosCacheTs";
+  const TTL_MS = 5 * 60 * 1000;
+  const nav = performance.getEntriesByType('navigation')[0];
+  const isReload = nav && nav.type === 'reload';
 
     function useAnuncios(anunciosList) {
         const display = document.querySelector('.anunciosdisplay');
@@ -331,37 +335,48 @@ function mostrarAnuncios() {
             sessionStorage.setItem("anuncioStart", Date.now());
         }
     }
+  let cached = null;
+  let cachedTs = 0;
 
-    // Check cache for this session only (no time expiration)
-    let cached = null;
-    try {
-        cached = JSON.parse(sessionStorage.getItem(CACHE_KEY));
-    } catch (e) {
-        cached = null;
-    }
+  try { cached = JSON.parse(sessionStorage.getItem(CACHE_KEY)); } catch (_) { cached = null; }
+  cachedTs = Number(sessionStorage.getItem(CACHE_TS_KEY) || 0);
 
-    if (cached && Array.isArray(cached)) {
-        useAnuncios(cached);
-        return;
-    }
+  const fresh = Array.isArray(cached) && (Date.now() - cachedTs) < TTL_MS;
 
-    // Fetch from API and cache for this session
-    fetch(API_URL)
-        .then(res => {
-            if (!res.ok) throw new Error("Network response was not ok");
-            return res.json();
-        })
-        .then(anunciosFetched => {
-            if (Array.isArray(anunciosFetched)) {
-                sessionStorage.setItem(CACHE_KEY, JSON.stringify(anunciosFetched));
-                useAnuncios(anunciosFetched);
-            } else {
-                useAnuncios([]);
-            }
-        })
-        .catch(() => {
-            useAnuncios([]);
-        });
+  // If cache is fresh, use it (no API call)
+  if (fresh) {
+    useAnuncios(cached);
+    return;
+  }
+
+  // If you want "only when refreshed", and this is not a reload, avoid the API:
+  if (!isReload && Array.isArray(cached)) {
+    useAnuncios(cached); // stale but acceptable when not refreshed
+    return;
+  }
+
+  // De-dupe concurrent calls
+  if (anunciosInFlight) {
+    anunciosInFlight.then(useAnuncios).catch(() => useAnuncios([]));
+    return;
+  }
+
+  anunciosInFlight = fetch(API_URL)
+    .then(res => {
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.json();
+    })
+    .then(anunciosFetched => {
+      if (!Array.isArray(anunciosFetched)) anunciosFetched = [];
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify(anunciosFetched));
+      sessionStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+      return anunciosFetched;
+    })
+    .finally(() => {
+      anunciosInFlight = null;
+    });
+
+  anunciosInFlight.then(useAnuncios).catch(() => useAnuncios([]));
 }
 
 window.addEventListener('load', mostrarAnuncios);
