@@ -280,12 +280,12 @@ function mostrarAnuncios() {
                 anuncioDiv.style.borderBottom = '5px solid #444';
 
                 const title = document.createElement('div');
-                title.textContent = a["Anuncio"];
+                title.innerHTML = a["Anuncio"];
                 title.style.fontSize = '1.3em';
                 title.style.marginBottom = '6px';
 
                 const details = document.createElement('div');
-                details.textContent = a["Mas detalles"] || '';
+                details.innerHTML = a["Mas detalles"] || '';
                 details.style.fontSize = '1em';
                 details.style.whiteSpace = 'pre-line';
                 details.style.marginBottom = '4px';
@@ -337,30 +337,36 @@ function mostrarAnuncios() {
     }
   let cached = null;
   let cachedTs = 0;
-
   try { cached = JSON.parse(sessionStorage.getItem(CACHE_KEY)); } catch (_) { cached = null; }
   cachedTs = Number(sessionStorage.getItem(CACHE_TS_KEY) || 0);
+  const now = Date.now();
+  const fresh = Array.isArray(cached) && (now - cachedTs) < TTL_MS;
 
-  const fresh = Array.isArray(cached) && (Date.now() - cachedTs) < TTL_MS;
-
-  // If cache is fresh, use it (no API call)
+  // Robust cache logic:
+  // 1. If cache is fresh, use it (no API call)
   if (fresh) {
     useAnuncios(cached);
     return;
   }
-
-  // If you want "only when refreshed", and this is not a reload, avoid the API:
+  // 2. If cache is stale but present and not a reload, use it (but also fetch in background to update for next time)
   if (!isReload && Array.isArray(cached)) {
-    useAnuncios(cached); // stale but acceptable when not refreshed
+    useAnuncios(cached);
+    // Fetch in background to update cache for next time
+    fetch(API_URL)
+      .then(res => res.ok ? res.json() : [])
+      .then(anunciosFetched => {
+        if (Array.isArray(anunciosFetched)) {
+          sessionStorage.setItem(CACHE_KEY, JSON.stringify(anunciosFetched));
+          sessionStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+        }
+      });
     return;
   }
-
-  // De-dupe concurrent calls
+  // 3. If no cache or reload, fetch and update
   if (anunciosInFlight) {
     anunciosInFlight.then(useAnuncios).catch(() => useAnuncios([]));
     return;
   }
-
   anunciosInFlight = fetch(API_URL)
     .then(res => {
       if (!res.ok) throw new Error("Network response was not ok");
@@ -375,7 +381,6 @@ function mostrarAnuncios() {
     .finally(() => {
       anunciosInFlight = null;
     });
-
   anunciosInFlight.then(useAnuncios).catch(() => useAnuncios([]));
 }
 
