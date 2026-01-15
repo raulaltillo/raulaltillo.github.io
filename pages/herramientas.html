@@ -39,7 +39,7 @@
         .card h3 {
             margin: 10px 0;
             font-size: 2em;
-            font-family: Hacked;
+            font-family: Helvetica;
             color: #e0e0e0;
         }
         .card p {
@@ -75,6 +75,19 @@
 
 <script>
 const tools = [
+    
+        {
+        title: "Ayuda con Matematicas",
+        description: "Sugerido por José Luis. Problemas y ejercicios resueltos de matemáticas paso a paso.",
+        image: "../images/mates.png",
+        link: "https://mathsteps.offiweb.es"
+    },
+            {
+        title: "Ayuda con Matematicas Aplicadas",
+        description: "Sugerido por José Luis. Problemas y ejercicios resueltos de matemáticas aplicadas paso a paso.",
+        image: "../images/matesa.png",
+        link: "https://aplisteps.offiweb.es"
+    },
     {
         title: "Practica de Valencias Inorganicas",
         description: "Practica las valencias de los elementos químicos de forma interactiva",
@@ -93,7 +106,6 @@ const tools = [
         image: "../images/organica.png",
         link: "../utilidades/organica.html"
     },
-    // Add more tools here as needed
 ];
 
 function createCard(tool) {
