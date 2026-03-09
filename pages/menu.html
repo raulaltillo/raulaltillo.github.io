@@ -34,12 +34,12 @@
   <br>
   <br>
 <center>
-  <pre style="font-size: 200%;color: #ffffff;font-family: Verdana;font-weight:bold;", id="todaydata">Algo ha fallado</pre>
-  <img src="../images/menu.png" width="90%" style="border: solid 15px #aeaeae; border-radius: 10px;">
+  <pre style="font-size: 200%;color: #ffffff;font-family: Verdana;font-weight:bold;", id="todaydata">Cargando menú...</pre>
+  <img id="menu-image" src="../images/menu.png" width="90%" style="border: solid 15px #aeaeae; border-radius: 10px;">
 </center>
 <script>
   const SHEET_JSON_URL = "https://sheetjson.com/spreadsheets/d/1OPkrvh0ccT4O2pbTp5NmIfcqXmHgOQyZWwhEAtrUfCY?gid=945627682";
-
+  const MENU_SHEET_JSON_URL = "https://sheetjson.com/spreadsheets/d/1OPkrvh0ccT4O2pbTp5NmIfcqXmHgOQyZWwhEAtrUfCY/edit?gid=2120338685";
   function getFormattedDate() {
     const daysOfWeek = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
     const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sept", "Oct", "Nov", "Dic"];
@@ -126,7 +126,7 @@
   document.addEventListener("DOMContentLoaded", () => {
     const todayElem = document.getElementById("todaydata");
     todayElem.textContent = "Cargando menú...";
-
+    const menuImage = document.getElementById("menu-image");
     fetch(SHEET_JSON_URL)
       .then(response => response.json())
       .then(data => {
@@ -137,7 +137,22 @@
         console.error(err);
         todayElem.textContent = "Menú de hoy:\n\nNo se ha podido cargar el menú";
       });
-  });
+    fetch(MENU_SHEET_JSON_URL)
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      if (Array.isArray(data) && data.length > 0 && data[0].Menu) {
+        menuImage.src = data[0].Menu;
+      } else {
+        throw new Error("Formato JSON inválido");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    });
+    });
 </script>
 </div>
 <script async src="../scripts/fade.js"></script>
