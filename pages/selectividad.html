@@ -16,6 +16,16 @@
     <link rel="stylesheet" href="../main.css">
     <meta name="color-scheme" content="light only">
     <style>
+              body {
+            padding-top: 72px;
+        }
+        .topnav {
+            top: 0;
+            left: 0;
+        }
+        .weather-iframe-container {
+            top: 58px;
+        }
               .container {
             border: solid 15px #0b0b0b;
             border-radius: 10px;
@@ -106,10 +116,119 @@
         border-color: #ff7a44;
         /* Keep background and color unchanged for subtle effect */
       }
-    .link-card.important:hover {
+      .link-card.important:hover {
         border-width: 5px;
         border-color: #1c0da3;
         /* Keep background and color unchanged for subtle effect */
+      }
+      .countdown-hero {
+        position: relative;
+        margin: 20px 20px 30px;
+        padding: 32px 24px;
+        border: 4px solid #5b0a0a;
+        border-radius: 14px;
+        background:
+          radial-gradient(circle at top, rgba(168, 17, 17, 0.32), transparent 55%),
+          linear-gradient(180deg, #120909 0%, #050505 100%);
+        box-shadow: 0 0 40px rgba(123, 9, 9, 0.45), inset 0 0 40px rgba(255, 80, 80, 0.07);
+        overflow: hidden;
+      }
+      .countdown-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          repeating-linear-gradient(
+            115deg,
+            transparent 0 90px,
+            rgba(186, 23, 23, 0.08) 90px 140px,
+            transparent 140px 240px
+          );
+        background-size: 240px 240px;
+        animation: doom-drift 10s linear infinite;
+        pointer-events: none;
+        opacity: 0.85;
+      }
+      .countdown-warning {
+        position: relative;
+        text-align: center;
+        color: #ffb6b6;
+        letter-spacing: 0.38em;
+        text-transform: uppercase;
+        font: 700 0.82rem "Cal Sans", Verdana, sans-serif;
+        margin-bottom: 14px;
+      }
+      .countdown-title {
+        position: relative;
+        text-align: center;
+        color: #fff2f2;
+        font: 400 clamp(2.5rem, 8vw, 5.8rem) "Cal Sans", Verdana, sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin: 0;
+        text-shadow: 0 0 18px rgba(255, 56, 56, 0.5);
+      }
+      .countdown-subtitle {
+        position: relative;
+        max-width: 760px;
+        margin: 14px auto 24px;
+        text-align: center;
+        color: #dfc7c7;
+        font: 400 1.05rem/1.6 Verdana, sans-serif;
+      }
+      .countdown-grid {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .countdown-card {
+        padding: 18px 12px;
+        border: 1px solid rgba(255, 120, 120, 0.2);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        text-align: center;
+        backdrop-filter: blur(2px);
+      }
+      .countdown-value {
+        display: block;
+        color: #fff;
+        font: 400 clamp(2rem, 6vw, 4rem) "Cal Sans", Verdana, sans-serif;
+        line-height: 1;
+      }
+      .countdown-label {
+        display: block;
+        margin-top: 8px;
+        color: #ffb6b6;
+        font: 700 0.82rem Verdana, sans-serif;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+      .countdown-deadline,
+      .countdown-status {
+        position: relative;
+        text-align: center;
+        margin-top: 18px;
+        color: #d6b7b7;
+        font-family: Verdana, sans-serif;
+      }
+      .countdown-status {
+        min-height: 1.2em;
+        color: #ff8d8d;
+        letter-spacing: 0.08em;
+      }
+      @keyframes doom-drift {
+        from { background-position: 0 0; }
+        to { background-position: 240px 0; }
+      }
+      @media (max-width: 720px) {
+        .countdown-hero {
+          margin: 14px 14px 24px;
+          padding: 24px 16px;
+        }
+        .countdown-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
       }
     </style>
 </head>
@@ -127,15 +246,80 @@
       <div id="weatherIframeContainer" class="weather-iframe-container">
         <iframe name="iframe_aemet_id33044" src="https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/jerez-de-la-frontera-id11020?w=g4p011100000ohmffffffx000000t999999r1s8n2" scrolling="no"></iframe>
       </div>
+<section class="countdown-hero" aria-labelledby="countdown-title">
+  <div class="countdown-warning">Cuenta Atrás</div>
+  <h1 class="countdown-title" id="countdown-title">Selectividad</h1>
+  <p class="countdown-subtitle">Tiempo restante hasta que empiece el primer examen. 2 de Junio, 07:45</p>
+  <div class="countdown-grid" id="countdownGrid">
+    <div class="countdown-card">
+      <span class="countdown-value" id="countdownDays">0</span>
+      <span class="countdown-label">Días</span>
+    </div>
+    <div class="countdown-card">
+      <span class="countdown-value" id="countdownHours">0</span>
+      <span class="countdown-label">Horas</span>
+    </div>
+    <div class="countdown-card">
+      <span class="countdown-value" id="countdownMinutes">0</span>
+      <span class="countdown-label">Min</span>
+    </div>
+    <div class="countdown-card">
+      <span class="countdown-value" id="countdownSeconds">0</span>
+      <span class="countdown-label">Seg</span>
+    </div>
+  </div>
+  <div class="countdown-deadline">Inicio fijado para 2026-06-02 07:45 Europe/Madrid.</div>
+  <div class="countdown-status" id="countdownStatus">Silencio antes del desastre.</div>
+</section>
 <div id="content">
-  <br>
-  <br>
-  <br>
-<br>
 <div class="container" id="linksContainer">
   <div class="links-grid" id="linksGrid"></div>
 </div>
     <script>
+  const selectividadStart = new Date("2026-06-02T07:45:00+02:00").getTime();
+  const countdownEls = {
+    days: document.getElementById('countdownDays'),
+    hours: document.getElementById('countdownHours'),
+    minutes: document.getElementById('countdownMinutes'),
+    seconds: document.getElementById('countdownSeconds'),
+    status: document.getElementById('countdownStatus')
+  };
+
+  function setCountdownValue(el, value) {
+    el.textContent = String(value).padStart(2, '0');
+  }
+
+  function updateCountdown() {
+    const now = Date.now();
+    const diff = selectividadStart - now;
+
+    if (diff <= 0) {
+      setCountdownValue(countdownEls.days, 0);
+      setCountdownValue(countdownEls.hours, 0);
+      setCountdownValue(countdownEls.minutes, 0);
+      setCountdownValue(countdownEls.seconds, 0);
+      countdownEls.status.textContent = "Ya ha empezado. No hay escapatoria.";
+      return;
+    }
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    setCountdownValue(countdownEls.days, days);
+    setCountdownValue(countdownEls.hours, hours);
+    setCountdownValue(countdownEls.minutes, minutes);
+    setCountdownValue(countdownEls.seconds, seconds);
+    countdownEls.status.textContent = diff < 86400000
+      ? "Menos de 24 horas. Mucha suerte"
+      : "El reloj sigue bajando.";
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
   // Example list of names and links
   const linksList = {
     "Análisis Musical II": "https://www.juntadeandalucia.es/economiaconocimientoempresasyuniversidad/sguit/examanes_anios_anteriores/selectividad/sel_2025-2026-Orientaciones_analisis_musical.pdf",
