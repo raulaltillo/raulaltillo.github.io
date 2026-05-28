@@ -138,16 +138,24 @@
         position: absolute;
         inset: 0;
         background:
-          repeating-linear-gradient(
-            115deg,
-            transparent 0 90px,
-            rgba(186, 23, 23, 0.08) 90px 140px,
-            transparent 140px 240px
-          );
-        background-size: 240px 240px;
-        animation: doom-drift 10s linear infinite;
+          radial-gradient(circle at 50% 0%, rgba(255, 70, 70, 0.1), transparent 42%),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.42), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.42));
         pointer-events: none;
-        opacity: 0.85;
+        opacity: 0.8;
+      }
+      .countdown-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(255, 58, 58, 0.08);
+        opacity: 0;
+        pointer-events: none;
+      }
+      .countdown-hero.is-ticking {
+        animation: doom-heartbeat 360ms ease-out;
+      }
+      .countdown-hero.is-ticking::after {
+        animation: doom-flare 360ms ease-out;
       }
       .countdown-warning {
         position: relative;
@@ -196,6 +204,12 @@
         font: 400 clamp(2rem, 6vw, 4rem) "Cal Sans", Verdana, sans-serif;
         line-height: 1;
       }
+      .countdown-hero.is-ticking .countdown-card:last-child {
+        animation: second-card-hit 360ms ease-out;
+      }
+      .countdown-hero.is-ticking .countdown-card:last-child .countdown-value {
+        animation: second-number-drop 360ms ease-out;
+      }
       .countdown-label {
         display: block;
         margin-top: 8px;
@@ -217,9 +231,25 @@
         color: #ff8d8d;
         letter-spacing: 0.08em;
       }
-      @keyframes doom-drift {
-        from { background-position: 0 0; }
-        to { background-position: 240px 0; }
+      @keyframes doom-heartbeat {
+        0% { box-shadow: 0 0 40px rgba(123, 9, 9, 0.45), inset 0 0 40px rgba(255, 80, 80, 0.07); }
+        38% { box-shadow: 0 0 46px rgba(148, 10, 10, 0.55), inset 0 0 42px rgba(255, 80, 80, 0.1); }
+        100% { box-shadow: 0 0 40px rgba(123, 9, 9, 0.45), inset 0 0 40px rgba(255, 80, 80, 0.07); transform: translateY(0); }
+      }
+      @keyframes doom-flare {
+        0% { opacity: 0; }
+        32% { opacity: 1; }
+        100% { opacity: 0; }
+      }
+      @keyframes second-card-hit {
+        0% { border-color: rgba(255, 120, 120, 0.2); background: rgba(255, 255, 255, 0.04); }
+        34% { border-color: rgba(255, 120, 120, 0.38); background: rgba(255, 255, 255, 0.06); }
+        100% { border-color: rgba(255, 120, 120, 0.2); background: rgba(255, 255, 255, 0.04); }
+      }
+      @keyframes second-number-drop {
+        0% { opacity: 0.72; transform: translateY(-5px); text-shadow: 0 0 0 rgba(255, 56, 56, 0); }
+        42% { opacity: 1; transform: translateY(0); text-shadow: 0 0 10px rgba(255, 56, 56, 0.4); }
+        100% { opacity: 1; transform: translateY(0) scale(1); text-shadow: 0 0 0 rgba(255, 56, 56, 0); }
       }
       @media (max-width: 720px) {
         .countdown-hero {
@@ -249,7 +279,7 @@
 <section class="countdown-hero" aria-labelledby="countdown-title">
   <div class="countdown-warning">Cuenta Atrás</div>
   <h1 class="countdown-title" id="countdown-title">Selectividad</h1>
-  <p class="countdown-subtitle">Tiempo restante hasta que empiece el primer examen. 2 de Junio, 07:45</p>
+  <p class="countdown-subtitle">Tiempo restante hasta que empiece el primer examen</p>
   <div class="countdown-grid" id="countdownGrid">
     <div class="countdown-card">
       <span class="countdown-value" id="countdownDays">0</span>
@@ -278,15 +308,28 @@
     <script>
   const selectividadStart = new Date("2026-06-02T07:45:00+02:00").getTime();
   const countdownEls = {
+    hero: document.querySelector('.countdown-hero'),
     days: document.getElementById('countdownDays'),
     hours: document.getElementById('countdownHours'),
     minutes: document.getElementById('countdownMinutes'),
     seconds: document.getElementById('countdownSeconds'),
     status: document.getElementById('countdownStatus')
   };
+  let previousTotalSeconds;
 
   function setCountdownValue(el, value) {
     el.textContent = String(value).padStart(2, '0');
+  }
+
+  function triggerSecondTick(totalSeconds) {
+    if (previousTotalSeconds === totalSeconds) {
+      return;
+    }
+
+    previousTotalSeconds = totalSeconds;
+    countdownEls.hero.classList.remove('is-ticking');
+    void countdownEls.hero.offsetWidth;
+    countdownEls.hero.classList.add('is-ticking');
   }
 
   function updateCountdown() {
@@ -298,7 +341,8 @@
       setCountdownValue(countdownEls.hours, 0);
       setCountdownValue(countdownEls.minutes, 0);
       setCountdownValue(countdownEls.seconds, 0);
-      countdownEls.status.textContent = "Ya ha empezado. No hay escapatoria.";
+      countdownEls.status.textContent = "Ya ha empezado.";
+      countdownEls.hero.classList.remove('is-ticking');
       return;
     }
 
@@ -307,6 +351,8 @@
     const hours = Math.floor((totalSeconds % 86400) / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
+
+    triggerSecondTick(totalSeconds);
 
     setCountdownValue(countdownEls.days, days);
     setCountdownValue(countdownEls.hours, hours);
